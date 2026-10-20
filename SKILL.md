@@ -4,7 +4,7 @@ description: Use this skill (Terracotta — the Eatable Adventures design system
 user-invocable: true
 ---
 
-Read the `README.md` file within this skill, and explore the other available files (`DESIGN.md`, `colors_and_type.css`, `grid.css`, `assets/`, `preview/`, `Brand Foundations.html`, `Navigation Guidelines.html`, `templates/app-shell/`).
+Read the `README.md` file within this skill, and explore the other available files (`DESIGN.md`, `colors_and_type.css`, `grid.css`, `assets/`, `preview/`, `Brand Foundations.html`, `Navigation Guidelines.html`, `templates/app-shell/`, `presentaciones/` for HTML decks, `charts/funnel.md` for funnels).
 
 If creating visual artifacts (slides, mocks, throwaway prototypes, etc), copy assets out and create static HTML files for the user to view. If working on production code, copy assets and read the rules here to become an expert in designing with this brand. For anything app-like, start from `templates/app-shell/`; to see the system whole, open `Brand Foundations.html`.
 

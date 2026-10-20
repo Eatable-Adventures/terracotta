@@ -119,6 +119,8 @@ Terse, concrete and proof-driven — **confident, not arrogant**. The register o
 | `Charts Catalogue.html` | Data-visualization catalogue — 17 chart types on the brand hierarchy, with rules. |
 | `Maps Catalogue.html` | Maps &amp; geography catalogue — 6 map types on real Natural Earth geometry. |
 | `Navigation Guidelines.html` | Navigation spec with live demos — sidebar & rail, iPhone tab bar, More sheet, iOS install, rules. |
+| `presentaciones/` | **Slide format for HTML decks** (cover, content-slide header, closing; 1280 × 720, PDF export). `ea_deck.py` builds them on Terracotta tokens. See its README. |
+| `charts/` | Canonical **funnel** (stacked discs): generator `funnel.py`, spec `funnel.md`, specimen `funnel.html`. |
 | `maps-brand.js` | Brand map renderers (`EAMaps.load()` / `EAMaps.render.*`) on d3-geo + world-atlas. |
 | `components/` | Exported React components (see Components below). |
 | `templates/app-shell/` | Reusable product **app-shell** template (`AppShell.dc.html`) on the restrained brand — sidebar, top bar, metrics, table, highlight block. |

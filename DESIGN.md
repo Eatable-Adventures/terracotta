@@ -119,6 +119,10 @@ Fixed hierarchy — color by **relevance**, not decoration: **Red → Orange →
 
 **Supported types** (see `Charts Catalogue.html` and the `preview/chart-*.html` cards): KPI tiles · bar · horizontal bars · line · area · donut · stacked bars · funnel · progress-vs-target · heatmap · sunburst · timeline/Gantt · radar · scatter/bubble · waterfall · treemap · sankey.
 
+**Funnel (override):** every funnel uses the canonical stacked-disc design (fixed-step widths, red ramp dark→light, numbered badge + arrow, aligned labels), approved 07-10-2026. Generator `charts/funnel.py`, spec in `charts/funnel.md`. It is the one chart that does NOT follow the relevance color order, because its stages are sequential.
+
+**Slides:** HTML decks use the fixed cover / content-slide header / closing in `presentaciones/` (1280 × 720, built with `ea_deck.py`, spec in `presentaciones/README.md`).
+
 **Rules:** Rubik everywhere; axis labels 11px `--fg3`, value labels 500 in EAV Black; hairline axes + dashed guides, no boxed plots. Max five series/segments. No 3D, shadows or full pies. Rounded bar ends / cells. The only gradients inside a chart are the single-series area fade and the heatmap ramp. Waterfall decreases are hollow grey (neutral, not "bad"); sankey flows carry the source node's rank color at ~55%; sunburst children inherit the parent hue. The yellow light point marks "today"/a milestone or the last point of the primary line.
 
 ### Maps & geography
