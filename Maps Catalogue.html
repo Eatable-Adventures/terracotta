@@ -16,7 +16,8 @@
   h1{font-size:38px;font-weight:400;letter-spacing:-0.02em;margin:0 0 10px;line-height:1.08;}
   h1 b{font-weight:700;}
   .lead{font-size:16px;color:var(--fg2);max-width:64ch;line-height:1.55;margin:0 0 28px;}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;padding:16px 18px;background:var(--surface-cream);border:1px solid var(--border-2);border-radius:var(--radius-lg);margin-bottom:40px;}
+  a{color:var(--red);}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;padding:16px 18px;background:var(--surface-fill);border:1px solid var(--border-2);border-radius:var(--radius-lg);margin-bottom:40px;}
   .lg{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg2);}
   .lg i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(30,30,30,.06);}
   .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
@@ -39,17 +40,17 @@
 <body>
 <div class="page">
   <div class="eyebrow">Maps &amp; geography</div>
-  <h1>Maps on the <b>brand hierarchy</b></h1>
-  <p class="lead">Geography is data, not drawing — every map renders real Natural Earth geometry. Land is EAV Grey, water is paper, and the palette follows the same rank order as the charts: red for what matters most, the yellow light point for headquarters.</p>
+  <h1>Live maps on <b>one system</b></h1>
+  <p class="lead">Live demos of <code>maps-brand.js</code>, the renderer for apps. Geography is data, not drawing: real Natural Earth geometry, quiet land, and colour only on the data layer, under the same rule as charts. For decks and static documents, use the map pieces: see <a href="Charts Catalogue.html">Charts Catalogue</a>.</p>
 
   <div class="legend">
     <span class="lg"><i style="background:#E8E8E8"></i>Land · EAV Grey</span>
     <span class="lg"><i style="background:#FFFFFF;border-color:#E8E8E8"></i>Water · paper</span>
     <span class="lg"><i style="background:#FFA103"></i>Headquarters · light point</span>
-    <span class="lg"><i style="background:#BC2D29"></i>Rank 1 · hubs, active, flows</span>
-    <span class="lg"><i style="background:#DE5533"></i>Rank 2 · partner network</span>
-    <span class="lg"><i style="background:#450E14"></i>Rank 3 · cities, endpoints</span>
-    <span class="lg"><i style="background:#F5EACE"></i>Dark Cream · focus region, low class</span>
+    <span class="lg"><i style="background:#BC2D29"></i>Red · hubs, active, flows</span>
+    <span class="lg"><i style="background:#DE5A55"></i>Ramp · partner network</span>
+    <span class="lg"><i style="background:#7A1217"></i>Dark ramp · top class</span>
+    <span class="lg"><i style="background:#F3EFE7"></i>Warm grey · focus region, low class</span>
   </div>
 
   <div class="grid">
@@ -62,19 +63,19 @@
     <div class="card wide">
       <div class="hd"><h3>Coverage</h3><span>World · categorical</span></div>
       <div class="map"><svg id="m-coverage"></svg></div>
-      <p class="use">Three states only: active hub country (red), partner network (orange), no presence (grey). Never more than three categorical fills on one map.</p>
+      <p class="use">Three states only: active hub country (red), partner network (light red), no presence (grey). Never more than three categorical fills on one map.</p>
     </div>
 
     <div class="card">
       <div class="hd"><h3>Choropleth</h3><span>Region · sequential</span></div>
       <div class="map"><svg id="m-choropleth"></svg></div>
-      <p class="use">Mercator fitted to the region. Warm sequential ramp — Dark Cream → Orange → Red → Burgundy — in four classes max; no-data countries in light grey.</p>
+      <p class="use">Mercator fitted to the region. Red ramp, light to dark, in four classes max; no-data countries in light grey.</p>
     </div>
 
     <div class="card">
       <div class="hd"><h3>Region focus</h3><span>Country · cities</span></div>
       <div class="map"><svg id="m-region"></svg></div>
-      <p class="use">Cream ground, focus countries in Dark Cream, neighbours in light grey. HQ light point, hub red, partner cities burgundy; labels haloed in cream.</p>
+      <p class="use">Cream ground, focus countries in warm grey, neighbours in light grey. HQ light point, hub red, partner cities burgundy; labels haloed in cream.</p>
     </div>
 
     <div class="card wide">
@@ -93,7 +94,7 @@
   <div class="rules">
     <div class="rule"><h4>Real geometry</h4><p>Load Natural Earth TopoJSON and project with d3-geo — never freehand outlines. Natural Earth for the world, Mercator fitted to a bounding box for regions. Antarctica is dropped.</p></div>
     <div class="rule"><h4>Quiet base, loud data</h4><p>Land EAV Grey with white hairline borders, water paper (or cream for a focus region). No relief, no tiles, no gridlines. Colour is spent only on the data layer.</p></div>
-    <div class="rule"><h4>Rank, then colour</h4><p>Same order as charts: Red → Orange → Burgundy → Yellow (light point, HQ only) → Dark Cream. Sequential maps use the warm ramp in ≤4 classes; categorical maps use ≤3 fills.</p></div>
+    <div class="rule"><h4>One colour rule</h4><p>Same rule as charts: the red ramp on neutral land, yellow only as the light point.</p></div>
   </div>
   <p class="attr">Geometry: Natural Earth via world-atlas (public domain).</p>
 </div>

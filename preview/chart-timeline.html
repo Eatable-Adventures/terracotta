@@ -1,70 +1,120 @@
-<!-- @dsCard group="Charts" viewport="760x260" name="Timeline / Gantt" subtitle="Program phases with the light point" -->
+<!-- @dsCard group="Charts" viewport="1182x316" name="Timeline / Gantt" subtitle="Phases, dates and today" -->
+<!-- Generada por presentaciones/build_nucleo.py desde ea_elementos.gantt. No se edita a mano. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="../colors_and_type.css">
-<style>
-  *{box-sizing:border-box;}
-  html,body{margin:0;background:var(--paper);color:var(--fg1);font-family:var(--font-sans);}
-  .page{max-width:1080px;margin:0 auto;padding:48px 32px 80px;}
-  .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--red);margin-bottom:14px;}
-  h1{font-size:38px;font-weight:400;letter-spacing:-0.02em;margin:0 0 10px;line-height:1.08;}
-  h1 b{font-weight:700;}
-  .lead{font-size:16px;color:var(--fg2);max-width:64ch;line-height:1.55;margin:0 0 28px;}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;padding:16px 18px;background:var(--surface-cream);border:1px solid var(--border-2);border-radius:var(--radius-lg);margin-bottom:40px;}
-  .lg{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg2);}
-  .lg i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(30,30,30,.06);}
-  .lg b{color:var(--fg1);font-weight:700;margin-right:2px;}
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
-  .card{background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;gap:14px;}
-  .card.wide{grid-column:1 / -1;}
-  .hd{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
-  .hd h3{margin:0;font-size:16px;font-weight:600;letter-spacing:-0.01em;}
-  .hd span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--fg4);white-space:nowrap;}
-  .use{font-size:13px;color:var(--fg3);line-height:1.5;margin:0;}
-  svg{width:100%;height:auto;display:block;overflow:visible;}
-  svg text{font-family:var(--font-sans);fill:var(--fg3);font-size:11px;}
-  svg .ax{stroke:var(--border-1);stroke-width:1;}
-  svg .val{fill:var(--fg1);font-weight:500;}
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
-  .kpi{border:1px solid var(--border-1);border-radius:var(--radius-md);padding:14px;}
-  .kpi .l{font-size:12px;color:var(--fg3);}
-  .kpi .n{font-size:30px;font-weight:500;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;line-height:1.1;margin:6px 0;}
-  .kpi .d{font-size:12px;color:var(--red);display:flex;align-items:center;gap:4px;}
-  .kpi .d.m{color:var(--fg3);}
-  .prog{display:flex;flex-direction:column;gap:12px;}
-  .pr{display:grid;grid-template-columns:150px 1fr 44px;gap:12px;align-items:center;font-size:13px;}
-  .pr .bar{height:10px;border-radius:999px;background:var(--surface-fill);overflow:hidden;}
-  .pr .bar i{display:block;height:100%;border-radius:999px;}
-  .pr .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--fg2);}
-  .rules{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  .rule{border-top:2px solid var(--fg1);padding-top:14px;}
-  .rule h4{margin:0 0 6px;font-size:14px;font-weight:600;}
-  .rule p{margin:0;font-size:13px;color:var(--fg3);line-height:1.5;}
-  @media(max-width:760px){.grid,.kpis,.rules{grid-template-columns:1fr;}}
-
-  .page{padding:16px;max-width:none;}
-  .card{border:0;padding:8px;}
+<style>html,body{margin:0;background:var(--paper);color:var(--fg1);font-family:var(--font-sans);}*{box-sizing:border-box;}
+/* ---- ea_visuals: lienzo y texto ---- */
+.lz{position:relative;flex:none;}
+.lz-svg{position:absolute;left:0;top:0;overflow:visible;}
+.lz-t{position:absolute;font-size:14px;line-height:1.35;color:var(--fg2);}
+.lz-t b{color:var(--fg1);font-weight:600;}
+.lz-t .k{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--fg3);margin-bottom:3px;}
+.lz-t.red{color:var(--red);} .lz-t.red b{color:var(--red);}
+.lz-t.on-red{color:#fff;} .lz-t.on-red b{color:#fff;}
+.lz-t.big{font-size:15px;}
+/* ---- píldoras ---- */
+.pl{display:inline-block;font-size:12px;font-weight:600;line-height:1;padding:5px 10px;border-radius:999px;white-space:nowrap;}
+.pl-red{background:var(--red);color:#fff;}
+.pl-rosa{background:var(--brand-tint);color:var(--red);}
+.pl-neutral{background:var(--surface-fill);color:var(--fg2);}
+.pl-sand{background:var(--dark-cream);color:var(--fg1);}
+.pl-out{background:#fff;color:var(--fg2);box-shadow:inset 0 0 0 1px var(--input);}
+.pl-burg{background:var(--burgundy);color:var(--cream);}
+/* ---- cuerpo de slide: subtítulo, visual y banda (gris claro, esquinas rectas) ---- */
+.sub{font-size:16px;color:var(--fg2);line-height:1.4;margin:-12px 0 18px;max-width:1040px;}
+.vis{flex:1;min-height:0;display:flex;gap:28px;align-items:stretch;margin-bottom:14px;}
+.banda{margin-top:auto;margin-bottom:16px;background:var(--surface-fill);border-left:3px solid var(--red);border-radius:0;padding:15px 20px;
+font-size:15px;color:var(--fg1);line-height:1.4;}
+.banda b{font-weight:600;}
+.banda-r{display:grid;grid-template-columns:120px 1fr;column-gap:18px;align-items:center;}
+.banda-r .br{font-size:14px;font-weight:700;color:var(--fg1);}
+.pre-foot{font-size:12px;color:var(--fg3);margin:8px 0 0;}
+.hueco{background:#FFF1B8;color:var(--fg1);font-weight:600;padding:1px 6px;border-radius:4px;white-space:nowrap;}
+/* ---- tarjetas, rótulos y cifras ---- */
+.row{display:flex;gap:20px;align-items:stretch;}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0;}
+.card{border:1px solid var(--border-1);border-radius:16px;padding:16px 18px;background:#fff;font-size:14px;line-height:1.45;color:var(--fg2);}
+.card h4{font-size:15px;font-weight:600;margin:0 0 6px;color:var(--fg1);letter-spacing:-.005em;}
+.card b,.tx b{color:var(--fg1);font-weight:600;}
+.card.cream{background:var(--surface-fill);border-color:var(--surface-fill);}
+.card.hot{border-color:var(--red);}
+.nb{flex:none;width:34px;height:34px;border-radius:9px;background:var(--red);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.nhead{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.nhead h4{margin:0;}
+.k2{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--fg3);margin-bottom:6px;}
+.k2.red{color:var(--red);}
+.big{font-size:40px;font-weight:600;letter-spacing:-.03em;line-height:1;color:var(--red);font-variant-numeric:tabular-nums;}
+.gris{font-size:13px;color:var(--fg3);margin:10px 0 0;line-height:1.4;}
+.it{font-style:italic;}
+.nw{white-space:nowrap;}
+.tile{background:#fff;border-radius:12px;display:flex;align-items:center;gap:10px;padding:10px 12px;font-size:14px;line-height:1.3;color:var(--fg1);}
+.tile b{font-weight:600;}
+.it3{display:flex;gap:12px;align-items:baseline;font-size:14px;line-height:1.45;color:var(--fg2);}
+.it3 .dot{flex:none;width:40px;display:flex;justify-content:center;}
+.it3 .dot i{width:7px;height:7px;border-radius:99px;background:var(--red);display:block;transform:translateY(-2px);}
+/* ---- tablas ---- */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;line-height:1.35;}
+table.tb th{text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg3);padding:0 10px 8px;border-bottom:1.5px solid var(--fg1);}
+table.tb td{padding:9px 10px;border-bottom:1px solid var(--border-2);vertical-align:middle;color:var(--fg2);}
+table.tb td.nm{color:var(--fg1);font-weight:600;}
+table.tb td.nm b{color:var(--red);}
+table.tb td.dt b{color:var(--fg1);font-weight:700;}
+/* ---- KPI ---- */
+.mB-l{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin:0 0 4px;}
+.mB-l.g{color:var(--fg3);}
+.mB-c{flex:1;border:1px solid var(--border-1);border-radius:16px;background:#fff;padding:13px 18px;display:flex;flex-direction:column;gap:7px;}
+.mB-c.hot{border-color:var(--red);}
+.mB-val{font-size:13px;color:var(--fg2);border-top:1px solid var(--border-2);padding-top:7px;margin-top:auto;}
+.mB-val b{color:var(--fg1);font-weight:600;}
+/* ---- scorecard ---- */
+.sc{flex:1;align-self:stretch;width:100%;display:flex;flex-direction:column;background:#fff;border:1px solid var(--border-1);box-shadow:var(--shadow-sm);}
+.sc-h{background:var(--red);color:#fff;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 24px;}
+.sc-b{display:grid;grid-template-columns:56px 1fr 1fr;column-gap:40px;align-items:stretch;padding:18px 32px 20px 28px;}
+.sc-i{display:flex;align-items:center;justify-content:center;}
+.sc .el{font-size:14px;line-height:1.4;color:var(--fg2);}
+.sc .el b{color:var(--fg1);font-weight:700;}
+.cr b{display:block;font-size:14px;font-weight:700;color:var(--fg1);margin-bottom:6px;}
+.cr-b{display:flex;align-items:center;gap:14px;}
+.cr-t{flex:1;height:10px;background:var(--surface-fill);position:relative;}
+.cr-t i{position:absolute;left:0;top:0;bottom:0;background:var(--red);}
+.cr-b span{width:40px;text-align:right;font-size:14px;font-weight:700;color:var(--red);}
+/* ---- Gantt (prefijo cg-) ---- */
+.cg{position:relative;width:100%;border:1px solid var(--border-1);border-radius:var(--radius-lg);overflow:hidden;background:var(--paper);}
+.cg-head,.cg-row{display:grid;}
+.cg-lab{padding:0 16px;display:flex;flex-direction:column;justify-content:center;font-size:13px;color:var(--fg2);line-height:1.3;}
+.cg-lab b{font-size:14px;font-weight:700;color:var(--fg1);}
+.cg-head{background:var(--cream);border-bottom:1px solid var(--dark-cream);}
+.cg-time{position:relative;}
+.cg-meses{position:relative;height:24px;}
+.cg-mes{position:absolute;top:0;height:24px;display:flex;align-items:center;padding-left:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.10em;color:var(--fg1);border-left:1px solid var(--dark-cream);}
+.cg-sems{position:relative;height:18px;}
+.cg-sem{position:absolute;top:0;height:18px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--fg3);font-variant-numeric:tabular-nums;}
+.cg-row{height:54px;border-top:1px solid var(--border-2);position:relative;}
+.cg-cap{position:absolute;top:37px;font-size:12px;font-weight:700;color:var(--fg1);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.cg-cap.r{transform:translateX(-100%);}
+.cg-grid{position:absolute;inset:0;pointer-events:none;}
+.cg-gl{position:absolute;top:0;bottom:0;width:1px;background:var(--border-2);opacity:.7;}
+.cg-gm{position:absolute;top:0;bottom:0;width:1px;background:var(--dark-cream);}
+.cg-bar{position:absolute;border-radius:var(--radius-pill);display:flex;align-items:center;padding:0 10px;font-size:12px;font-weight:500;color:var(--brand-fg);white-space:nowrap;overflow:hidden;}
+.cg-bar.prop{background:var(--red);}
+.cg-bar.pausa{background:var(--dark-cream);color:var(--fg2);justify-content:center;border-radius:0;}
+.cg-body{position:relative;}
+.cg-hoy{position:absolute;top:0;bottom:0;width:0;border-left:1px dashed var(--fg3);z-index:3;pointer-events:none;}
+.cg-hoy .pt{position:absolute;left:-6px;top:-5px;width:11px;height:11px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 5px rgba(255,161,3,.22);}
+.cg-hoy .tx{position:absolute;left:10px;top:37px;white-space:nowrap;font-size:12px;font-weight:700;color:var(--fg1);background:var(--paper);padding:0 6px;border-radius:var(--radius-pill);}
+.cg-dline{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dotted var(--burgundy);z-index:2;pointer-events:none;}
+.cg-dline .dd{position:absolute;left:-7px;bottom:21px;width:12px;height:12px;border-radius:50%;background:var(--burgundy);}
+.cg-pill{position:absolute;top:7px;background:var(--burgundy);color:var(--cream);border-radius:var(--radius-pill);padding:6px 16px;display:flex;flex-direction:column;gap:1px;z-index:3;}
+.cg-pill b{font-size:13px;font-weight:700;}
+.cg-pill span{font-size:12px;opacity:.9;white-space:nowrap;}
+.cg-leg{display:flex;align-items:center;gap:24px;margin-top:8px;font-size:13px;color:var(--fg2);}
+.cg-leg .sw{display:inline-block;width:28px;height:10px;border-radius:var(--radius-pill);margin-right:8px;vertical-align:middle;}
 </style>
 </head>
 <body>
-<div class="page">
-<!-- Timeline -->
-    <div class="card">
-      <div class="hd"><h3>Timeline / Gantt</h3><span>Program phases</span></div>
-      <svg viewBox="0 0 900 150">
-        <g style="font-size:11px;"><text x="300" y="14" text-anchor="middle">M3</text><text x="450" y="14" text-anchor="middle">M6</text><text x="600" y="14" text-anchor="middle">M9</text><text x="750" y="14" text-anchor="middle">M12</text></g>
-        <line class="ax" x1="150" y1="20" x2="150" y2="140"/><line class="ax" x1="450" y1="20" x2="450" y2="140" stroke-dasharray="2 4"/><line class="ax" x1="750" y1="20" x2="750" y2="140" stroke-dasharray="2 4"/>
-        <text x="140" y="42" text-anchor="end" class="val">Detect</text><rect x="150" y="30" width="180" height="18" rx="9" fill="#BC2D29"/>
-        <text x="140" y="72" text-anchor="end" class="val">Build</text><rect x="300" y="60" width="240" height="18" rx="9" fill="#DE5533"/>
-        <text x="140" y="102" text-anchor="end" class="val">Test</text><rect x="500" y="90" width="230" height="18" rx="9" fill="#450E14"/>
-        <text x="140" y="132" text-anchor="end" class="val">Scale</text><rect x="700" y="120" width="180" height="18" rx="9" fill="#FFA103"/>
-        <circle cx="610" cy="99" r="6" fill="#FFA103"/><circle cx="610" cy="99" r="11" fill="#FFA103" opacity=".22"/>
-        <text x="610" y="86" text-anchor="middle" style="fill:#1E1E1E;font-weight:500;">today</text>
-      </svg>
-      <p class="use">Pill bars per phase in hierarchy order; the yellow light point marks "today" or a milestone.</p>
-    </div>
-</div>
+<div id="pieza" style="display:inline-block;padding:16px"><div style="flex:none;width:1150px"><div class="cg"><div class="cg-head" style="grid-template-columns:172px 978px"><div class="cg-lab"></div><div class="cg-time"><div class="cg-meses"><div class="cg-mes" style="left:0.0px;width:163.0px">Ene 27</div><div class="cg-mes" style="left:163.0px;width:163.0px">Feb 27</div><div class="cg-mes" style="left:326.0px;width:180.5px">Mar 27</div><div class="cg-mes" style="left:506.5px;width:174.6px">Abr 27</div><div class="cg-mes" style="left:681.1px;width:180.5px">May 27</div><div class="cg-mes" style="left:861.6px;width:116.4px">Jun 27</div></div><div class="cg-sems"><div class="cg-sem" style="left:0.0px;width:40.8px">1</div><div class="cg-sem" style="left:40.8px;width:40.8px">2</div><div class="cg-sem" style="left:81.5px;width:40.8px">3</div><div class="cg-sem" style="left:122.2px;width:40.8px">4</div><div class="cg-sem" style="left:163.0px;width:40.8px">5</div><div class="cg-sem" style="left:203.8px;width:40.8px">6</div><div class="cg-sem" style="left:244.5px;width:40.8px">7</div><div class="cg-sem" style="left:285.2px;width:40.8px">8</div><div class="cg-sem" style="left:326.0px;width:40.8px">9</div><div class="cg-sem" style="left:366.8px;width:40.8px">10</div><div class="cg-sem" style="left:407.5px;width:40.8px">11</div><div class="cg-sem" style="left:448.2px;width:40.8px">12</div><div class="cg-sem" style="left:489.0px;width:40.8px">13</div><div class="cg-sem" style="left:529.8px;width:40.8px">14</div><div class="cg-sem" style="left:570.5px;width:40.8px">15</div><div class="cg-sem" style="left:611.2px;width:40.8px">16</div><div class="cg-sem" style="left:652.0px;width:40.8px">17</div><div class="cg-sem" style="left:692.8px;width:40.8px">18</div><div class="cg-sem" style="left:733.5px;width:40.8px">19</div><div class="cg-sem" style="left:774.2px;width:40.8px">20</div><div class="cg-sem" style="left:815.0px;width:40.8px">21</div><div class="cg-sem" style="left:855.8px;width:40.8px">22</div><div class="cg-sem" style="left:896.5px;width:40.8px">23</div><div class="cg-sem" style="left:937.2px;width:40.8px">24</div></div></div></div><div class="cg-body"><div class="cg-row" style="grid-template-columns:172px 978px"><div class="cg-lab"><b>Fase 1</b>Set Up</div><div class="cg-time"><div class="cg-grid"><i class="cg-gl" style="left:0.0px"></i><i class="cg-gl" style="left:40.8px"></i><i class="cg-gl" style="left:81.5px"></i><i class="cg-gl" style="left:122.2px"></i><i class="cg-gl" style="left:163.0px"></i><i class="cg-gl" style="left:203.8px"></i><i class="cg-gl" style="left:244.5px"></i><i class="cg-gl" style="left:285.2px"></i><i class="cg-gl" style="left:326.0px"></i><i class="cg-gl" style="left:366.8px"></i><i class="cg-gl" style="left:407.5px"></i><i class="cg-gl" style="left:448.2px"></i><i class="cg-gl" style="left:489.0px"></i><i class="cg-gl" style="left:529.8px"></i><i class="cg-gl" style="left:570.5px"></i><i class="cg-gl" style="left:611.2px"></i><i class="cg-gl" style="left:652.0px"></i><i class="cg-gl" style="left:692.8px"></i><i class="cg-gl" style="left:733.5px"></i><i class="cg-gl" style="left:774.2px"></i><i class="cg-gl" style="left:815.0px"></i><i class="cg-gl" style="left:855.8px"></i><i class="cg-gl" style="left:896.5px"></i><i class="cg-gl" style="left:937.2px"></i><i class="cg-gl" style="left:978.0px"></i><i class="cg-gm" style="left:0.0px"></i><i class="cg-gm" style="left:163.0px"></i><i class="cg-gm" style="left:326.0px"></i><i class="cg-gm" style="left:506.5px"></i><i class="cg-gm" style="left:681.1px"></i><i class="cg-gm" style="left:861.6px"></i></div><div class="cg-bar prop" style="left:0.0px;width:314.4px;top:11px;height:24px">Final de la primera fase · febrero</div></div></div><div class="cg-row" style="grid-template-columns:172px 978px"><div class="cg-lab"><b>Fase 2</b>Scouting de soluciones</div><div class="cg-time"><div class="cg-grid"><i class="cg-gl" style="left:0.0px"></i><i class="cg-gl" style="left:40.8px"></i><i class="cg-gl" style="left:81.5px"></i><i class="cg-gl" style="left:122.2px"></i><i class="cg-gl" style="left:163.0px"></i><i class="cg-gl" style="left:203.8px"></i><i class="cg-gl" style="left:244.5px"></i><i class="cg-gl" style="left:285.2px"></i><i class="cg-gl" style="left:326.0px"></i><i class="cg-gl" style="left:366.8px"></i><i class="cg-gl" style="left:407.5px"></i><i class="cg-gl" style="left:448.2px"></i><i class="cg-gl" style="left:489.0px"></i><i class="cg-gl" style="left:529.8px"></i><i class="cg-gl" style="left:570.5px"></i><i class="cg-gl" style="left:611.2px"></i><i class="cg-gl" style="left:652.0px"></i><i class="cg-gl" style="left:692.8px"></i><i class="cg-gl" style="left:733.5px"></i><i class="cg-gl" style="left:774.2px"></i><i class="cg-gl" style="left:815.0px"></i><i class="cg-gl" style="left:855.8px"></i><i class="cg-gl" style="left:896.5px"></i><i class="cg-gl" style="left:937.2px"></i><i class="cg-gl" style="left:978.0px"></i><i class="cg-gm" style="left:0.0px"></i><i class="cg-gm" style="left:163.0px"></i><i class="cg-gm" style="left:326.0px"></i><i class="cg-gm" style="left:506.5px"></i><i class="cg-gm" style="left:681.1px"></i><i class="cg-gm" style="left:861.6px"></i></div><div class="cg-bar prop" style="left:296.9px;width:302.7px;top:11px;height:24px">Etapa 1 · scouting · 24-02 a 16-04</div></div></div><div class="cg-row" style="grid-template-columns:172px 978px"><div class="cg-lab"><b>Fase 3</b>Pilotos y PoC</div><div class="cg-time"><div class="cg-grid"><i class="cg-gl" style="left:0.0px"></i><i class="cg-gl" style="left:40.8px"></i><i class="cg-gl" style="left:81.5px"></i><i class="cg-gl" style="left:122.2px"></i><i class="cg-gl" style="left:163.0px"></i><i class="cg-gl" style="left:203.8px"></i><i class="cg-gl" style="left:244.5px"></i><i class="cg-gl" style="left:285.2px"></i><i class="cg-gl" style="left:326.0px"></i><i class="cg-gl" style="left:366.8px"></i><i class="cg-gl" style="left:407.5px"></i><i class="cg-gl" style="left:448.2px"></i><i class="cg-gl" style="left:489.0px"></i><i class="cg-gl" style="left:529.8px"></i><i class="cg-gl" style="left:570.5px"></i><i class="cg-gl" style="left:611.2px"></i><i class="cg-gl" style="left:652.0px"></i><i class="cg-gl" style="left:692.8px"></i><i class="cg-gl" style="left:733.5px"></i><i class="cg-gl" style="left:774.2px"></i><i class="cg-gl" style="left:815.0px"></i><i class="cg-gl" style="left:855.8px"></i><i class="cg-gl" style="left:896.5px"></i><i class="cg-gl" style="left:937.2px"></i><i class="cg-gl" style="left:978.0px"></i><i class="cg-gm" style="left:0.0px"></i><i class="cg-gm" style="left:163.0px"></i><i class="cg-gm" style="left:326.0px"></i><i class="cg-gm" style="left:506.5px"></i><i class="cg-gm" style="left:681.1px"></i><i class="cg-gm" style="left:861.6px"></i></div><div class="cg-bar prop" style="left:611.2px;width:110.7px;top:11px;height:24px">Kick-off</div><div class="cg-bar pausa" style="left:733.5px;width:69.9px;top:11px;height:24px">Pausa</div><div class="cg-bar prop" style="left:815.0px;width:151.4px;top:11px;height:24px">Ejecución del piloto</div><span class="cg-cap" style="left:619.2px">19-04</span><span class="cg-cap" style="left:815.0px">24-05</span><span class="cg-cap r" style="left:966.4px">~18-06</span></div></div><div class="cg-row" style="grid-template-columns:172px 978px"><div class="cg-lab"><b>Decisión</b>de continuidad</div><div class="cg-time"><div class="cg-grid"><i class="cg-gl" style="left:0.0px"></i><i class="cg-gl" style="left:40.8px"></i><i class="cg-gl" style="left:81.5px"></i><i class="cg-gl" style="left:122.2px"></i><i class="cg-gl" style="left:163.0px"></i><i class="cg-gl" style="left:203.8px"></i><i class="cg-gl" style="left:244.5px"></i><i class="cg-gl" style="left:285.2px"></i><i class="cg-gl" style="left:326.0px"></i><i class="cg-gl" style="left:366.8px"></i><i class="cg-gl" style="left:407.5px"></i><i class="cg-gl" style="left:448.2px"></i><i class="cg-gl" style="left:489.0px"></i><i class="cg-gl" style="left:529.8px"></i><i class="cg-gl" style="left:570.5px"></i><i class="cg-gl" style="left:611.2px"></i><i class="cg-gl" style="left:652.0px"></i><i class="cg-gl" style="left:692.8px"></i><i class="cg-gl" style="left:733.5px"></i><i class="cg-gl" style="left:774.2px"></i><i class="cg-gl" style="left:815.0px"></i><i class="cg-gl" style="left:855.8px"></i><i class="cg-gl" style="left:896.5px"></i><i class="cg-gl" style="left:937.2px"></i><i class="cg-gl" style="left:978.0px"></i><i class="cg-gm" style="left:0.0px"></i><i class="cg-gm" style="left:163.0px"></i><i class="cg-gm" style="left:326.0px"></i><i class="cg-gm" style="left:506.5px"></i><i class="cg-gm" style="left:681.1px"></i><i class="cg-gm" style="left:861.6px"></i></div><div class="cg-pill" style="left:610.7px"><b>Decisión conjunta · 16-04</b><span>¿Funciona? Si es que sí, tercera fase; si no, se revisa el alcance</span></div></div></div><div class="cg-dline" style="left:596.7px;margin-left:172px"><span class="dd"></span></div><div class="cg-hoy" style="left:218.3px;margin-left:172px"><span class="pt"></span><span class="tx">Hoy · 10-02</span></div></div></div><div class="cg-leg"><span><i class="sw" style="background:var(--red);"></i>Cronograma de referencia</span><span><i class="sw" style="background:var(--dark-cream);border-radius:0"></i>Pausa</span></div></div></div>
 </body>
 </html>

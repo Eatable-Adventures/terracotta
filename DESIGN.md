@@ -115,19 +115,19 @@ Brand extras (full hex, consume directly): `--red #BC2D29 · --burgundy #450E14 
 
 ## 9. Charts & data visualization
 
-Fixed hierarchy — color by **relevance**, not decoration: **Red → Orange → Burgundy → Yellow → Dark Cream → Grey (neutral) → Black (axes/text)** (`--chart-1…5`, `--chart-neutral`, `--chart-axis`). Applies to every chart type. Expressive "impact" charts (gradients in the viz) are reserved for reports/covers, never consulting decks.
+One rule for every chart, in decks and in apps. **One series:** neutral grey (`--chart-neutral`), with the element the message is about in EAV Red (`--chart-1`), never everything in red. **Categories of one family:** the red ramp (`--ramp-1…5`). **Two things of a different nature** (us against a benchmark): red and dark grey (`--chart-reference`). Green only for validation and status pieces; yellow only as the light point and in the traffic light; orange only inside the brand gradient.
 
-**Supported types** (see `Charts Catalogue.html` and the `preview/chart-*.html` cards): KPI tiles · bar · horizontal bars · line · area · donut · stacked bars · funnel · progress-vs-target · heatmap · sunburst · timeline/Gantt · radar · scatter/bubble · waterfall · treemap · sankey.
+**One source:** every chart and map is a piece in `presentaciones/ea_elementos/`. The gallery (`presentaciones/Galería de elementos.html`) shows them all; `Charts Catalogue.html` is the index by chart type, and the `preview/chart-*.html` and `preview/map-*.html` cards are generated from the same pieces by `presentaciones/build_nucleo.py`. Types: KPI tiles · bar · horizontal bars · line · area · donut · stacked bars · funnel · progress-vs-target · heatmap · sunburst · timeline/Gantt · radar · scatter/bubble · waterfall · treemap · sankey, and 140 more pieces chosen by intent.
 
-**Funnel (override):** every funnel uses the canonical stacked-disc design (fixed-step widths, red ramp dark→light, numbered badge + arrow, aligned labels), approved 07-10-2026. Generator `charts/funnel.py`, spec in `charts/funnel.md`. It is the one chart that does NOT follow the relevance color order, because its stages are sequential.
+**Funnel:** every funnel uses the canonical stacked-disc design (fixed-step widths, red ramp dark→light, numbered badge + arrow, aligned labels). Spec in `charts/funnel.md`.
 
-**Slides:** HTML decks use the fixed cover / content-slide header / closing in `presentaciones/` (1280 × 720, built with `ea_deck.py`, spec in `presentaciones/README.md`).
+**Slides:** HTML decks live in `presentaciones/`: a fixed base (`ea_deck.py`, 1280 × 720) and 158 visual elements chosen by intent (`ea_elementos/`). Entry point, usage rules and review tool: `presentaciones/README.md`.
 
-**Rules:** Rubik everywhere; axis labels 11px `--fg3`, value labels 500 in EAV Black; hairline axes + dashed guides, no boxed plots. Max five series/segments. No 3D, shadows or full pies. Rounded bar ends / cells. The only gradients inside a chart are the single-series area fade and the heatmap ramp. Waterfall decreases are hollow grey (neutral, not "bad"); sankey flows carry the source node's rank color at ~55%; sunburst children inherit the parent hue. The yellow light point marks "today"/a milestone or the last point of the primary line.
+**Rules:** Rubik everywhere; hairline axes + dashed guides, no boxed plots. Numbers as labels on the chart, one per element. Max five series or segments. No 3D, shadows or full pies. The only gradients inside a chart are the single-series area fade and the heatmap ramp.
 
 ### Maps & geography
 
-Geography is data, not drawing: render real Natural Earth geometry (world-atlas TopoJSON via d3-geo — `maps-brand.js` wraps it as `EAMaps.load()` + `EAMaps.render.<type>(svgEl, geo)`). **Six types** (`Maps Catalogue.html`, `preview/map-*.html`): hub network · coverage · choropleth · region focus · bubble map · flow map.
+Geography is data, not drawing: render real Natural Earth geometry (world-atlas TopoJSON via d3-geo — `maps-brand.js` wraps it as `EAMaps.load()` + `EAMaps.render.<type>(svgEl, geo)`). **Six types**: hub network · coverage · choropleth · region focus · bubble map · flow map. In decks and static documents they are pieces in `presentaciones/ea_elementos/`; live apps use `maps-brand.js` (`Maps Catalogue.html`). Both follow the chart colour rule.
 
 **Rules:** land EAV Grey with white hairline borders, water paper (cream ground + Dark Cream focus countries for a region); no relief, tiles or gridlines. Natural Earth projection for the world (Antarctica dropped), Mercator fitted to a bounding box for regions. Data layer follows the chart rank: Red (hubs, active, flows) → Orange (partner network) → Burgundy (cities, endpoints); the yellow light point marks headquarters only. Sequential ramps ≤4 classes (Dark Cream → Orange → Red → Burgundy); categorical fills ≤3. Flows are great-circle arcs from one origin at 55%. Labels Rubik 11–12px with a paper/cream halo. Interactive street-level maps (prototypes) use Leaflet + OpenStreetMap with attribution.
 

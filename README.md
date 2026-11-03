@@ -66,10 +66,10 @@ The heartbeat in the form of light. **Pulse** activates (CTAs); **Rhythm** organ
 - **Light point** — an EAV Yellow pulse that activates one focus; over white, cream or photography only. Signals, never decorates.
 
 ### Charts & data visualization
-Color is assigned by **relevance**, in a fixed order: **Red → Orange → Burgundy → Yellow → Dark Cream → Grey (neutral) → Black (axes/text)**. Seventeen chart types are specified in `Charts Catalogue.html` (and as `preview/chart-*` cards): KPI tiles, bar, horizontal bars, line, area, donut, stacked bars, funnel, progress-vs-target, heatmap, sunburst, timeline/Gantt, radar, scatter, waterfall, treemap, sankey. Max five series; no 3D, shadows or full pies; the only in-chart gradients are the area fade and heatmap ramp.
+One rule, in decks and in apps. **One series:** neutral grey, with the element the message is about in red; never everything in red. **Categories of one family:** the red ramp. **Two things of a different nature:** red and dark grey. Yellow only as the light point, orange only inside the brand gradient. No 3D, shadows or full pies; max five series. Every chart is a piece in `presentaciones/ea_elementos/`: see the gallery, or `Charts Catalogue.html` for the index by chart type.
 
 ### Maps & geography
-Maps render **real Natural Earth geometry** (never freehand outlines) with a quiet base — land EAV Grey, water paper — and spend colour only on the data layer, in chart rank order. The yellow light point marks headquarters. Six types are specified in `Maps Catalogue.html` (and as `preview/map-*` cards): hub network, coverage, choropleth, region focus, bubble map, flow map. `maps-brand.js` provides the renderers.
+Maps render **real Natural Earth geometry** (never freehand outlines) with a quiet base and spend colour only on the data layer, under the same rule as charts. The yellow light point marks headquarters. Six types: hub network, coverage, choropleth, region focus, bubble map, flow map. In decks they are pieces in `presentaciones/ea_elementos/`; in live apps, `maps-brand.js` draws them (`Maps Catalogue.html`).
 
 ### Navigation
 One nav list drives every layout. At **768px and up** (iPad portrait included) apps use the **white-paper sidebar**, 224px or a 64px icon rail. Below 768px they use an **iPhone tab bar** (four tabs + More) and a **More bottom sheet**. Only the exact current page gets the active pill, children open only inside the current section, and status marks (red count, cream beta, grey lock) shrink to corner dots in the rail. Safe-area insets are paid back with `max(floor, env(...))`. Full spec, live demos and the iOS home-screen setup: `Navigation Guidelines.html` (and the `preview/nav-*` cards).
@@ -116,15 +116,15 @@ Terse, concrete and proof-driven — **confident, not arrogant**. The register o
 | `colors_and_type.css` | All design tokens (EAV palette, warm text ramp, **Rubik** type scale, rounded radii, gradients & light point, chart hierarchy, 8px spacing) + semantic element styles. Import first. |
 | `grid.css` | The flexible / 12-column backbone grid + 8px baseline utilities and specimen overlays. Import after `colors_and_type.css`. |
 | `Brand Foundations.html` | One-page brand showcase — palette, type, gradients, light point, components, principles. |
-| `Charts Catalogue.html` | Data-visualization catalogue — 17 chart types on the brand hierarchy, with rules. |
-| `Maps Catalogue.html` | Maps &amp; geography catalogue — 6 map types on real Natural Earth geometry. |
+| `Charts Catalogue.html` | Index of chart and map types: colour rule, what each is for, its piece in the gallery. Generated. |
+| `Maps Catalogue.html` | Live demos of `maps-brand.js`, the map renderer for apps. For decks, use the map pieces in `presentaciones/ea_elementos/`. |
 | `Navigation Guidelines.html` | Navigation spec with live demos — sidebar & rail, iPhone tab bar, More sheet, iOS install, rules. |
-| `presentaciones/` | **Slide format for HTML decks** (cover, content-slide header, closing; 1280 × 720, PDF export). `ea_deck.py` builds them on Terracotta tokens. See its README. |
-| `charts/` | Canonical **funnel** (stacked discs): generator `funnel.py`, spec `funnel.md`, specimen `funnel.html`. |
+| `presentaciones/` | **Presentations (Terracotta V2):** decks and reports in HTML and PDF. `ea_deck.py` is the fixed base (cover, agenda, section dividers, slide header, closing; 1280 × 720) and `ea_elementos/` holds 158 visual elements chosen by intent, with a gallery, usage rules, 435 icons and a review tool. **Start with its `README.md`.** |
+| `charts/` | Canonical **funnel** (stacked discs): spec `funnel.md`, specimen `funnel.html`, and `funnel.py`, which re-exports the generator from `presentaciones/ea_elementos/embudo_canonico.py`. |
 | `maps-brand.js` | Brand map renderers (`EAMaps.load()` / `EAMaps.render.*`) on d3-geo + world-atlas. |
 | `components/` | Exported React components (see Components below). |
 | `templates/app-shell/` | Reusable product **app-shell** template (`AppShell.dc.html`) on the restrained brand — sidebar, top bar, metrics, table, highlight block. |
-| `preview/` | Standalone specimen cards that populate the Design System tab (Type, Colors, Components, Navigation, Charts, Maps, Spacing, Brand). |
+| `preview/` | Standalone specimen cards that populate the Design System tab (Type, Colors, Components, Navigation, Charts, Maps, Spacing, Brand). The Charts and Maps cards are generated from `ea_elementos`. |
 | `assets/` | Brand assets — `logo.svg` (Eatable Adventures wordmark). |
 | `ui_kits/ecosystem-db/` | A high-fidelity app recreation kept on the **previous** (Swiss) visual language — self-contained on its own local CSS. *Not yet re-skinned to the refreshed brand.* |
 
@@ -144,3 +144,4 @@ Terse, concrete and proof-driven — **confident, not arrogant**. The register o
 4. **Rounded surfaces, pill buttons, the CTA pulse on action.** Soft warm dividers; shadows only when floating.
 5. **Start from `templates/app-shell/`** for anything app-like, and from `Brand Foundations.html` to see the system whole.
 6. **Icons:** Material Symbols Outlined (weight 300), functional and secondary.
+7. **Decks, reports and slides:** go to `presentaciones/README.md`. They have their own base and rules, in Spanish (for example, titles in slides are fully bold).

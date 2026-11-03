@@ -39,7 +39,7 @@ function TopBar({ active, detailLabel, query, setQuery, count }) {
           <window.Icon name="Bug" size={18} />
         </button>
         <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end' }}>
-          <span style={{ fontSize:14, fontWeight:500, color:'#111' }}>José Cabañero</span>
+          <span style={{ fontSize:14, fontWeight:500, color:'#111' }}>Nombre Apellido</span>
           <span style={{ fontSize:10, color:'#111', textTransform:'uppercase', letterSpacing:'.08em', fontWeight:700, cursor:'pointer', whiteSpace:'nowrap' }}>Log Out</span>
         </div>
         <div style={{ width:32, height:32, borderRadius:0, background:'#111', display:'flex', alignItems:'center', justifyContent:'center' }}>

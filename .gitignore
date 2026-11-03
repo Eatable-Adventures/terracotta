@@ -21,3 +21,13 @@ yarn-error.log*
 # Python
 __pycache__/
 *.pyc
+
+# Solo internos: citan clientes o son material de terceros. El repositorio es público.
+/CLAUDE.md
+/revision/
+/presentaciones/catalogo/
+/presentaciones/referencia/
+/presentaciones/Medición de decks.md
+/presentaciones/Referencias de Terracotta.md
+/presentaciones/Registro de criterios.md
+/presentaciones/Versiones de Terracotta.md

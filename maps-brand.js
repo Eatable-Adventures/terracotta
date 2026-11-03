@@ -3,7 +3,8 @@
    Requires d3 + topojson-client loaded first. Exposes window.EAMaps. */
 (function(){
 const P={red:'#BC2D29',orange:'#DE5533',burgundy:'#450E14',yellow:'#FFA103',darkCream:'#F5EACE',cream:'#FFF9EE',grey:'#E8E8E8',lightGrey:'#FAFAFA',black:'#1E1E1E',fg2:'#574E48',fg3:'#857B72',fg4:'#ABA197',border:'#DCD6CC'};
-const RANK=[P.red,P.orange,P.burgundy,P.yellow,P.darkCream];
+P.soft='#DE5A55';P.fill='#F3EFE7';P.dark='#7A1217'; // la misma regla de color que los gráficos: rampa de rojos sobre neutros
+const RANK=[P.red,P.dark,P.soft,'#EFA39F','#A3201E'];
 const ATLAS='https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json';
 let _p;
 function load(){
@@ -79,19 +80,19 @@ const render={
     const {s,path}=world(el,900,430,geo);
     const active=new Set([ID.ES,ID.IT,ID.CO,ID.PT]);
     const pipeline=new Set([ID.MX,ID.BR,ID.CL,ID.FR,ID.DE,ID.NL,ID.GB,ID.IL,ID.US]);
-    land(s,path,geo,f=>active.has(f.id)?P.red:pipeline.has(f.id)?P.orange:P.grey);
-    legend(s,16,362,[{fill:P.red,label:'Active hub country'},{fill:P.orange,label:'Partner network'},{fill:P.grey,label:'No presence'}]);
+    land(s,path,geo,f=>active.has(f.id)?P.red:pipeline.has(f.id)?P.soft:P.grey);
+    legend(s,16,362,[{fill:P.red,label:'Active hub country'},{fill:P.soft,label:'Partner network'},{fill:P.grey,label:'No presence'}]);
   },
 
   /* 3 — Choropleth: sequential warm ramp, Europe */
   choropleth(el,geo){
     const {s,path}=region(el,560,440,EUROPE);
     const v={[ID.ES]:64,[ID.IT]:48,[ID.PT]:31,[ID.NL]:26,[ID.FR]:22,[ID.GB]:20,[ID.DE]:18,[ID.CH]:14,[ID.DK]:12,[ID.BE]:11,[ID.IE]:9,[ID.SE]:7,[ID.PL]:6,[ID.AT]:5,[ID.NO]:4,[ID.FI]:3,[ID.CZ]:3,[ID.GR]:2};
-    const scale=d3.scaleThreshold().domain([5,15,30,50]).range([P.darkCream,'#F5EACE',P.orange,P.red,P.burgundy]);
-    const fill=f=>v[f.id]==null?P.lightGrey:v[f.id]<5?P.darkCream:scale(v[f.id]);
+    const scale=d3.scaleThreshold().domain([5,15,30,50]).range([P.fill,'#EFA39F',P.soft,P.red,P.dark]);
+    const fill=f=>v[f.id]==null?P.lightGrey:v[f.id]<5?P.fill:scale(v[f.id]);
     s.append('g').selectAll('path').data(geo.countries.features).join('path').attr('d',path).attr('fill',fill);
     s.append('path').datum(geo.borders).attr('d',path).attr('fill','none').attr('stroke','#fff').attr('stroke-width',.8);
-    legend(s,16,330,[{fill:P.burgundy,label:'50+ startups'},{fill:P.red,label:'30–49'},{fill:P.orange,label:'15–29'},{fill:P.darkCream,label:'1–14'},{fill:P.lightGrey,stroke:P.grey,label:'No data'}]);
+    legend(s,16,330,[{fill:P.dark,label:'50+ startups'},{fill:P.red,label:'30–49'},{fill:P.soft,label:'15–29'},{fill:'#EFA39F',label:'1–14'},{fill:P.lightGrey,stroke:P.grey,label:'No data'}]);
   },
 
   /* 4 — Bubble map: sized by value, ranked color */
@@ -133,7 +134,7 @@ const render={
     const {s,proj,path}=region(el,560,440,IBERIA);
     const iberia=new Set([ID.ES,ID.PT]);
     s.append('rect').attr('width',560).attr('height',440).attr('fill',P.cream);
-    land(s,path,geo,f=>iberia.has(f.id)?P.darkCream:P.lightGrey);
+    land(s,path,geo,f=>iberia.has(f.id)?P.fill:P.lightGrey);
     const cities=[{n:'Madrid',c:[-3.70,40.42],hq:true},{n:'Barcelona',c:[2.17,41.39]},{n:'Valencia',c:[-0.38,39.47]},{n:'Bilbao',c:[-2.93,43.26]},{n:'Sevilla',c:[-5.99,37.39]},{n:'Lisbon',c:[-9.14,38.72],hub:true},{n:'Porto',c:[-8.61,41.15]},{n:'Zaragoza',c:[-0.88,41.65]}];
     cities.forEach(ct=>{const [x,y]=proj(ct.c);
       if(ct.hq){lightPoint(s,x,y);}

@@ -12,4 +12,4 @@
 - **Limits:** at most 5 coloured stages plus 1 goal. If there are more, split into two funnels. No shadows or gradients.
 - **In a slide:** funnel on the left (about 800px of 1280), reading panel on the right (secondary-metrics card plus a strategic-implication callout).
 
-Note: the ramp and grey values are currently hard-coded in `funnel.py`; they are not yet tokens in `colors_and_type.css`.
+The ramp is available as tokens in `colors_and_type.css` (`--ramp-1` to `--ramp-5`). The code lives in `presentaciones/ea_elementos/embudo_canonico.py`; `charts/funnel.py` re-exports it. In a slide, use `ea_elementos.embudo()`.

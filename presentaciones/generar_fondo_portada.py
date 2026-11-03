@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Genera assets/cover-background.png (2048 x 1152) con los tokens de Terracotta.
 
-Reproduce la EJECUCIÓN del fondo de portada del sistema de Fer (tres paneles verticales, un glow
+Reproduce la EJECUCIÓN del fondo de portada del sistema de referencia de la portada (tres paneles verticales, un glow
 semicircular en el borde izquierdo de cada panel a media altura, viñeteo vertical a burgundy en los
 paneles estrechos y caída radial roja a burgundy en el panel ancho), pero con la paleta de Terracotta
 leída de colors_and_type.css (--burgundy, --red, --orange, --yellow). Si la paleta cambia, se vuelve

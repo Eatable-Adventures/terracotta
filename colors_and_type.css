@@ -114,16 +114,31 @@
   --radius: 10px;                          /* ROUNDED — brandbook cards/boxes */
 
   /* ===== CHARTS & DATA VISUALIZATION ===================================
-     Fixed color hierarchy — color is assigned by RELEVANCE, not decoration.
-     Red(1) → Orange(2) → Burgundy(3) → Yellow(4) → Dark Cream(5) →
-     Grey(neutral) → Black(axes/text). Applies to every chart type. ====== */
-  --chart-1: #BC2D29;   /* most relevant data point         */
-  --chart-2: #DE5533;   /* second                           */
-  --chart-3: #450E14;   /* third / high-weight support      */
-  --chart-4: #FFA103;   /* fourth / secondary info          */
-  --chart-5: #F5EACE;   /* fifth / secondary support        */
-  --chart-neutral: #E8E8E8;  /* neutral / complementary     */
-  --chart-axis:    #1E1E1E;  /* axes, text, reference        */
+     One rule for every chart, in decks and in apps. One series: neutral grey,
+     with the element the message is about in red. Categories of one family:
+     the red ramp. Two things of a different nature: red and dark grey.
+     Yellow only as the light point, orange only inside the brand gradient.
+     Pieces and catalogue: presentaciones/ea_elementos/, Charts Catalogue.html ===== */
+  --chart-1: #BC2D29;   /* focus: what the message is about */
+  --chart-2: #7A1217;   /* other categories of the family   */
+  --chart-3: #DE5A55;
+  --chart-4: #EFA39F;
+  --chart-5: #A3201E;
+  --chart-neutral:   #DCD6CC;  /* everything that is not the focus */
+  --chart-reference: #857B72;  /* a benchmark or a second nature   */
+  --chart-axis:      #1E1E1E;  /* axes, text, reference            */
+
+  /* Canonical red ramp, dark to light: funnel and ordinal levels in one hue */
+  --ramp-1: #7A1217;
+  --ramp-2: #A3201E;
+  --ramp-3: #BC2D29;
+  --ramp-4: #DE5A55;
+  --ramp-5: #EFA39F;
+  /* Status colours: only for validation and status pieces, never for brand or series */
+  --validacion:     #2F7D4A;  /* validated, favourable, approved */
+  --estado-ok:      var(--validacion);
+  --estado-riesgo:  var(--yellow);
+  --estado-bloqueo: var(--red);
 
   /* ===== ELEVATION — soft & warm. Flat at rest; lift only when floating. */
   --shadow-sm: 0 1px 2px rgba(30,30,30,0.05);

@@ -1,401 +1,54 @@
-<!DOCTYPE html>
+<!-- Generada por presentaciones/build_nucleo.py. No se edita a mano. -->
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Eatable Adventures — Charts & Data Visualization</title>
+<title>Charts &amp; Data Visualization · Terracotta</title>
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
-  *{box-sizing:border-box;}
-  html,body{margin:0;background:var(--paper);color:var(--fg1);font-family:var(--font-sans);}
-  .page{max-width:1080px;margin:0 auto;padding:48px 32px 80px;}
-  .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--red);margin-bottom:14px;}
-  h1{font-size:38px;font-weight:400;letter-spacing:-0.02em;margin:0 0 10px;line-height:1.08;}
-  h1 b{font-weight:700;}
-  .lead{font-size:16px;color:var(--fg2);max-width:64ch;line-height:1.55;margin:0 0 28px;}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;padding:16px 18px;background:var(--surface-cream);border:1px solid var(--border-2);border-radius:var(--radius-lg);margin-bottom:40px;}
-  .lg{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg2);}
-  .lg i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(30,30,30,.06);}
-  .lg b{color:var(--fg1);font-weight:700;margin-right:2px;}
-  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
-  .card{background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;gap:14px;}
-  .card.wide{grid-column:1 / -1;}
-  .hd{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
-  .hd h3{margin:0;font-size:16px;font-weight:600;letter-spacing:-0.01em;}
-  .hd span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--fg4);white-space:nowrap;}
-  .use{font-size:13px;color:var(--fg3);line-height:1.5;margin:0;}
-  svg{width:100%;height:auto;display:block;overflow:visible;}
-  svg text{font-family:var(--font-sans);fill:var(--fg3);font-size:11px;}
-  svg .ax{stroke:var(--border-1);stroke-width:1;}
-  svg .val{fill:var(--fg1);font-weight:500;}
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
-  .kpi{border:1px solid var(--border-1);border-radius:var(--radius-md);padding:14px;}
-  .kpi .l{font-size:12px;color:var(--fg3);}
-  .kpi .n{font-size:30px;font-weight:500;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;line-height:1.1;margin:6px 0;}
-  .kpi .d{font-size:12px;color:var(--red);display:flex;align-items:center;gap:4px;}
-  .kpi .d.m{color:var(--fg3);}
-  .prog{display:flex;flex-direction:column;gap:12px;}
-  .pr{display:grid;grid-template-columns:150px 1fr 44px;gap:12px;align-items:center;font-size:13px;}
-  .pr .bar{height:10px;border-radius:999px;background:var(--surface-fill);overflow:hidden;}
-  .pr .bar i{display:block;height:100%;border-radius:999px;}
-  .pr .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--fg2);}
-  .rules{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  .rule{border-top:2px solid var(--fg1);padding-top:14px;}
-  .rule h4{margin:0 0 6px;font-size:14px;font-weight:600;}
-  .rule p{margin:0;font-size:13px;color:var(--fg3);line-height:1.5;}
-  @media(max-width:760px){.grid,.kpis,.rules{grid-template-columns:1fr;}}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--fg1);font-family:var(--font-sans);}
+.page{max-width:1080px;margin:0 auto;padding:48px 32px 80px;}
+h1{font-size:38px;font-weight:400;letter-spacing:-.02em;margin:0 0 10px;line-height:1.08;}
+h2{font-size:20px;font-weight:700;margin:40px 0 12px;}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--red);margin-bottom:14px;}
+.lead{font-size:16px;line-height:1.55;color:var(--fg2);max-width:70ch;margin:0;}
+.reglas{list-style:none;padding:0;margin:0;display:grid;gap:10px;}
+.reglas li{background:var(--surface-fill);border-radius:10px;padding:12px 16px;font-size:14px;line-height:1.45;color:var(--fg2);}
+.reglas b{color:var(--fg1);}
+.ms-c{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;}
+.m{display:inline-flex;align-items:center;gap:6px;font-size:13px;}
+.m i{width:13px;height:13px;border-radius:3px;display:inline-block;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th{text-align:left;font-size:12px;color:var(--fg3);padding:0 12px 8px 0;border-bottom:1.5px solid var(--fg1);}
+td{padding:9px 12px 9px 0;border-bottom:1px solid var(--border-2);color:var(--fg2);vertical-align:middle;}
+td b{color:var(--fg1);font-weight:600;}
+a{color:var(--red);}
+code{font-size:13px;}
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="eyebrow">Data visualization</div>
-  <h1>Charts on the <b>brand hierarchy</b></h1>
-  <p class="lead">Every chart type uses the same fixed color order — assigned by relevance, never decoration. Rubik throughout, warm hairline axes, rounded ends, no 3D, no gridlines louder than the data. Seventeen types below, from KPI tiles to sankey and sunburst.</p>
-
-  <div class="legend">
-    <span class="lg"><i style="background:#BC2D29"></i><b>1</b> EAV Red · most relevant</span>
-    <span class="lg"><i style="background:#DE5533"></i><b>2</b> Orange</span>
-    <span class="lg"><i style="background:#450E14"></i><b>3</b> Burgundy</span>
-    <span class="lg"><i style="background:#FFA103"></i><b>4</b> Yellow</span>
-    <span class="lg"><i style="background:#F5EACE"></i><b>5</b> Dark Cream</span>
-    <span class="lg"><i style="background:#E8E8E8"></i>Grey · neutral</span>
-    <span class="lg"><i style="background:#1E1E1E"></i>Black · axes &amp; text</span>
-  </div>
-
-  <div class="grid">
-
-    <!-- KPI tiles -->
-    <div class="card wide">
-      <div class="hd"><h3>KPI tiles</h3><span>Metric · delta</span></div>
-      <div class="kpis">
-        <div class="kpi"><div class="l">Active projects</div><div class="n">42</div><div class="d">▲ +6 this quarter</div></div>
-        <div class="kpi"><div class="l">Validated pilots</div><div class="n">18</div><div class="d m">in 6–12 months</div></div>
-        <div class="kpi"><div class="l">Partner companies</div><div class="n">70+</div><div class="d m">real projects</div></div>
-        <div class="kpi"><div class="l">Capital deployed</div><div class="n">€24M</div><div class="d">▲ +12%</div></div>
-      </div>
-    </div>
-
-    <!-- Vertical bars -->
-    <div class="card">
-      <div class="hd"><h3>Bar chart</h3><span>Compare categories</span></div>
-      <svg viewBox="0 0 440 200">
-        <line class="ax" x1="30" y1="160" x2="430" y2="160"/>
-        <rect x="50" y="40" width="48" height="120" rx="4" fill="#BC2D29"/>
-        <rect x="126" y="70" width="48" height="90" rx="4" fill="#DE5533"/>
-        <rect x="202" y="92" width="48" height="68" rx="4" fill="#450E14"/>
-        <rect x="278" y="112" width="48" height="48" rx="4" fill="#FFA103"/>
-        <rect x="354" y="130" width="48" height="30" rx="4" fill="#F5EACE"/>
-        <text class="val" x="74" y="32" text-anchor="middle">24</text>
-        <text class="val" x="150" y="62" text-anchor="middle">18</text>
-        <text class="val" x="226" y="84" text-anchor="middle">13</text>
-        <text class="val" x="302" y="104" text-anchor="middle">9</text>
-        <text class="val" x="378" y="122" text-anchor="middle">6</text>
-        <text x="74" y="180" text-anchor="middle">Agritech</text>
-        <text x="150" y="180" text-anchor="middle">Food</text>
-        <text x="226" y="180" text-anchor="middle">Retail</text>
-        <text x="302" y="180" text-anchor="middle">Supply</text>
-        <text x="378" y="180" text-anchor="middle">Other</text>
-      </svg>
-      <p class="use">Rank the series first; color follows rank. Rounded tops, value labels above, no vertical gridlines.</p>
-    </div>
-
-    <!-- Horizontal bars -->
-    <div class="card">
-      <div class="hd"><h3>Horizontal bars</h3><span>Ranked lists</span></div>
-      <div class="prog">
-        <div class="pr"><span>Madrid</span><div class="bar"><i style="width:92%;background:#BC2D29"></i></div><span class="v">23</span></div>
-        <div class="pr"><span>Verona</span><div class="bar"><i style="width:64%;background:#DE5533"></i></div><span class="v">16</span></div>
-        <div class="pr"><span>Bogotá</span><div class="bar"><i style="width:44%;background:#450E14"></i></div><span class="v">11</span></div>
-        <div class="pr"><span>Lisbon</span><div class="bar"><i style="width:28%;background:#FFA103"></i></div><span class="v">7</span></div>
-        <div class="pr"><span>Other hubs</span><div class="bar"><i style="width:14%;background:#E8E8E8"></i></div><span class="v">3</span></div>
-      </div>
-      <p class="use">Pill-shaped tracks on a warm fill; labels left, tabular values right. Best for long category names.</p>
-    </div>
-
-    <!-- Line -->
-    <div class="card">
-      <div class="hd"><h3>Line chart</h3><span>Trend over time</span></div>
-      <svg viewBox="0 0 440 200">
-        <line class="ax" x1="30" y1="160" x2="430" y2="160"/>
-        <line class="ax" x1="30" y1="100" x2="430" y2="100" stroke-dasharray="2 4"/>
-        <line class="ax" x1="30" y1="40" x2="430" y2="40" stroke-dasharray="2 4"/>
-        <polyline fill="none" stroke="#E8E8E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="40,140 105,132 170,128 235,120 300,118 365,110 420,106"/>
-        <polyline fill="none" stroke="#DE5533" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="40,126 105,118 170,104 235,108 300,90 365,84 420,70"/>
-        <polyline fill="none" stroke="#BC2D29" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="40,120 105,108 170,96 235,80 300,66 365,52 420,38"/>
-        <circle cx="420" cy="38" r="5" fill="#BC2D29"/>
-        <circle cx="420" cy="38" r="9" fill="#BC2D29" opacity=".18"/>
-        <text class="val" x="410" y="26" text-anchor="end">+38%</text>
-        <text x="40" y="180" text-anchor="middle">Q1</text><text x="170" y="180" text-anchor="middle">Q3</text><text x="300" y="180" text-anchor="middle">Q1</text><text x="420" y="180" text-anchor="middle">Q3</text>
-      </svg>
-      <p class="use">Primary series in red with a pulse dot on the last point; secondary in orange; benchmark in grey. Dashed guides only.</p>
-    </div>
-
-    <!-- Area -->
-    <div class="card">
-      <div class="hd"><h3>Area chart</h3><span>Volume over time</span></div>
-      <svg viewBox="0 0 440 200">
-        <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BC2D29" stop-opacity=".28"/><stop offset="1" stop-color="#BC2D29" stop-opacity="0"/></linearGradient></defs>
-        <line class="ax" x1="30" y1="160" x2="430" y2="160"/>
-        <path d="M40,130 L105,118 L170,120 L235,96 L300,86 L365,60 L420,48 L420,160 L40,160 Z" fill="url(#ga)"/>
-        <polyline fill="none" stroke="#BC2D29" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="40,130 105,118 170,120 235,96 300,86 365,60 420,48"/>
-        <text x="40" y="180" text-anchor="middle">2021</text><text x="230" y="180" text-anchor="middle">2023</text><text x="420" y="180" text-anchor="middle">2026</text>
-      </svg>
-      <p class="use">A single series only. Red line with a soft fade to transparent — the one place a gradient is allowed inside a chart.</p>
-    </div>
-
-    <!-- Donut -->
-    <div class="card">
-      <div class="hd"><h3>Donut</h3><span>Part of whole</span></div>
-      <div style="display:flex;align-items:center;gap:26px;">
-        <svg viewBox="0 0 160 160" style="width:150px;flex-shrink:0;">
-          <circle cx="80" cy="80" r="58" fill="none" stroke="#F3EFE7" stroke-width="22"/>
-          <circle cx="80" cy="80" r="58" fill="none" stroke="#BC2D29" stroke-width="22" stroke-dasharray="153 364" transform="rotate(-90 80 80)"/>
-          <circle cx="80" cy="80" r="58" fill="none" stroke="#DE5533" stroke-width="22" stroke-dasharray="95 364" stroke-dashoffset="-153" transform="rotate(-90 80 80)"/>
-          <circle cx="80" cy="80" r="58" fill="none" stroke="#450E14" stroke-width="22" stroke-dasharray="62 364" stroke-dashoffset="-248" transform="rotate(-90 80 80)"/>
-          <circle cx="80" cy="80" r="58" fill="none" stroke="#FFA103" stroke-width="22" stroke-dasharray="36 364" stroke-dashoffset="-310" transform="rotate(-90 80 80)"/>
-          <text x="80" y="76" text-anchor="middle" style="font-size:28px;font-weight:500;fill:#1E1E1E;letter-spacing:-0.02em;">42%</text>
-          <text x="80" y="94" text-anchor="middle">Agritech</text>
-        </svg>
-        <div class="prog" style="flex:1;gap:8px;">
-          <div class="lg"><i style="background:#BC2D29"></i>Agritech · 42%</div>
-          <div class="lg"><i style="background:#DE5533"></i>Innovative food · 26%</div>
-          <div class="lg"><i style="background:#450E14"></i>Retail &amp; foodservice · 17%</div>
-          <div class="lg"><i style="background:#FFA103"></i>Supply chain · 10%</div>
-          <div class="lg"><i style="background:#F3EFE7"></i>Other · 5%</div>
-        </div>
-      </div>
-      <p class="use">Max five segments; the largest starts at 12 o'clock in red. Headline number in the hole. Never a full pie.</p>
-    </div>
-
-    <!-- Stacked bars -->
-    <div class="card">
-      <div class="hd"><h3>Stacked bars</h3><span>Composition by group</span></div>
-      <svg viewBox="0 0 440 200">
-        <line class="ax" x1="30" y1="160" x2="430" y2="160"/>
-        <g><rect x="60" y="100" width="56" height="60" fill="#BC2D29"/><rect x="60" y="66" width="56" height="34" fill="#DE5533"/><rect x="60" y="44" width="56" height="22" fill="#450E14"/><rect x="60" y="30" width="56" height="14" rx="3" fill="#FFA103"/></g>
-        <g><rect x="160" y="112" width="56" height="48" fill="#BC2D29"/><rect x="160" y="84" width="56" height="28" fill="#DE5533"/><rect x="160" y="60" width="56" height="24" fill="#450E14"/><rect x="160" y="52" width="56" height="8" rx="3" fill="#FFA103"/></g>
-        <g><rect x="260" y="118" width="56" height="42" fill="#BC2D29"/><rect x="260" y="96" width="56" height="22" fill="#DE5533"/><rect x="260" y="84" width="56" height="12" fill="#450E14"/><rect x="260" y="74" width="56" height="10" rx="3" fill="#FFA103"/></g>
-        <g><rect x="360" y="132" width="56" height="28" fill="#BC2D29"/><rect x="360" y="116" width="56" height="16" fill="#DE5533"/><rect x="360" y="106" width="56" height="10" fill="#450E14"/><rect x="360" y="100" width="56" height="6" rx="3" fill="#FFA103"/></g>
-        <text x="88" y="180" text-anchor="middle">2023</text><text x="188" y="180" text-anchor="middle">2024</text><text x="288" y="180" text-anchor="middle">2025</text><text x="388" y="180" text-anchor="middle">2026</text>
-      </svg>
-      <p class="use">Base segment in red, stacking upward in hierarchy order. Round only the top of the stack.</p>
-    </div>
-
-    <!-- Funnel -->
-    <div class="card wide">
-      <div class="hd"><h3>Funnel</h3><span>Pipeline stages</span></div>
-      <div style="max-width:760px"><svg viewBox="0 0 800 402" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;overflow:visible"><path d="M95.0,12 L106.9,60 A158.1,10 0 0 0 423.1,60 L435.0,12 Z" fill="#7A1217"/><ellipse cx="265" cy="12" rx="170.0" ry="10" fill="#5A0C10"/><text x="265" y="49.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:24px;font-weight:700;fill:#FFFFFF;letter-spacing:-0.5px;">240</text><rect x="0" y="27.0" width="26" height="26" fill="#7A1217" stroke="none" stroke-width="1.5"/><text x="13" y="45.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:14px;font-weight:600;fill:#FFFFFF;">1</text><polygon points="30,28.0 64,28.0 78,40.0 64,52.0 30,52.0" fill="#6B6B6B"/><line x1="443.0" y1="40.0" x2="451.0" y2="40.0" stroke="#D9D4CE" stroke-dasharray="2 3"/><circle cx="451.0" cy="40.0" r="3.2" fill="#6B6B6B"/><line x1="455.0" y1="40.0" x2="490" y2="40.0" stroke="#6B6B6B"/><text x="504" y="38.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:15px;font-weight:600;fill:#1E1E1E;">Detect</text><text x="504" y="55.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:12px;font-weight:400;fill:#857B72;">startups identified</text><path d="M117.0,92 L127.4,140 A137.6,10 0 0 0 402.6,140 L413.0,92 Z" fill="#A3201E"/><ellipse cx="265" cy="92" rx="148.0" ry="10" fill="#80171A"/><text x="265" y="129.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:24px;font-weight:700;fill:#FFFFFF;letter-spacing:-0.5px;">96</text><rect x="0" y="107.0" width="26" height="26" fill="#A3201E" stroke="none" stroke-width="1.5"/><text x="13" y="125.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:14px;font-weight:600;fill:#FFFFFF;">2</text><polygon points="30,108.0 64,108.0 78,120.0 64,132.0 30,132.0" fill="#6B6B6B"/><line x1="421.0" y1="120.0" x2="451.0" y2="120.0" stroke="#D9D4CE" stroke-dasharray="2 3"/><circle cx="451.0" cy="120.0" r="3.2" fill="#6B6B6B"/><line x1="455.0" y1="120.0" x2="490" y2="120.0" stroke="#6B6B6B"/><text x="504" y="118.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:15px;font-weight:700;fill:#1E1E1E;">Build</text><text x="504" y="135.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:12px;font-weight:400;fill:#857B72;">40% of the previous</text><path d="M139.0,172 L147.8,220 A117.2,10 0 0 0 382.2,220 L391.0,172 Z" fill="#DE5A55"/><ellipse cx="265" cy="172" rx="126.0" ry="10" fill="#C23F3B"/><text x="265" y="209.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:24px;font-weight:700;fill:#FFFFFF;letter-spacing:-0.5px;">42</text><rect x="0" y="187.0" width="26" height="26" fill="#DE5A55" stroke="none" stroke-width="1.5"/><text x="13" y="205.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:14px;font-weight:600;fill:#FFFFFF;">3</text><polygon points="30,188.0 64,188.0 78,200.0 64,212.0 30,212.0" fill="#6B6B6B"/><line x1="399.0" y1="200.0" x2="451.0" y2="200.0" stroke="#D9D4CE" stroke-dasharray="2 3"/><circle cx="451.0" cy="200.0" r="3.2" fill="#6B6B6B"/><line x1="455.0" y1="200.0" x2="490" y2="200.0" stroke="#6B6B6B"/><text x="504" y="198.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:15px;font-weight:600;fill:#1E1E1E;">Test</text><text x="504" y="215.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:12px;font-weight:400;fill:#857B72;">44% of the previous</text><path d="M161.0,252 L168.3,300 A96.7,10 0 0 0 361.7,300 L369.0,252 Z" fill="#EFA39F"/><ellipse cx="265" cy="252" rx="104.0" ry="10" fill="#DC8581"/><text x="265" y="289.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:24px;font-weight:700;fill:#5A0C10;letter-spacing:-0.5px;">18</text><rect x="0" y="267.0" width="26" height="26" fill="#EFA39F" stroke="none" stroke-width="1.5"/><text x="13" y="285.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:14px;font-weight:600;fill:#5A0C10;">4</text><polygon points="30,268.0 64,268.0 78,280.0 64,292.0 30,292.0" fill="#6B6B6B"/><line x1="377.0" y1="280.0" x2="451.0" y2="280.0" stroke="#D9D4CE" stroke-dasharray="2 3"/><circle cx="451.0" cy="280.0" r="3.2" fill="#6B6B6B"/><line x1="455.0" y1="280.0" x2="490" y2="280.0" stroke="#6B6B6B"/><text x="504" y="278.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:15px;font-weight:600;fill:#1E1E1E;">Scale</text><text x="504" y="295.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:12px;font-weight:400;fill:#857B72;">43% of the previous</text><rect x="209.0" y="336" width="112" height="46" rx="8" fill="none" stroke="#BC2D29" stroke-width="2" stroke-dasharray="5 4"/><text x="265" y="367.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:19px;font-weight:700;fill:#BC2D29;">25</text><rect x="0" y="347.0" width="26" height="26" fill="#FFFFFF" stroke="#BC2D29" stroke-width="1.5"/><text x="13" y="365.0" text-anchor="middle" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:14px;font-weight:600;fill:#BC2D29;">5</text><polygon points="30,348.0 64,348.0 78,360.0 64,372.0 30,372.0" fill="#6B6B6B"/><line x1="329.0" y1="360.0" x2="451.0" y2="360.0" stroke="#D9D4CE" stroke-dasharray="2 3"/><circle cx="451.0" cy="360.0" r="3.2" fill="#6B6B6B"/><line x1="455.0" y1="360.0" x2="490" y2="360.0" stroke="#6B6B6B"/><text x="504" y="358.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:15px;font-weight:600;fill:#1E1E1E;">Goal</text><text x="504" y="375.0" text-anchor="start" style="font-family:Rubik,Inter,Helvetica Neue,Arial,sans-serif;font-size:12px;font-weight:400;fill:#857B72;">in 12 months</text></svg></div>
-      <p class="use">Canonical EA funnel (approved 07-10-2026): stacked discs, fixed-step widths, red ramp dark to light, numbered badge and aligned labels. Generator: <code>charts/funnel.py</code>.</p>
-    </div>
-
-    <!-- Bullet / target -->
-    <div class="card">
-      <div class="hd"><h3>Progress vs target</h3><span>Goal tracking</span></div>
-      <div class="prog" style="gap:16px;">
-        <div class="pr" style="grid-template-columns:140px 1fr 60px;"><span>Pilots validated</span><div class="bar" style="height:14px;position:relative;"><i style="width:72%;background:#BC2D29"></i><span style="position:absolute;left:85%;top:-4px;width:2px;height:22px;background:#1E1E1E;"></span></div><span class="v">18 / 25</span></div>
-        <div class="pr" style="grid-template-columns:140px 1fr 60px;"><span>Corporate partners</span><div class="bar" style="height:14px;position:relative;"><i style="width:94%;background:#BC2D29"></i><span style="position:absolute;left:90%;top:-4px;width:2px;height:22px;background:#1E1E1E;"></span></div><span class="v">47 / 50</span></div>
-        <div class="pr" style="grid-template-columns:140px 1fr 60px;"><span>Capital deployed</span><div class="bar" style="height:14px;position:relative;"><i style="width:48%;background:#BC2D29"></i><span style="position:absolute;left:80%;top:-4px;width:2px;height:22px;background:#1E1E1E;"></span></div><span class="v">€24M / €50M</span></div>
-      </div>
-      <p class="use">Red fill on a warm track; the black tick is the target. Values as tabular "current / goal".</p>
-    </div>
-
-    <!-- Heatmap -->
-    <div class="card">
-      <div class="hd"><h3>Heatmap</h3><span>Density / intensity</span></div>
-      <svg viewBox="0 0 440 170">
-        <g style="font-size:11px;">
-          <text x="60" y="14" text-anchor="middle">Mon</text><text x="120" y="14" text-anchor="middle">Tue</text><text x="180" y="14" text-anchor="middle">Wed</text><text x="240" y="14" text-anchor="middle">Thu</text><text x="300" y="14" text-anchor="middle">Fri</text>
-          <text x="20" y="46" text-anchor="end">Detect</text><text x="20" y="86" text-anchor="end">Build</text><text x="20" y="126" text-anchor="end">Test</text>
-        </g>
-        <g>
-          <rect x="34" y="26" width="52" height="30" rx="5" fill="#F5EACE"/><rect x="94" y="26" width="52" height="30" rx="5" fill="#DE5533"/><rect x="154" y="26" width="52" height="30" rx="5" fill="#BC2D29"/><rect x="214" y="26" width="52" height="30" rx="5" fill="#F8E5E2"/><rect x="274" y="26" width="52" height="30" rx="5" fill="#F5EACE"/>
-          <rect x="34" y="66" width="52" height="30" rx="5" fill="#F8E5E2"/><rect x="94" y="66" width="52" height="30" rx="5" fill="#F5EACE"/><rect x="154" y="66" width="52" height="30" rx="5" fill="#DE5533"/><rect x="214" y="66" width="52" height="30" rx="5" fill="#BC2D29"/><rect x="274" y="66" width="52" height="30" rx="5" fill="#450E14"/>
-          <rect x="34" y="106" width="52" height="30" rx="5" fill="#F5EACE"/><rect x="94" y="106" width="52" height="30" rx="5" fill="#F8E5E2"/><rect x="154" y="106" width="52" height="30" rx="5" fill="#F5EACE"/><rect x="214" y="106" width="52" height="30" rx="5" fill="#DE5533"/><rect x="274" y="106" width="52" height="30" rx="5" fill="#BC2D29"/>
-        </g>
-        <g><rect x="350" y="26" width="14" height="110" rx="3" fill="url(#hm)"/><defs><linearGradient id="hm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#450E14"/><stop offset=".45" stop-color="#BC2D29"/><stop offset=".75" stop-color="#DE5533"/><stop offset="1" stop-color="#F5EACE"/></linearGradient></defs><text x="372" y="32">high</text><text x="372" y="136">low</text></g>
-      </svg>
-      <p class="use">Sequential warm ramp: Dark Cream → Orange → Red → Burgundy. Rounded cells, one ramp legend.</p>
-    </div>
-
-    <!-- Sunburst -->
-    <div class="card">
-      <div class="hd"><h3>Sunburst</h3><span>Nested hierarchy</span></div>
-      <div style="display:flex;align-items:center;gap:26px;">
-        <svg viewBox="0 0 200 200" style="width:180px;flex-shrink:0;">
-          <!-- inner ring (4 segments) -->
-          <g fill="none" stroke-width="26" transform="rotate(-90 100 100)">
-            <circle cx="100" cy="100" r="42" stroke="#BC2D29" stroke-dasharray="118 264"/>
-            <circle cx="100" cy="100" r="42" stroke="#DE5533" stroke-dasharray="66 264" stroke-dashoffset="-118"/>
-            <circle cx="100" cy="100" r="42" stroke="#450E14" stroke-dasharray="48 264" stroke-dashoffset="-184"/>
-            <circle cx="100" cy="100" r="42" stroke="#FFA103" stroke-dasharray="32 264" stroke-dashoffset="-232"/>
-          </g>
-          <!-- outer ring (children, tinted) -->
-          <g fill="none" stroke-width="20" transform="rotate(-90 100 100)">
-            <circle cx="100" cy="100" r="70" stroke="#BC2D29" stroke-dasharray="110 440"/>
-            <circle cx="100" cy="100" r="70" stroke="#BC2D29" opacity=".55" stroke-dasharray="86 440" stroke-dashoffset="-110"/>
-            <circle cx="100" cy="100" r="70" stroke="#DE5533" stroke-dasharray="60 440" stroke-dashoffset="-196"/>
-            <circle cx="100" cy="100" r="70" stroke="#DE5533" opacity=".5" stroke-dasharray="50 440" stroke-dashoffset="-256"/>
-            <circle cx="100" cy="100" r="70" stroke="#450E14" stroke-dasharray="80 440" stroke-dashoffset="-306"/>
-            <circle cx="100" cy="100" r="70" stroke="#FFA103" stroke-dasharray="54 440" stroke-dashoffset="-386"/>
-          </g>
-          <!-- white separators -->
-          <g fill="none" stroke="#fff" stroke-width="2" transform="rotate(-90 100 100)">
-            <circle cx="100" cy="100" r="42" stroke-dasharray="1 263"/><circle cx="100" cy="100" r="42" stroke-dasharray="1 263" stroke-dashoffset="-118"/><circle cx="100" cy="100" r="42" stroke-dasharray="1 263" stroke-dashoffset="-184"/><circle cx="100" cy="100" r="42" stroke-dasharray="1 263" stroke-dashoffset="-232"/>
-          </g>
-          <circle cx="100" cy="100" r="56" fill="none" stroke="#fff" stroke-width="3"/>
-          <text x="100" y="97" text-anchor="middle" style="font-size:20px;font-weight:500;fill:#1E1E1E;letter-spacing:-0.02em;">184</text>
-          <text x="100" y="112" text-anchor="middle" style="font-size:9px;">startups</text>
-        </svg>
-        <div class="prog" style="flex:1;gap:8px;">
-          <div class="lg"><i style="background:#BC2D29"></i>Agritech · precision ag, inputs</div>
-          <div class="lg"><i style="background:#DE5533"></i>Innovative food · alt-protein</div>
-          <div class="lg"><i style="background:#450E14"></i>Retail &amp; foodservice</div>
-          <div class="lg"><i style="background:#FFA103"></i>Supply chain</div>
-        </div>
-      </div>
-      <p class="use">Parents on the inner ring in rank color; children inherit the parent hue at 100% then ~50% opacity. Two rings maximum; total in the center.</p>
-    </div>
-
-    <!-- Timeline -->
-    <div class="card wide">
-      <div class="hd"><h3>Timeline / Gantt</h3><span>Program phases</span></div>
-      <svg viewBox="0 0 900 150">
-        <g style="font-size:11px;"><text x="300" y="14" text-anchor="middle">M3</text><text x="450" y="14" text-anchor="middle">M6</text><text x="600" y="14" text-anchor="middle">M9</text><text x="750" y="14" text-anchor="middle">M12</text></g>
-        <line class="ax" x1="150" y1="20" x2="150" y2="140"/><line class="ax" x1="450" y1="20" x2="450" y2="140" stroke-dasharray="2 4"/><line class="ax" x1="750" y1="20" x2="750" y2="140" stroke-dasharray="2 4"/>
-        <text x="140" y="42" text-anchor="end" class="val">Detect</text><rect x="150" y="30" width="180" height="18" rx="9" fill="#BC2D29"/>
-        <text x="140" y="72" text-anchor="end" class="val">Build</text><rect x="300" y="60" width="240" height="18" rx="9" fill="#DE5533"/>
-        <text x="140" y="102" text-anchor="end" class="val">Test</text><rect x="500" y="90" width="230" height="18" rx="9" fill="#450E14"/>
-        <text x="140" y="132" text-anchor="end" class="val">Scale</text><rect x="700" y="120" width="180" height="18" rx="9" fill="#FFA103"/>
-        <circle cx="610" cy="99" r="6" fill="#FFA103"/><circle cx="610" cy="99" r="11" fill="#FFA103" opacity=".22"/>
-        <text x="610" y="86" text-anchor="middle" style="fill:#1E1E1E;font-weight:500;">today</text>
-      </svg>
-      <p class="use">Pill bars per phase in hierarchy order; the yellow light point marks "today" or a milestone.</p>
-    </div>
-
-    <!-- Radar -->
-    <div class="card">
-      <div class="hd"><h3>Radar</h3><span>Multi-criteria profile</span></div>
-      <svg viewBox="0 0 440 240">
-        <g transform="translate(220,120)" fill="none" stroke="#E8E8E8" stroke-width="1">
-          <polygon points="0,-90 78,-45 78,45 0,90 -78,45 -78,-45"/>
-          <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" stroke-dasharray="2 4"/>
-          <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" stroke-dasharray="2 4"/>
-          <line x1="0" y1="0" x2="0" y2="-90"/><line x1="0" y1="0" x2="78" y2="-45"/><line x1="0" y1="0" x2="78" y2="45"/><line x1="0" y1="0" x2="0" y2="90"/><line x1="0" y1="0" x2="-78" y2="45"/><line x1="0" y1="0" x2="-78" y2="-45"/>
-        </g>
-        <g transform="translate(220,120)">
-          <polygon points="0,-52 60,-35 48,28 0,66 -70,40 -40,-24" fill="#E8E8E8" opacity=".6" stroke="#ABA197" stroke-width="1.5" stroke-linejoin="round"/>
-          <polygon points="0,-82 70,-40 62,36 0,50 -52,30 -62,-36" fill="#BC2D29" opacity=".18" stroke="#BC2D29" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle cx="0" cy="-82" r="4" fill="#BC2D29"/><circle cx="70" cy="-40" r="4" fill="#BC2D29"/><circle cx="62" cy="36" r="4" fill="#BC2D29"/><circle cx="0" cy="50" r="4" fill="#BC2D29"/><circle cx="-52" cy="30" r="4" fill="#BC2D29"/><circle cx="-62" cy="-36" r="4" fill="#BC2D29"/>
-        </g>
-        <text x="220" y="20" text-anchor="middle">Team</text>
-        <text x="312" y="72" text-anchor="start">Technology</text>
-        <text x="312" y="172" text-anchor="start">Traction</text>
-        <text x="220" y="228" text-anchor="middle">Market</text>
-        <text x="128" y="172" text-anchor="end">Capital</text>
-        <text x="128" y="72" text-anchor="end">Fit</text>
-        <g transform="translate(340,196)" style="font-size:11px;"><rect width="10" height="10" rx="2" fill="#BC2D29"/><text x="14" y="9">Startup</text><rect x="70" width="10" height="10" rx="2" fill="#ABA197"/><text x="84" y="9">Cohort avg</text></g>
-      </svg>
-      <p class="use">One profile in red with an 18% fill; the benchmark in grey behind. Max six axes, hex or pentagon rings, dashed inner guides.</p>
-    </div>
-
-    <!-- Scatter -->
-    <div class="card">
-      <div class="hd"><h3>Scatter / bubble</h3><span>Correlation · two measures</span></div>
-      <svg viewBox="0 0 440 220">
-        <line class="ax" x1="40" y1="180" x2="430" y2="180"/><line class="ax" x1="40" y1="20" x2="40" y2="180"/>
-        <line class="ax" x1="40" y1="100" x2="430" y2="100" stroke-dasharray="2 4"/><line class="ax" x1="235" y1="20" x2="235" y2="180" stroke-dasharray="2 4"/>
-        <g fill="#E8E8E8"><circle cx="70" cy="160" r="6"/><circle cx="96" cy="150" r="5"/><circle cx="120" cy="140" r="7"/><circle cx="150" cy="128" r="5"/><circle cx="180" cy="120" r="8"/><circle cx="205" cy="135" r="5"/><circle cx="250" cy="90" r="6"/><circle cx="280" cy="76" r="5"/><circle cx="310" cy="88" r="7"/><circle cx="350" cy="60" r="5"/><circle cx="130" cy="92" r="5"/><circle cx="300" cy="140" r="6"/></g>
-        <circle cx="330" cy="52" r="11" fill="#DE5533" opacity=".9"/>
-        <circle cx="390" cy="38" r="14" fill="#BC2D29"/><circle cx="390" cy="38" r="22" fill="#BC2D29" opacity=".16"/>
-        <text class="val" x="390" y="16" text-anchor="middle">Lead pilot</text>
-        <text x="235" y="200" text-anchor="middle">Technology readiness →</text>
-        <text transform="translate(18,100) rotate(-90)" text-anchor="middle">Market traction →</text>
-        <text x="428" y="96" text-anchor="end" style="fill:#ABA197;">high / high</text>
-      </svg>
-      <p class="use">Population in grey; the one or two points that matter in red and orange, sized by a third measure. Quadrant guides dashed.</p>
-    </div>
-
-    <!-- Waterfall -->
-    <div class="card">
-      <div class="hd"><h3>Waterfall</h3><span>Bridge from start to end</span></div>
-      <svg viewBox="0 0 440 220">
-        <line class="ax" x1="20" y1="180" x2="430" y2="180"/>
-        <rect x="30" y="80" width="46" height="100" rx="4" fill="#1E1E1E"/>
-        <rect x="96" y="44" width="46" height="36" rx="4" fill="#BC2D29"/>
-        <rect x="162" y="30" width="46" height="14" rx="4" fill="#BC2D29"/>
-        <rect x="228" y="30" width="46" height="26" rx="4" fill="#E8E8E8" stroke="#ABA197" stroke-width="1"/>
-        <rect x="294" y="56" width="46" height="12" rx="4" fill="#E8E8E8" stroke="#ABA197" stroke-width="1"/>
-        <rect x="360" y="68" width="46" height="112" rx="4" fill="#450E14"/>
-        <g stroke="#DCD6CC" stroke-dasharray="2 3"><line x1="76" y1="80" x2="96" y2="80"/><line x1="142" y1="44" x2="162" y2="44"/><line x1="208" y1="30" x2="228" y2="30"/><line x1="274" y1="56" x2="294" y2="56"/><line x1="340" y1="68" x2="360" y2="68"/></g>
-        <text class="val" x="53" y="72" text-anchor="middle">100</text><text class="val" x="119" y="36" text-anchor="middle">+36</text><text class="val" x="185" y="22" text-anchor="middle">+14</text><text class="val" x="251" y="22" text-anchor="middle">−26</text><text class="val" x="317" y="48" text-anchor="middle">−12</text><text class="val" x="383" y="60" text-anchor="middle">112</text>
-        <text x="53" y="200" text-anchor="middle">Start</text><text x="119" y="200" text-anchor="middle">Pilots</text><text x="185" y="200" text-anchor="middle">Scale</text><text x="251" y="200" text-anchor="middle">Churn</text><text x="317" y="200" text-anchor="middle">Costs</text><text x="383" y="200" text-anchor="middle">End</text>
-      </svg>
-      <p class="use">Totals in black and burgundy; increases in red; decreases hollow grey — reduction is neutral, not "bad". Dashed connectors.</p>
-    </div>
-
-    <!-- Treemap -->
-    <div class="card">
-      <div class="hd"><h3>Treemap</h3><span>Hierarchical share</span></div>
-      <svg viewBox="0 0 440 220">
-        <g stroke="#fff" stroke-width="3">
-          <rect x="0" y="0" width="220" height="140" rx="8" fill="#BC2D29"/>
-          <rect x="0" y="140" width="220" height="80" rx="8" fill="#DE5533"/>
-          <rect x="220" y="0" width="130" height="110" rx="8" fill="#450E14"/>
-          <rect x="350" y="0" width="90" height="110" rx="8" fill="#FFA103"/>
-          <rect x="220" y="110" width="110" height="110" rx="8" fill="#F5EACE"/>
-          <rect x="330" y="110" width="110" height="60" rx="8" fill="#E8E8E8"/>
-          <rect x="330" y="170" width="110" height="50" rx="8" fill="#F3EFE7"/>
-        </g>
-        <g style="font-weight:500;">
-          <text x="14" y="24" style="fill:#fff;font-size:13px;">Agritech</text><text x="14" y="42" style="fill:#FFF9EE;opacity:.85;">42% · €10.1M</text>
-          <text x="14" y="164" style="fill:#fff;font-size:13px;">Innovative food</text><text x="14" y="182" style="fill:#FFF9EE;opacity:.85;">22%</text>
-          <text x="234" y="24" style="fill:#FFF9EE;font-size:13px;">Retail</text><text x="234" y="42" style="fill:#F5EACE;opacity:.85;">14%</text>
-          <text x="364" y="24" style="fill:#1E1E1E;font-size:13px;">Supply</text><text x="364" y="42" style="fill:#1E1E1E;opacity:.75;">9%</text>
-          <text x="234" y="134" style="fill:#1E1E1E;font-size:13px;">Foodservice</text><text x="234" y="152" style="fill:#574E48;">7%</text>
-          <text x="344" y="134" style="fill:#574E48;">Packaging · 4%</text>
-          <text x="344" y="194" style="fill:#857B72;">Other · 2%</text>
-        </g>
-      </svg>
-      <p class="use">Cells ordered by size, colored by rank; white 3px gutters and 8px corners. Label + share inside; drop labels on cells too small to hold them.</p>
-    </div>
-
-    <!-- Sankey -->
-    <div class="card wide">
-      <div class="hd"><h3>Sankey</h3><span>Flow between stages</span></div>
-      <svg viewBox="0 0 900 260">
-        <g style="font-size:11px;"><text x="60" y="14" text-anchor="middle">Source</text><text x="450" y="14" text-anchor="middle">Program</text><text x="840" y="14" text-anchor="middle">Outcome</text></g>
-        <!-- flows -->
-        <g fill-opacity=".85">
-          <path d="M80,30 C260,30 260,40 430,40 L430,110 C260,110 260,90 80,90 Z" fill="#BC2D29" opacity=".55"/>
-          <path d="M80,90 C260,90 260,160 430,160 L430,190 C260,190 260,120 80,120 Z" fill="#DE5533" opacity=".55"/>
-          <path d="M80,135 C260,135 260,120 430,120 L430,150 C260,150 260,165 80,165 Z" fill="#450E14" opacity=".45"/>
-          <path d="M80,180 C260,180 260,200 430,200 L430,230 C260,230 260,210 80,210 Z" fill="#FFA103" opacity=".55"/>
-          <path d="M470,40 C650,40 650,30 820,30 L820,100 C650,100 650,100 470,100 Z" fill="#BC2D29" opacity=".55"/>
-          <path d="M470,100 C650,100 650,130 820,130 L820,180 C650,180 650,140 470,140 Z" fill="#450E14" opacity=".45"/>
-          <path d="M470,140 C650,140 650,190 820,190 L820,240 C650,240 650,230 470,230 Z" fill="#E8E8E8"/>
-        </g>
-        <!-- nodes -->
-        <g>
-          <rect x="60" y="30" width="20" height="60" rx="4" fill="#BC2D29"/><rect x="60" y="90" width="20" height="45" rx="4" fill="#DE5533"/><rect x="60" y="135" width="20" height="45" rx="4" fill="#450E14"/><rect x="60" y="180" width="20" height="30" rx="4" fill="#FFA103"/>
-          <rect x="430" y="40" width="40" height="190" rx="6" fill="#1E1E1E"/>
-          <rect x="820" y="30" width="20" height="70" rx="4" fill="#BC2D29"/><rect x="820" y="130" width="20" height="50" rx="4" fill="#450E14"/><rect x="820" y="190" width="20" height="50" rx="4" fill="#ABA197"/>
-        </g>
-        <g class="val" style="font-size:12px;fill:#1E1E1E;font-weight:500;">
-          <text x="50" y="64" text-anchor="end">Scouting · 120</text><text x="50" y="116" text-anchor="end">Referrals · 60</text><text x="50" y="161" text-anchor="end">Corporates · 45</text><text x="50" y="199" text-anchor="end">Inbound · 30</text>
-          <text x="450" y="140" text-anchor="middle" style="fill:#fff;">Build</text>
-          <text x="850" y="68">Validated pilot · 80</text><text x="850" y="158">In progress · 50</text><text x="850" y="218" style="fill:#857B72;">Dropped · 35</text>
-        </g>
-      </svg>
-      <p class="use">Flows carry their source node's rank color at ~55% opacity; dropped/neutral flows go grey. The central stage is an EAV Black node. Never rainbow the links.</p>
-    </div>
-
-  </div>
-
-  <div class="rules">
-    <div class="rule"><h4>Color by relevance</h4><p>Rank the series, then color in order: Red → Orange → Burgundy → Yellow → Dark Cream. Grey for benchmarks and context. Never assign colors by category meaning.</p></div>
-    <div class="rule"><h4>Type &amp; axes</h4><p>Rubik everywhere. Axis labels 11px in the warm muted grey; value labels 500 weight in EAV Black. Hairline axes, dashed guides — no boxed plots.</p></div>
-    <div class="rule"><h4>Restraint</h4><p>Max five series or segments. No 3D, no shadows, no full pies. The only gradient inside a chart is the single-series area fade or a heatmap ramp.</p></div>
-  </div>
+<div class="eyebrow">Data visualization</div>
+<h1>Charts on <b>one system</b></h1>
+<p class="lead">Every chart in Terracotta comes from one set of pieces: <code>presentaciones/ea_elementos/</code>. The full catalogue, with an example, when to use each piece and when not to, is the <a href="presentaciones/Galer%C3%ADa%20de%20elementos.html">gallery of elements</a>. This page is the index by chart type.</p>
+<h2>Colour rule</h2>
+<ul class="reglas">
+<li><b>One series:</b> neutral grey, and the element the message is about in EAV Red. Never everything in red.
+<div class="ms-c"><span class="m"><i style="background:#BC2D29"></i>Focus · --chart-1</span><span class="m"><i style="background:#DCD6CC"></i>Neutral · --chart-neutral</span></div></li>
+<li><b>Categories of one family:</b> the red ramp, dark to light.
+<div class="ms-c"><span class="m"><i style="background:#7A1217"></i>--ramp-1</span><span class="m"><i style="background:#A3201E"></i>--ramp-2</span><span class="m"><i style="background:#BC2D29"></i>--ramp-3</span><span class="m"><i style="background:#DE5A55"></i>--ramp-4</span><span class="m"><i style="background:#EFA39F"></i>--ramp-5</span></div></li>
+<li><b>Two things of a different nature</b> (us against a benchmark): red and dark grey.</li>
+<li><b>Status:</b> green only for validation and status pieces. Yellow only as the light point and in the traffic light. Orange only inside the brand gradient.</li>
+</ul>
+<h2>Chart types</h2>
+<table><tr><th>Type</th><th>Use it for</th><th>Piece, in the gallery</th><th>Panel</th></tr>
+<tr><td><b>KPI tiles</b></td><td>One number, its change and its trend</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#cifra_delta"><code>cifra_delta()</code></a></td><td><a href="preview/chart-kpi.html">Card</a></td></tr><tr><td><b>Bar chart</b></td><td>Compare categories or periods</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#columnas"><code>columnas()</code></a></td><td><a href="preview/chart-bar.html">Card</a></td></tr><tr><td><b>Horizontal bars</b></td><td>Ranked lists with long labels</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#barras_ranking"><code>barras_ranking()</code></a></td><td><a href="preview/chart-hbar.html">Card</a></td></tr><tr><td><b>Line chart</b></td><td>Trend over time</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#linea"><code>linea()</code></a></td><td><a href="preview/chart-line.html">Card</a></td></tr><tr><td><b>Area chart</b></td><td>Volume over time, by part</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#area_apilada"><code>area_apilada()</code></a></td><td><a href="preview/chart-area.html">Card</a></td></tr><tr><td><b>Donut</b></td><td>Part of a whole, up to five segments</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#donut"><code>donut()</code></a></td><td><a href="preview/chart-donut.html">Card</a></td></tr><tr><td><b>Stacked bars</b></td><td>Composition by group</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#barras_apiladas"><code>barras_apiladas()</code></a></td><td><a href="preview/chart-stacked.html">Card</a></td></tr><tr><td><b>Funnel</b></td><td>Successive stages of a filter</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#embudo"><code>embudo()</code></a></td><td><a href="preview/chart-funnel.html">Card</a></td></tr><tr><td><b>Progress vs target</b></td><td>How far from the goal</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#bala"><code>bala()</code></a></td><td><a href="preview/chart-progress.html">Card</a></td></tr><tr><td><b>Heatmap</b></td><td>Intensity across two dimensions</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#mapa_calor"><code>mapa_calor()</code></a></td><td><a href="preview/chart-heatmap.html">Card</a></td></tr><tr><td><b>Sunburst</b></td><td>Nested hierarchy, two rings</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#sunburst"><code>sunburst()</code></a></td><td><a href="preview/chart-sunburst.html">Card</a></td></tr><tr><td><b>Timeline / Gantt</b></td><td>Phases, dates and today</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#gantt"><code>gantt()</code></a></td><td><a href="preview/chart-timeline.html">Card</a></td></tr><tr><td><b>Radar</b></td><td>Profile against several criteria</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#radar"><code>radar()</code></a></td><td><a href="preview/chart-radar.html">Card</a></td></tr><tr><td><b>Scatter / bubble</b></td><td>Two variables per element</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#dispersion"><code>dispersion()</code></a></td><td><a href="preview/chart-scatter.html">Card</a></td></tr><tr><td><b>Waterfall</b></td><td>Bridge between two values</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#cascada"><code>cascada()</code></a></td><td><a href="preview/chart-waterfall.html">Card</a></td></tr><tr><td><b>Treemap</b></td><td>Share of a total, up to 15 parts</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#treemap"><code>treemap()</code></a></td><td><a href="preview/chart-treemap.html">Card</a></td></tr><tr><td><b>Sankey</b></td><td>Flows from sources to destinations</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#sankey"><code>sankey()</code></a></td><td><a href="preview/chart-sankey.html">Card</a></td></tr></table>
+<h2>Maps</h2>
+<table><tr><th>Type</th><th>Use it for</th><th>Piece, in the gallery</th><th>Panel</th></tr>
+<tr><td><b>Hub network</b></td><td>Where the actors are, in groups</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#mapa_actores"><code>mapa_actores()</code></a></td><td><a href="preview/map-hubs.html">Card</a></td></tr><tr><td><b>Coverage</b></td><td>Presence by country, up to three states</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#mapa_coropletico"><code>mapa_coropletico()</code></a></td><td><a href="preview/map-coverage.html">Card</a></td></tr><tr><td><b>Choropleth</b></td><td>One value per country</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#mapa_coropletico"><code>mapa_coropletico()</code></a></td><td><a href="preview/map-choropleth.html">Card</a></td></tr><tr><td><b>Region focus</b></td><td>One value per country, within a region</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#mapa_coropletico"><code>mapa_coropletico()</code></a></td><td><a href="preview/map-region.html">Card</a></td></tr><tr><td><b>Bubble map</b></td><td>Amounts by place, proportional area</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#mapa_burbujas"><code>mapa_burbujas()</code></a></td><td><a href="preview/map-bubbles.html">Card</a></td></tr><tr><td><b>Flow map</b></td><td>From one origin to several destinations</td><td><a href="presentaciones/Galer%C3%ADa%20de%20elementos.html#mapa_flujos"><code>mapa_flujos()</code></a></td><td><a href="preview/map-flows.html">Card</a></td></tr></table>
+<p class="lead" style="margin-top:16px">In decks and static documents, use these pieces. In live apps, <code>maps-brand.js</code> draws the same maps in the browser: see <a href="Maps%20Catalogue.html">Maps Catalogue</a>.</p>
 </div>
 </body>
 </html>
