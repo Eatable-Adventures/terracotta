@@ -7,7 +7,7 @@ Fija las piezas que NO se rediseñan en cada presentación:
   - portadilla() : foto a sangre (o una escena isométrica si no hay foto con relación con el proyecto) y tarjeta blanca.
   - cabecera()   : eyebrow gris numerado + título en negrita con tramo rojo + glow ámbar + logo arriba a la derecha.
   - cierre()     : "Gracias." + mensaje (y próximo paso opcional) | "Let's Beat" sobre el degradado de marca.
-Idioma: todas las etiquetas fijas salen en el idioma del deck (idioma="es" por defecto, o "en"). Decisiones del 01-11-2026.
+Idioma: todas las etiquetas fijas salen en el idioma del deck (idioma="es" por defecto, o "en").
 
 Lo demás (contenido de cada slide) se escribe encima con las variables de Terracotta.
 Uso: ver README.md de esta carpeta. Todo queda embebido en base64 (HTML autocontenido, sin red).
@@ -64,8 +64,10 @@ TXT = {
 
 # ------------------------------------------------------------------ CSS fijo
 CSS_BASE = """
-/* Verde de validación (29-10-2026): solo para estados de validación (favorable, validado, aprobado). No es color de marca ni de series de datos */
+/* Verde de validación: solo para estados de validación (favorable, validado, aprobado). No es color de marca ni de series de datos */
 :root{--validacion:#2F7D4A;}
+/* Gris neutro de apoyo: bandas, fichas, teselas y etiquetas en #F3F3F3, el --surface-fill del núcleo. En esta capa --light-grey toma el mismo valor (en el núcleo es el fondo de página, #FAFAFA) */
+:root{--light-grey:#F3F3F3;}
 html,body{margin:0;padding:0;background:#DCD6CC;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 *{box-sizing:border-box;}
 body{font-family:'Rubik','Inter','Helvetica Neue',Arial,sans-serif;color:var(--fg1);}
@@ -109,7 +111,7 @@ color:var(--cream);text-transform:none;letter-spacing:-.005em;}
 .cover .cv-copy{position:absolute;left:319px;top:672px;font-size:12.5px;color:var(--cream);}
 .cover .cv-m .v.eq{font-size:14.5px;line-height:1.45;}
 
-/* ---- agenda (formato del Google Slides de EA, 28-10-2026) ---- */
+/* ---- agenda (formato del Google Slides de EA) ---- */
 .agenda{position:absolute;inset:0;display:grid;grid-template-columns:450px 1px 1fr;align-items:center;padding:0 96px 0 108px;}
 .ag-l{position:relative;}
 .ag-ey{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--red);margin:0 0 14px;}
@@ -169,7 +171,7 @@ def cabecera(eyebrow, titulo_html, pills=""):
 
 def pie(n, total, fuente, cliente, idioma="es"):
     """Pie de slide: la fuente a la izquierda (sin fechas concretas) y la confidencialidad con el número a la derecha,
-    sin «Eatable Adventures» (decisión del 01-11-2026)."""
+    sin «Eatable Adventures»."""
     return (f'<div class="slide-foot"><span><b>{E(fuente)}</b></span>'
             f'<span>{E(TXT[idioma]["pie"].format(c=cliente))} · <b>{n} / {total}</b></span></div>')
 
@@ -181,15 +183,17 @@ def slide(cuerpo_html, n, total, fuente, cliente, idioma="es", clave=None):
             f'{pie(n, total, fuente, cliente, idioma)}</div></section>')
 
 
-def agenda(secciones, subtitulo="", idioma="es"):
+def agenda(secciones, subtitulo="", idioma="es", linea_al_texto=True):
     """Agenda: «AGENDA» con glow y un subtítulo a la izquierda, línea vertical y las secciones a la derecha, sin pie.
-    secciones: [(título, descripción)] o [(número, título, descripción)]; con más de cinco, versión densa."""
+    secciones: [(título, descripción)] o [(número, título, descripción)]; con más de cinco, versión densa.
+    linea_al_texto: la línea vertical mide lo mismo que el bloque de secciones (por defecto); False, el alto fijo."""
     items = [(f"{i + 1:02d}", *s) if len(s) == 2 else s for i, s in enumerate(secciones)]
     filas = "".join(f'<div class="ag-i"><h3><span>{E(n)}.</span> {E(t)}</h3>' + (f'<p>{E(d)}</p>' if d else "") + '</div>' for n, t, d in items)
     return (f'<section class="slide"><img class="logo-tr" src="{LOGO_SVG}" alt="Eatable Adventures">'
             f'<div class="agenda{" densa" if len(items) > 5 else ""}"><div class="ag-l"><p class="ag-ey">{E(TXT[idioma]["agenda"])}</p>'
             f'<div class="ag-tt"><span class="glow"></span><h2 class="ag-t">AGENDA</h2></div>'
-            + (f'<p class="ag-s">{E(subtitulo)}</p>' if subtitulo else "") + f'</div><div class="ag-v"></div><div class="ag-r">{filas}</div></div></section>')
+            + (f'<p class="ag-s">{E(subtitulo)}</p>' if subtitulo else "") + f'</div><div class="ag-v"{' style="visibility:hidden"' if linea_al_texto else ""}></div>'
+            f'<div class="ag-r"{' style="border-left:1px solid var(--border-1);margin-left:-1px"' if linea_al_texto else ""}>{filas}</div></div></section>')
 
 
 def portadilla(numero, titulo, subtitulo="", foto=None, visual_html=None):
@@ -210,7 +214,7 @@ def portada(linea1, linea2, subtitulo, realizado_para, equipo, fecha, clasificac
     """linea1: tipo de entregable. linea2: cliente o proyecto. Máx. ~22 caracteres por línea, en frase normal (no mayúsculas).
     subtitulo: una línea, bloques separados por ' · ', sin punto final. fecha: mes con mayúscula inicial y año ('Octubre 2026').
     equipo: las personas reales del proyecto (texto o lista, una por línea); «Delivery Excellence» solo si se pide para
-    un deck concreto. Las etiquetas y el copyright salen en el idioma del deck (decisiones del 01-11-2026)."""
+    un deck concreto. Las etiquetas y el copyright salen en el idioma del deck."""
     t = TXT[idioma]
     lineas = equipo if isinstance(equipo, (list, tuple)) else [equipo]
     eq = "<br>".join(E(x) for x in lineas)
@@ -231,7 +235,7 @@ def portada(linea1, linea2, subtitulo, realizado_para, equipo, fecha, clasificac
 
 
 def cierre(mensaje_clave, cliente, siguiente=None, idioma="es"):
-    """Cierre fijo. El mensaje va sin la etiqueta «Mensaje clave» (29-10-2026) y admite **negrita** para destacar una parte.
+    """Cierre fijo. El mensaje va sin la etiqueta «Mensaje clave» y admite **negrita** para destacar una parte.
     siguiente: próximo paso o entregable opcional bajo «Gracias.» («E3, Veredicto estratégico»)."""
     t = TXT[idioma]
     txt = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", E(mensaje_clave))

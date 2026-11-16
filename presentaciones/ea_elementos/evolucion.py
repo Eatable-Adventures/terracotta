@@ -10,7 +10,7 @@ from .base import (
     arrow_eje, circle, fmt, lin, line, rampa, rect, text, uid,
 )
 
-from .base import (arrow, hatch, mezcla)  # añadidos el 01-11-2026
+from .base import (arrow, hatch, mezcla)
 
 __all__ = ["linea", "area_apilada", "sparkline", "pendiente", "cascada", "curva_s", "abanico", "bump", "pequenos_multiplos", "combo_financiero"]
 

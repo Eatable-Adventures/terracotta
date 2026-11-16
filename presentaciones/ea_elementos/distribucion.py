@@ -12,7 +12,7 @@ from .base import (
 )
 from .marcas import (_con_leyenda)
 
-from .base import (INPUT, _logo_html, mezcla)  # añadidos el 01-11-2026
+from .base import (INPUT, _logo_html, mezcla)
 
 __all__ = ["mapa_burbujas", "mapa_flujos", "mapa_madurez", "dispersion", "mapa_calor", "histograma", "cajas", "red_nodos", "NOMBRES_PAIS", "REGIONES", "mapa_coropletico", "mapa_burbujas", "mapa_flujos", "CENTROS", "mapa_actores"]
 
@@ -330,19 +330,25 @@ def _proyeccion(centro):
     return pr
 
 
-def mapa_coropletico(valores, region="europa", escala=None, destacado=None, etiquetas=None, fmt_valor=None, leyenda_txt="", W=520, H=None):
+def mapa_coropletico(valores, region="europa", escala=None, destacado=None, etiquetas=None, fmt_valor=None, leyenda_txt="", W=520, H=None, zonas=None, bordes=True):
     """Mapa coroplético: países coloreados por valor (gris cálido a rojo oscuro), sin JavaScript.
     Proyección acimutal equivalente de Lambert (proporciones reales en Europa); el alto sale de la región.
     valores: {país: valor} con el nombre en español (NOMBRES_PAIS) o en inglés del atlas; region: 'europa',
     'iberia', 'latam', 'hispano' (Latinoamérica e Iberia) o 'mundo'; destacado: país con borde negro; etiquetas: países que llevan la cifra encima
     (por defecto, todos los que tienen valor); leyenda_txt: qué mide la escala.
+    zonas: [dict(rotulo, valor, caja=(lon0, lon1, lat0, lat1), punto=(lon, lat))]: colorea por zona (continente, región) todos los
+    países cuyo centro cae en la caja (gana la primera que lo contiene) y pone un rótulo «zona · valor» en el punto (con ancla=(lon, lat),
+    el rótulo va fuera, en el mar, unido por una guía a ese punto de la zona); con zonas,
+    valores puede ir vacío. bordes: False quita las líneas entre países, para que las zonas se lean como manchas limpias.
     Cuándo usarlo: actividad, mercado o presencia por país (dónde están los proveedores, las patentes, la demanda).
     Cuándo no: si el valor depende del tamaño del país (usa valores por habitante) o con menos de 4 países (usa barras)."""
     f = fmt_valor or fmt
     geo = _geo()
     nom = lambda p: NOMBRES_PAIS.get(p, p)
     val = {nom(k): v for k, v in valores.items()}
-    d0, d1 = escala or (min(val.values()), max(val.values()))
+    zonas = zonas or []
+    todos = list(val.values()) + [z["valor"] for z in zonas]
+    d0, d1 = escala or (min(todos), max(todos))
     (lon0, lon1, lat0, lat1), centro = REGIONES[region]
     pr0 = _proyeccion(centro)
     if centro:
@@ -365,14 +371,29 @@ def mapa_coropletico(valores, region="europa", escala=None, destacado=None, etiq
         if not dentro:
             continue
         d = "".join("M" + " L".join(f"{a:.1f},{b:.1f}" for a, b in (pr(x, y) for x, y in ring)) + "Z" for p in dentro for ring in p)
+        if zonas and pais not in val:  # cada polígono por su propio centro: los territorios de ultramar van con su zona
+            for pol in dentro:
+                ring = pol[0]
+                cx, cy = sum(x for x, _ in ring) / len(ring), sum(y for _, y in ring) / len(ring)
+                z = next((z for z in zonas if z["caja"][0] <= cx <= z["caja"][1] and z["caja"][2] <= cy <= z["caja"][3]), None)
+                cz = calor((z["valor"] - d0) / (d1 - d0)) if z else FILL
+                dp = "".join("M" + " L".join(f"{a:.1f},{b:.1f}" for a, b in (pr(x, y) for x, y in r)) + "Z" for r in pol)
+                paths.append(f'<path d="{dp}" fill="{cz}" stroke="{"#fff" if bordes else cz}" stroke-width=".5" fill-rule="evenodd" stroke-linejoin="round"/>')
+            continue
         c = calor((val[pais] - d0) / (d1 - d0)) if pais in val else FILL
         hot = destacado and nom(destacado) == pais
-        paths.append(f'<path d="{d}" fill="{c}" stroke="{FG1 if hot else "#fff"}" stroke-width="{2 if hot else .8}" fill-rule="evenodd" stroke-linejoin="round"/>')
+        paths.append(f'<path d="{d}" fill="{c}" stroke="{FG1 if hot else ("#fff" if bordes else c)}" stroke-width="{2 if hot else .8}" fill-rule="evenodd" stroke-linejoin="round"/>')
         if pais in val and pais in eti:
             ring = max((p[0] for p in dentro), key=len)
             cx, cy = CENTROS.get(pais) or (sum(x for x, _ in ring) / len(ring), sum(y for _, y in ring) / len(ring))
             px, py = pr(cx, cy)
             etq.append(text(px, py + 4, f(val[pais]), 11, 700, sobre(c), "middle"))
+    for z in zonas:
+        px, py = pr(*z["punto"])
+        if z.get("ancla"):  # rótulo fuera del territorio, unido por una guía a un punto de la zona
+            ax, ay = pr(*z["ancla"])
+            etq.append(line(px, py, ax, ay, FG2, 1) + circle(ax, ay, 2.5, FG1))
+        etq.append(text(px, py + 4, f'{z["rotulo"]} · {f(z["valor"])}', 12, 700, FG1, "middle", halo=True))
     gid = uid("g")
     grad = f'<linearGradient id="{gid}">' + "".join(f'<stop offset="{t / 4}" stop-color="{calor(t / 4)}"/>' for t in range(5)) + '</linearGradient>'
     defs = f'<clipPath id="{clip}"><rect x="0" y="0" width="{W}" height="{hm}"/></clipPath>{grad}'

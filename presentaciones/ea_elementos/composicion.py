@@ -84,10 +84,10 @@ def anillo_categorias(grupos, centro, marca=("science", "Marcado"), franja="", c
     return L.render()
 
 
-def donut(partes, centro=None, destacado=None, W=520, D=200, grosor=30):
+def donut(partes, centro=None, destacado=None, W=520, D=200, grosor=30, colores=None):
     """Anillo con la cifra clave en el centro y la leyenda con valores a la derecha.
     partes: [(rótulo, valor)]; centro = (cifra, texto); destacado: índice en rojo y el resto en grises
-    (si es None, todas en la rampa de rojos).
+    (si es None, todas en la rampa de rojos); colores: lista explícita, uno por parte, que manda sobre destacado.
     Cuándo usarlo: una parte de un total con 2 a 5 partes, cuando la cifra central es el mensaje.
     Cuándo no: más de 5 partes o partes parecidas entre sí (usa barras_ranking)."""
     tot = sum(v for _, v in partes)
@@ -97,6 +97,8 @@ def donut(partes, centro=None, destacado=None, W=520, D=200, grosor=30):
         grises = [FG4, INPUT, GREY, FILL]
         g = iter(grises)
         cols = [RED if i == destacado else next(g, FILL) for i in range(len(partes))]
+    if colores:
+        cols = list(colores)
     r = (D - grosor) / 2
     c = math.pi * 2 * r
     s, off = [], 0

@@ -9,7 +9,7 @@ from .base import (
 )
 from .marcas import (delta)
 
-from .base import (BORDER2, arrow, text, uid)  # añadidos el 01-11-2026
+from .base import (BORDER2, arrow, text, uid)
 
 __all__ = ["arbol_tramite", "arbol", "espina_pescado", "organigrama", "formula", "arbol_drivers", "abanico_foco", "arbol_opciones"]
 

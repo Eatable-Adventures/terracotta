@@ -7,11 +7,12 @@ import math
 
 from .base import (E, FG1, FG2, FG3, FG4, FILL, LGREY, ORANGE, RED, TINT, flecha_svg, icono, icono_caja, logo, md, pill)
 from .magnitud import (columnas)
-from .marcas import (chip_nota, etiqueta_evidencia, valoracion)
+from .marcas import (chip_nota, etiqueta_evidencia, marca, valoracion)
 
-from .base import (INPUT, _logo_html, mezcla)  # añadidos el 01-11-2026
+from .base import (INPUT, _logo_html, mezcla)
+from .base import (RAMP)
 
-__all__ = ["tarjeta_actor", "etiquetas_icono", "grupo_fichas", "ficha_hipotesis", "tarjetas_salida", "cita", "lista_numerada", "aviso", "persona", "muro_logos", "ecosistema_logos", "antes_despues_imagen", "ficha_linea", "ficha_empresa", "columnas_numeradas", "afirmacion_evidencia", "columnas_requisitos", "columna_contexto", "tarjetas_escenario", "grupo_logos", "bloque", "ficha_startup", "categorias_chips"]
+__all__ = ["tarjeta_actor", "etiquetas_icono", "grupo_fichas", "ficha_hipotesis", "tarjetas_salida", "cita", "lista_numerada", "aviso", "persona", "muro_logos", "ecosistema_logos", "antes_despues_imagen", "ficha_linea", "ficha_empresa", "columnas_numeradas", "afirmacion_evidencia", "columnas_requisitos", "columna_contexto", "tarjetas_escenario", "grupo_logos", "bloque", "ficha_startup", "categorias_chips", "ficha_finalista", "lista_validacion", "mapa_grupos_logos"]
 
 
 def tarjeta_actor(nombre, sub="", frase="", logo_html="", rotulo=None, compacta=False):
@@ -33,12 +34,15 @@ def tarjeta_actor(nombre, sub="", frase="", logo_html="", rotulo=None, compacta=
             f'<div style="font-size:13px;line-height:1.38;margin-top:3px">{rot}{md(frase)}</div></div>')
 
 
-def etiquetas_icono(items, vertical=True):
-    """Etiquetas pequeñas con icono en caja (condiciones, capacidades). items: [(icono, texto)]."""
+def etiquetas_icono(items, vertical=True, caja=True, tam=None, llenar=False):
+    """Etiquetas pequeñas con icono en caja (condiciones, capacidades). items: [(icono, texto)].
+    caja: False deja el icono rojo sin el cuadrado rosa; tam: texto en px (por defecto, el de .tile);
+    llenar: la lista ocupa el alto de su columna y las etiquetas se lo reparten (para acabar a ras de la pieza de al lado)."""
     d = "column" if vertical else "row"
-    return (f'<div style="display:flex;flex-direction:{d};gap:6px">' + "".join(
-        f'<div class="tile" style="flex:1;background:var(--light-grey);box-shadow:inset 0 0 0 1px var(--border-2);padding:6px 10px">'
-        f'{icono_caja(ic, 17, caja=28, radio=8)}<b>{E(t)}</b></div>' for ic, t in items) + '</div>')
+    ic_ = (lambda ic: icono_caja(ic, 17, caja=28, radio=8)) if caja else (lambda ic: icono(ic, 24, RED))
+    return (f'<div style="display:flex;flex-direction:{d};gap:6px;{"flex:1;" if llenar else ""}">' + "".join(
+        f'<div class="tile" style="flex:1;background:var(--light-grey);box-shadow:inset 0 0 0 1px var(--border-2);padding:6px {14 if not caja else 10}px;'
+        f'{f"font-size:{tam}px;" if tam else ""}">{ic_(ic)}<b>{E(t)}</b></div>' for ic, t in items) + '</div>')
 
 
 def grupo_fichas(titulo, fichas, destacado=False):
@@ -124,23 +128,24 @@ def cita(texto_, autor, cargo="", W=520):
             f'{" · " + E(cargo) if cargo else ""}</div></div>')
 
 
-def lista_numerada(items, W=520, H=None):
+def lista_numerada(items, W=520, H=None, tam_texto=13, tam_titulo=14):
     """Lista numerada con el número en cuadro rojo, título en negrita y una línea de texto.
-    items: [(título, texto)]. H: alto total (reparte el aire entre los puntos).
+    items: [(título, texto)]. H: alto total (reparte el aire entre los puntos). tam_texto y tam_titulo: px del texto y del título.
     Cuándo usarlo: recomendaciones, próximos pasos o conclusiones (3 a 5).
     Cuándo no: si el orden no significa nada (usa icono_dato o viñetas)."""
     return (f'<div style="display:flex;flex-direction:column;gap:14px;width:{W}px;{f"height:{H}px;justify-content:space-between;" if H else ""}">' + "".join(
         f'<div style="display:flex;gap:14px;align-items:flex-start"><span class="nb">{i + 1}</span>'
-        f'<div><b style="font-size:14px;color:var(--fg1)">{E(t)}</b><div style="font-size:13px;line-height:1.4;color:var(--fg2);margin-top:2px">{md(x)}</div></div></div>'
+        f'<div><b style="font-size:{tam_titulo}px;color:var(--fg1)">{E(t)}</b><div style="font-size:{tam_texto}px;line-height:1.4;color:var(--fg2);margin-top:2px">{md(x)}</div></div></div>'
         for i, (t, x) in enumerate(items)) + '</div>')
 
 
-def aviso(texto_, tipo="clave", W=520):
+def aviso(texto_, tipo="clave", W=520, centrar=False):
     """Recuadro de llamada: 'clave' (rosa con borde rojo), 'aviso' (icono de alerta) o 'nota' (gris).
+    centrar: el icono centrado en alto con el texto (para textos de dos o tres líneas).
     Cuándo usarlo: una advertencia, un supuesto crítico o una idea que no puede perderse, dentro del cuerpo.
     Cuándo no: para la conclusión de la slide (eso es la banda de cuerpo_slide)."""
     bg, bd, ic = {"clave": (TINT, RED, "new_releases"), "aviso": ("#fff", ORANGE, "warning"), "nota": (FILL, FG4, "rate_review")}[tipo]
-    return (f'<div style="width:{W}px;display:flex;gap:12px;align-items:flex-start;background:{bg};border-left:3px solid {bd};'
+    return (f'<div style="width:{W}px;display:flex;gap:12px;align-items:{"center" if centrar else "flex-start"};background:{bg};border-left:3px solid {bd};'
             f'padding:12px 16px;font-size:14px;line-height:1.45;color:var(--fg1)">{icono(ic, 22, bd)}<div>{md(texto_)}</div></div>')
 
 
@@ -241,41 +246,80 @@ def antes_despues_imagen(antes, despues, W=520, alto=170):
             f'<div style="height:{alto}px;display:flex;align-items:center">{flecha_svg(RED, 28, 18, 2.5)}</div>{lado(despues, "red")}</div>')
 
 
-def ficha_linea(empresas, W=1100, escala_madurez=5, H=None):
+def ficha_linea(empresas, W=1100, escala_madurez=5, H=None, cabeceras=None, ancho_estado=None):
     """Ficha de una línea por empresa: logo, nombre, país y tipo, madurez en puntos y una frase.
-    empresas: [dict(nombre, pais, tipo, madurez=None, frase, logo_html=None, destacada=False)]. H: alto total (reparte las filas).
+    empresas: [dict(nombre, pais, tipo, madurez=None, frase, logo_html=None, destacada=False, estado=None, estado_tipo="neutral", celdas=None)]. H: alto total (reparte las filas).
+    estado (opcional): texto de una píldora en una última columna (recomendación o fase); estado_tipo: red, rosa, neutral, sand, out o burg.
+    celdas (opcional): textos cortos en columnas propias entre el nombre y la frase (país, producto); con celdas, pais y tipo pueden ir vacíos.
+    cabeceras (opcional): rótulos de columna en una fila superior, en el orden empresa, celdas, frase y estado. ancho_estado: ancho fijo de las píldoras (px) para que midan igual; su cabecera va centrada sobre ellas.
     Sin madurez no hay columna de puntos, para usarla en media slide.
     Cuándo usarlo: listas largas de candidatos (10 a 20) en una o dos slides, antes de las fichas completas.
     Cuándo no: si hay que comparar varias dimensiones con nota (usa matriz_puntuacion)."""
+    con_mad = any(e.get("madurez") is not None for e in empresas)
+    con_est = any(e.get("estado") for e in empresas)
+    n_cel = max((len(e.get("celdas") or []) for e in empresas), default=0)
+    col_est = (ancho_estado or 170) + 8 if con_est else 0
+    plantilla = f'48px {"230px 150px" if con_mad else "190px"}{" 1fr" * n_cel} 1fr{f" {col_est}px" if con_est else ""}'
     filas = []
+    if cabeceras:
+        rot = "".join(f'<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3){(f";justify-self:end;width:{ancho_estado}px;text-align:center" if ancho_estado else ";text-align:right") if con_est and k == len(cabeceras) - 1 else ""}">{E(c)}</div>' for k, c in enumerate(cabeceras))
+        filas.append(f'<div style="display:grid;grid-template-columns:{plantilla};gap:16px;align-items:end;padding:8px 12px;border-bottom:1.5px solid var(--fg1)"><div></div>{rot}</div>')
     for e in empresas:
         hot = e.get("destacada")
         ini = "".join(p[0] for p in e["nombre"].split()[:2]).upper()
         lg = e.get("logo_html") or (f'<span style="width:40px;height:40px;border-radius:10px;background:{RED if hot else FG1};color:#fff;'
                                     f'display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">{E(ini)}</span>')
-        con_mad = e.get("madurez") is not None
-        filas.append(f'<div style="display:grid;grid-template-columns:48px {"230px 150px" if con_mad else "190px"} 1fr;gap:16px;align-items:center;padding:{4 if H else 9}px 12px;'
+        sub = " · ".join(x for x in (e.get("pais"), e.get("tipo")) if x)
+        cel = "".join(f'<div style="font-size:13px;line-height:1.35;color:var(--fg2)">{md(c)}</div>' for c in (e.get("celdas") or []))
+        cel += "".join("<div></div>" for _ in range(n_cel - len(e.get("celdas") or [])))
+        est = ""
+        if con_est:
+            pl = pill(e["estado"], e.get("estado_tipo", "neutral")) if e.get("estado") else ""
+            if pl and ancho_estado:
+                pl = pl.replace("<span ", f'<span style="display:inline-block;width:{ancho_estado}px;text-align:center;box-sizing:border-box" ', 1)
+            est = f'<div style="text-align:right">{pl}</div>'
+        filas.append(f'<div style="display:grid;grid-template-columns:{plantilla};gap:16px;align-items:center;padding:{4 if H else 9}px 12px;'
                      f'border-bottom:1px solid var(--border-2);{f"background:{TINT};" if hot else ""}">'
                      f'<div>{lg}</div><div><b style="font-size:14px;color:{RED if hot else FG1}">{E(e["nombre"])}</b>'
-                     f'<div style="font-size:12px;color:var(--fg3)">{E(e["pais"])} · {E(e["tipo"])}</div></div>'
+                     + (f'<div style="font-size:12px;color:var(--fg3)">{E(sub)}</div>' if sub else "") + '</div>'
                      + (f'<div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--fg3)">MADUREZ</span>'
-                        f'{valoracion(e["madurez"], escala_madurez)}</div>' if con_mad else "") +
-                     f'<div style="font-size:13px;line-height:1.4;color:var(--fg2)">{md(e["frase"])}</div></div>')
-    alto = f"height:{H}px;display:grid;grid-auto-rows:1fr;" if H else ""
-    return f'<div style="width:{W}px;{alto}border-top:1.5px solid var(--fg1)">{"".join(filas)}</div>'
+                        f'{valoracion(e["madurez"], escala_madurez)}</div>' if e.get("madurez") is not None else ("<div></div>" if con_mad else "")) + cel +
+                     f'<div style="font-size:13px;line-height:1.4;color:var(--fg2)">{md(e["frase"])}</div>{est}</div>')
+    alto = f"height:{H}px;display:grid;grid-auto-rows:{'auto ' if cabeceras else ''}1fr;" if H else ""
+    if H and cabeceras:
+        alto = f"height:{H}px;display:grid;grid-template-rows:auto repeat({len(empresas)},1fr);"
+    return f'<div style="width:{W}px;{alto}border-top:{"0" if cabeceras else "1.5px solid var(--fg1)"}">{"".join(filas)}</div>'
 
 
-def ficha_startup(e, W=1152, H=None, tam_texto=15):
+def ficha_startup(e, W=1152, H=None, tam_texto=15, kpi=False):
     """Ficha de startup a toda la slide, sin ingresos: fila de datos clave arriba y cuatro bloques de texto que llenan el resto.
     e = dict(datos=[(rótulo, valor)], bloques=[(título, texto)], destacado=índice del bloque con filete rojo).
+    kpi=True: los datos van como KPI (cifra grande arriba, rótulo corto debajo, centrados y sobre gris claro); pide valores cortos.
+    Con dos bloques, van en una fila que llena el alto; con tres, el tercero va abajo a todo el ancho (su lista, en columnas); con cuatro, en rejilla de 2 × 2. El texto de un bloque puede ser una lista de frases, que sale en viñetas.
     Cuándo usarlo: fichas de finalistas o candidatos cuando no hay cifras de ingresos que enseñar (una por slide, hermanas).
     Cuándo no: si hay ingresos y una cita (usa ficha_empresa); para listas largas (usa ficha_linea)."""
-    datos = "".join(f'<div style="flex:1;min-width:0;padding:10px 16px;background:var(--surface-fill);border-radius:10px"><span class="k2" style="margin-bottom:3px">{E(r)}</span>'
-                    f'<b style="display:block;font-size:15px;line-height:1.25;color:var(--fg1)">{E(v)}</b></div>' for r, v in e["datos"])
-    bloques = "".join(bloque(t, f'<div style="font-size:{tam_texto}px;line-height:1.5;color:var(--fg2)">{md(x)}</div>', filete="rojo" if i == e.get("destacado") else "negro")
-                      for i, (t, x) in enumerate(e["bloques"]))
+    if kpi:
+        datos = "".join(f'<div style="flex:1;min-width:0;padding:12px 10px;background:var(--surface-grey);border:1px solid var(--border-1);border-radius:10px;'
+                        f'display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">'
+                        f'<b style="display:block;font-size:22px;line-height:1.15;color:var(--fg1);white-space:nowrap">{E(v)}</b>'
+                        f'<span style="font-size:12px;line-height:1.3;color:var(--fg2);margin-top:4px">{E(r)}</span></div>' for r, v in e["datos"])
+    else:
+        datos = "".join(f'<div style="flex:1;min-width:0;padding:10px 16px;background:var(--surface-fill);border-radius:10px"><span class="k2" style="margin-bottom:3px">{E(r)}</span>'
+                        f'<b style="display:block;font-size:15px;line-height:1.25;color:var(--fg1)">{E(v)}</b></div>' for r, v in e["datos"])
+    n = len(e["bloques"])
+    def txt(x, ancho):
+        if isinstance(x, (list, tuple)):
+            rej = f"display:grid;grid-template-columns:repeat({len(x)},1fr);gap:0 28px;" if ancho else ""
+            return f'<ul style="margin:0;padding-left:18px;{rej}">' + "".join(f'<li style="margin-bottom:6px">{md(i)}</li>' for i in x) + "</ul>"
+        return md(x)
+    def bq(i, t, x):
+        ancho = n == 3 and i == 2
+        b = bloque(t, f'<div style="font-size:{tam_texto - (1 if ancho else 0)}px;line-height:1.5;color:var(--fg2)">{txt(x, ancho)}</div>', filete="rojo" if i == e.get("destacado") else "negro")
+        return f'<div style="grid-column:1/-1;display:flex;flex-direction:column">{b}</div>' if ancho else b
+    bloques = "".join(bq(i, t, x) for i, (t, x) in enumerate(e["bloques"]))
+    filas = "grid-template-rows:1fr auto" if n == 3 else "grid-auto-rows:1fr"
     return (f'<div style="width:{W}px;{f"height:{H}px;" if H else ""}display:flex;flex-direction:column;gap:16px"><div style="display:flex;gap:10px">{datos}</div>'
-            f'<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:16px 20px">{bloques}</div></div>')
+            f'<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;{filas};gap:16px 20px">{bloques}</div></div>')
 
 
 def categorias_chips(grupos, columnas=3, marca="Finalista", W=1152, H=None, rojo=True):
@@ -325,11 +369,12 @@ def ficha_empresa(e, W=1100):
     return f'<div style="width:{W}px">{cab}{cuerpo}{pie}</div>'
 
 
-def columnas_numeradas(items, W=1100, H=None, tam_texto=13, tam_cifra=15, rojo=True):
+def columnas_numeradas(items, W=1100, H=None, tam_texto=13, tam_cifra=15, rojo=True, compacta=False):
     """Columnas numeradas: 01, 02 y 03 en rojo con icono, título, texto y, al pie, una caja con una o dos cifras;
     separadores verticales finos entre columnas. items: [dict(titulo, texto, icono=None, cifras=[(cifra, rótulo)])].
     H: alto total (las cajas de cifras bajan al pie). tam_texto y tam_cifra: px del texto y de las cifras.
     rojo=False: números y cifras en negro (K1), y el foco se pone en el texto con **negrita**.
+    compacta: número, icono y título en una sola línea, para el pie de una slide con otra pieza encima.
     Cuándo usarlo: el resumen ejecutivo o la síntesis de evidencia en 2 a 4 ideas, cada una con su dato.
     Cuándo no: recomendaciones o pasos que se leen en orden de arriba abajo (usa lista_numerada)."""
     n = len(items)
@@ -343,9 +388,12 @@ def columnas_numeradas(items, W=1100, H=None, tam_texto=13, tam_cifra=15, rojo=T
                 f'<b style="display:block;font-size:{tam_cifra}px;color:var(--{"red" if rojo else "fg1"});white-space:nowrap">{E(c)}</b>'
                 f'<span style="font-size:11px;line-height:1.25;color:var(--fg2);font-weight:600">{E(r)}</span></div>' for k, (c, r) in enumerate(it["cifras"])) + '</div>')
         cols.append(f'<div style="display:flex;flex-direction:column;padding:0 22px;{"border-left:1px solid var(--border-2);" if i else "padding-left:0;"}{"padding-right:0;" if i == n - 1 else ""}">'
-                    f'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px;font-weight:700;color:var(--{"red" if rojo else "fg1"});letter-spacing:-.02em">{i + 1:02d}</span>{ic}</div>'
-                    f'<b style="font-size:14px;line-height:1.3;color:var(--fg1);margin:8px 0">{E(it["titulo"])}</b>'
-                    f'<div style="font-size:{tam_texto}px;line-height:1.45;color:var(--fg2);margin-bottom:14px">{md(it["texto"])}</div>{cif}</div>')
+                    + (f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span style="font-size:20px;font-weight:700;color:var(--{"red" if rojo else "fg1"});'
+                       f'letter-spacing:-.02em">{i + 1:02d}</span>{ic}<b style="font-size:14px;line-height:1.3;color:var(--fg1)">{E(it["titulo"])}</b></div>'
+                       f'<div style="font-size:{tam_texto}px;line-height:1.45;color:var(--fg2)">{md(it["texto"])}</div>{cif}</div>' if compacta else
+                       f'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px;font-weight:700;color:var(--{"red" if rojo else "fg1"});letter-spacing:-.02em">{i + 1:02d}</span>{ic}</div>'
+                       f'<b style="font-size:14px;line-height:1.3;color:var(--fg1);margin:8px 0">{E(it["titulo"])}</b>'
+                       f'<div style="font-size:{tam_texto}px;line-height:1.45;color:var(--fg2);margin-bottom:14px">{md(it["texto"])}</div>{cif}</div>'))
     return f'<div style="width:{W}px;{f"height:{H}px;" if H else ""}display:grid;grid-template-columns:repeat({n},1fr);align-items:stretch">{"".join(cols)}</div>'
 
 
@@ -432,14 +480,139 @@ def grupo_logos(logos, rotulo="Actores", columnas=2, destacado=False, W=320):
             f'<div style="display:grid;grid-template-columns:repeat({columnas},1fr);gap:4px 10px">{celdas}</div></div>')
 
 
-def bloque(titulo, contenido, filete="rojo", fondo="blanco", W=None):
+def bloque(titulo, contenido, filete="rojo", fondo="blanco", W=None, llenar=False, tam=13):
     """Bloque con filete superior: la tarjeta base de las slides de texto, con una raya de 3 px arriba (roja para lo
     que importa, negra para el resto) y el título en negrita. contenido: texto con **negrita** o HTML;
-    filete: 'rojo', 'negro' o None; fondo: 'blanco' (con sombra suave) o 'gris'.
+    filete: 'rojo', 'negro', 'rosa' (el rojo claro de las etapas ya pasadas de chevrones, para casar con ellas), 'fino' (1 px gris, para separar sin peso) o None; fondo: 'blanco' (con sombra suave), 'gris', 'claro' (gris a medio tono) 'ninguno' (sin fondo ni sombra y sin margen lateral, para una columna limpia) o 'recuadro' (blanco con borde fino, sin sombra). llenar: ocupa el alto de su columna,
+    para que los bloques hermanos de una fila acaben a la misma altura. tam: cuerpo del texto en px (el título, uno más), para
+    slides con poco texto que se proyectan.
     Cuándo usarlo: dos o tres bloques de texto que se leen por separado (contexto, brecha, implicación).
     Cuándo no: si el texto se puede convertir en un visual (D1); para la conclusión de la slide (usa la banda)."""
-    col = {"rojo": RED, "negro": FG1}.get(filete)
-    cuerpo = contenido if str(contenido).lstrip().startswith("<") else f'<div style="font-size:13px;line-height:1.45;color:var(--fg2)">{md(contenido)}</div>'
-    fondo_css = "background:var(--surface-fill);" if fondo == "gris" else "background:#fff;box-shadow:var(--shadow-sm);"
-    return (f'<div style="{f"width:{W}px;" if W else ""}{fondo_css}{f"border-top:3px solid {col};" if col else ""}padding:14px 18px 16px;display:flex;flex-direction:column;gap:8px">'
-            f'<b style="font-size:14px;color:var(--fg1)">{E(titulo)}</b>{cuerpo}</div>')
+    col = {"rojo": RED, "negro": FG1, "rosa": RAMP[4], "fino": "#CFCAC2"}.get(filete)
+    cuerpo = contenido if str(contenido).lstrip().startswith("<") else f'<div style="font-size:{tam}px;line-height:1.45;color:var(--fg2)">{md(contenido)}</div>'
+    fondo_css = ("background:var(--surface-fill);" if fondo == "gris" else f"background:{mezcla(FILL, '#FFFFFF', .5)};" if fondo == "claro"
+                 else "" if fondo == "ninguno" else "background:#fff;border:1px solid var(--border-1);border-radius:12px;" if fondo == "recuadro"
+                 else "background:#fff;box-shadow:var(--shadow-sm);")
+    return (f'<div style="{f"width:{W}px;" if W else ""}{"flex:1;" if llenar else ""}{fondo_css}{f"border-top:{1 if filete == 'fino' else 3}px solid {col};" if col else ""}padding:{"12px 0 0" if fondo == "ninguno" else "14px 18px 16px"};display:flex;flex-direction:column;gap:8px">'
+            f'<b style="font-size:{max(14, tam + 1)}px;color:var(--fg1)">{E(titulo)}</b>{cuerpo}</div>')
+
+
+def ficha_finalista(nombre, sub, teselas, etapas, logo_html="", rol=None, pie=None, W=1152, H=None):
+    """Ficha de perfil de un finalista frente a las etapas de un proceso.
+    Arriba, logo, nombre, una línea de contexto y una píldora con su papel; debajo, teselas grises con los datos
+    clave; en el centro, una fila por etapa con su estado y lo que se sabe; al pie, bloques grises opcionales
+    (lo que falta por demostrar, condiciones).
+    teselas: [(rótulo, valor, nota)] o con un cuarto elemento True para la cifra que decide (en rojo), de 3 a 6.
+    etapas: [dict(n, nombre, estado, rotulo, texto, fuente="")], estado en 'si', 'parcial', 'no' o 'nd'
+    (la marca de cumplimiento) y rotulo el texto del estado («Cubre», «Por instalar»); fuente: etiqueta corta
+    del origen del dato («RFI», «Sesión»), opcional. pie: [(título, texto con **negrita**)], de 1 a 3.
+    H: alto total; las filas de etapa reparten el sobrante.
+    Cuándo usarlo: fichas hermanas de 2 a 5 finalistas evaluados contra las mismas etapas o requisitos.
+    Cuándo no: fichas de competidores con cifras de negocio (usa ficha_empresa o la ficha en cuadrantes);
+    listas largas de candidatos (usa ficha_linea)."""
+    cab = (f'<div style="display:flex;align-items:center;gap:14px">'
+           + (f'<div style="flex:none;display:flex;align-items:center">{_logo_html(logo_html, 30)}</div>' if logo_html else "")
+           + f'<div style="flex:1;min-width:0;font-size:14px;color:var(--fg3)"><b style="font-size:18px;color:var(--fg1)">{E(nombre)}</b>'
+           + (f' · {md(sub)}' if sub else "") + '</div>'
+           + (pill(rol, "out") if rol else "") + '</div>')
+    def tesela(t):
+        rot, val, nota = t[:3]
+        rojo = len(t) > 3 and t[3]
+        return (f'<div style="flex:1;min-width:0;background:{FILL};border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;justify-content:center">'
+                f'<span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);line-height:1.3">{E(rot)}</span>'
+                f'<span style="font-size:{22 if rojo else 16}px;font-weight:700;line-height:1.2;margin-top:3px;color:{RED if rojo else FG1}">{md(val)}</span>'
+                + (f'<span style="font-size:12px;color:var(--fg3);line-height:1.3;margin-top:2px">{md(nota)}</span>' if nota else "") + '</div>')
+    tes = f'<div style="display:flex;gap:10px">{"".join(tesela(t) for t in teselas)}</div>'
+    def fila_(e, ultima):
+        borde = "" if ultima else f"border-bottom:1px solid {INPUT};"
+        fte = (f'<span style="flex:none;width:62px;text-align:right;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--fg4)">{E(e["fuente"])}</span>'
+               if any(x.get("fuente") for x in etapas) else "")
+        return (f'<div style="flex:1;display:flex;align-items:center;gap:12px;{borde}padding:4px 0;min-height:30px">'
+                f'<span style="flex:none;width:18px;font-size:12px;color:var(--fg3)">{E(str(e.get("n", "")))}</span>'
+                f'<b style="flex:none;width:225px;font-size:14px;color:var(--fg1)">{E(e["nombre"])}</b>'
+                f'<span style="flex:none;width:130px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--fg2)">{marca(e["estado"], 18)}{E(e["rotulo"])}</span>'
+                f'<span style="flex:1;min-width:0;font-size:13.5px;line-height:1.35;color:var(--fg2)">{md(e["texto"])}</span>{fte}</div>')
+    filas = "".join(fila_(e, i == len(etapas) - 1) for i, e in enumerate(etapas))
+    centro = f'<div style="flex:1;display:flex;flex-direction:column">{filas}</div>'
+    bajo = ""
+    if pie:
+        bajo = ('<div style="display:flex;gap:10px">' + "".join(
+            f'<div style="flex:1;background:{FILL};padding:10px 14px;border-top:3px solid {RED if i == 0 else FG1}">'
+            f'<div style="font-size:13px;font-weight:700;color:var(--fg1);margin-bottom:3px">{E(t)}</div>'
+            f'<div style="font-size:13px;line-height:1.38;color:var(--fg2)">{md(x)}</div></div>' for i, (t, x) in enumerate(pie)) + '</div>')
+    alto = f"height:{H}px;" if H else ""
+    return f'<div style="width:{W}px;{alto}display:flex;flex-direction:column;gap:12px">{cab}{tes}{centro}{bajo}</div>'
+
+
+def lista_validacion(puntos, W=680, H=None, ancho_estado=128, ancho_tema=None):
+    """Lista de lo que se comprobó, punto por punto: marca y rótulo del estado a la izquierda,
+    el tema en negrita, lo que se encontró y, si la hay, una cita corta con su autor. Una línea fina separa los puntos.
+    puntos: [dict(tema, estado, rotulo, texto, cita=None, autor=None)], estado en 'si', 'parcial', 'no' o 'nd' (la marca)
+    y rotulo el texto del estado escrito en los datos («Confirmado», «Con matices», «No se confirma»).
+    H: alto total; los puntos reparten el sobrante. ancho_tema: el tema va en su propia columna de ese ancho (px) y lo encontrado
+    en otra, para listas a todo el ancho.
+    Cuándo usarlo: el resultado de una validación, una auditoría o una due diligence, de 4 a 8 puntos, junto a sus riesgos.
+    Cuándo no: si cada punto se compara entre varios actores (usa tabla_comparativa) o no hay estado (usa lista_numerada)."""
+    n = len(puntos)
+    filas = []
+    for i, p in enumerate(puntos):
+        borde = "" if i == n - 1 else f"border-bottom:1px solid {INPUT};"
+        cita_ = ""
+        if p.get("cita"):
+            autor = f' <span style="font-style:normal;color:var(--fg4)">· {E(p["autor"])}</span>' if p.get("autor") else ""
+            cita_ = f'<div style="font-size:12px;line-height:1.35;font-style:italic;color:var(--fg3);margin-top:3px">«{E(p["cita"])}»{autor}</div>'
+        filas.append(f'<div style="flex:1;display:flex;gap:14px;align-items:center;padding:7px 0;{borde}">'
+                     f'<span style="flex:none;width:{ancho_estado}px;display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--fg2)">'
+                     f'{marca(p["estado"], 18)}{E(p["rotulo"])}</span>'
+                     + (f'<b style="flex:none;width:{ancho_tema}px;font-size:14px;line-height:1.3;color:var(--fg1)">{E(p["tema"])}</b>'
+                        f'<div style="flex:1;font-size:13.5px;line-height:1.4;color:var(--fg2)">{md(p["texto"])}{cita_}</div></div>' if ancho_tema else
+                        f'<div style="flex:1"><b style="font-size:14px;color:var(--fg1)">{E(p["tema"])}</b>'
+                        f'<span style="font-size:13px;line-height:1.4;color:var(--fg2)"> · {md(p["texto"])}</span>{cita_}</div></div>'))
+    alto = f"height:{H}px;" if H else ""
+    return f'<div style="width:{W}px;{alto}display:flex;flex-direction:column">{"".join(filas)}</div>'
+
+
+def mapa_grupos_logos(filas, W=1152, gap=14):
+    """Mapa del universo de un scouting en bloques: cada bloque es un grupo con su recuento, su
+    rótulo, una píldora de estado y las teselas de sus actores (logo con el nombre debajo; sin logo, monograma).
+    Los grupos activos llevan filete rojo arriba y los cerrados van en gris; un bloque de resumen opcional da las cifras.
+    filas: [dict(anchos=[px o None para el resto], bloques=[...])]; cada bloque es dict(rotulo, actores, estado=None,
+    activo=False, grande=False, nota="" con el motivo del grupo bajo el rótulo) o dict(resumen=[(cifra, texto, rojo)], nota=""). actores: como en muro_logos.
+    Cuándo usarlo: el mapa completo de candidatos de un scouting (de 20 a 80) por estado, con nombre y logo de cada uno.
+    Cuándo no: si basta con el recuento por grupo (usa embudo o barras); para teselas iguales sin nombre, ecosistema_logos."""
+    def tesela(a, grande):
+        nombre = a.get("nombre", "") if isinstance(a, dict) else (a[0] if isinstance(a, (tuple, list)) else a)
+        ruta = a.get("logo") if isinstance(a, dict) else (a[1] if isinstance(a, (tuple, list)) and len(a) > 1 else None)
+        im = logo(ruta, 40 if grande else 30, "center", 64 if grande else 52) if ruta else None
+        if not im:
+            ini = "".join(w[0] for w in str(nombre).split()[:2]).upper()
+            im = (f'<span style="width:28px;height:28px;border-radius:50%;background:var(--cream);border:1px solid var(--border-1);'
+                  f'color:var(--red);font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center">{E(ini)}</span>')
+        return (f'<div style="width:{84 if grande else 62}px;text-align:center"><div style="height:{44 if grande else 34}px;display:flex;'
+                f'align-items:center;justify-content:center">{im}</div><span style="display:block;margin-top:3px;line-height:1.15;'
+                f'font-size:{11 if grande else 9.6}px;font-weight:{600 if grande else 400};color:var(--{"fg1" if grande else "fg2"})">{E(nombre)}</span></div>')
+
+    def bloque_(b):
+        if "resumen" in b:
+            lineas = "".join(f'<div style="display:flex;align-items:baseline;gap:10px"><b style="font-size:34px;line-height:1;letter-spacing:-.04em;'
+                             f'color:var(--{"red" if r else "fg1"})">{E(c)}</b><span style="font-size:13px;font-weight:600;color:var(--fg1)">{E(t)}</span></div>'
+                             for c, t, r in b["resumen"])
+            nota = f'<div style="font-size:11px;line-height:1.35;color:var(--fg3);margin-top:2px">{md(b["nota"])}</div>' if b.get("nota") else ""
+            return (f'<div style="background:{FILL};border-radius:16px;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:6px">'
+                    f'{lineas}{nota}</div>')
+        on = b.get("activo")
+        estilo = (f"background:#fff;border:1px solid var(--border-1);border-top:4px solid {RED};" if on
+                  else f"background:{FILL};border:1px solid var(--border-1);border-top:4px solid {FG4};")
+        pil = f'<span style="margin-left:auto">{pill(b["estado"], "red" if on else "out")}</span>' if b.get("estado") else ""
+        return (f'<div style="{estilo}border-radius:16px;padding:12px 14px">'
+                f'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-bottom:8px">'
+                f'<b style="font-size:24px;line-height:1;letter-spacing:-.03em;color:var(--{"red" if on else "fg2"})">{len(b["actores"])}</b>{pil}'
+                f'<span style="flex-basis:100%;font-size:12.5px;font-weight:600;line-height:1.15;color:var(--fg1)">{E(b["rotulo"])}</span>'
+                + (f'<span style="flex-basis:100%;font-size:11.5px;line-height:1.3;color:var(--fg3)">{md(b["nota"])}</span>' if b.get("nota") else "")
+                + f'</div><div style="display:flex;flex-wrap:wrap;gap:8px 5px">{"".join(tesela(a, b.get("grande")) for a in b["actores"])}</div></div>')
+
+    out = []
+    for f in filas:
+        cols = " ".join(f"{a}px" if a else "1fr" for a in f["anchos"])
+        out.append(f'<div style="display:grid;grid-template-columns:{cols};gap:{gap}px">{"".join(bloque_(b) for b in f["bloques"])}</div>')
+    return f'<div style="width:{W}px;display:flex;flex-direction:column;gap:{gap}px">{"".join(out)}</div>'

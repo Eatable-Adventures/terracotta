@@ -1,6 +1,6 @@
 # Funnel (stacked discs), canonical design
 
-**Approved 07-10-2026.** Use this design for every funnel (scouting, pipeline, conversion), not rounded bands or horizontal bars. Generator: `charts/funnel.py` (`funnel_svg(stages, goal, key)`), specimen: `charts/funnel.html`, catalogue card: `preview/chart-funnel.html`.
+**Canonical design.** Use this design for every funnel (scouting, pipeline, conversion), not rounded bands or horizontal bars. Generator: `charts/funnel.py` (`funnel_svg(stages, goal, key)`), specimen: `charts/funnel.html`, catalogue card: `preview/chart-funnel.html`.
 
 - **Shape:** stacked, centred discs (truncated cones) with a darker top ellipse as the rim and a curved base. Height 68px, ellipse vertical radius 10px, pitch between discs 80px.
 - **Non-proportional steps:** width drops a fixed step per stage (340px at the top, 44px step), never as a function of the value. Numbers and conversion % are the real ones; the drawing is only visual hierarchy.

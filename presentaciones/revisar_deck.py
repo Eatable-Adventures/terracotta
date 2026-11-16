@@ -9,7 +9,8 @@ Uso:
     python3 revisar_deck.py deck.html [--out DIR] [--paginas 3,5-7] [--sin-png]
     python3 revisar_deck.py deck.pdf  [--out DIR]     (sin HTML: solo medición y PNG, para decks hechos a mano)
 
-Deja en DIR (por defecto, <carpeta del deck>/_revision/<nombre>/; mejor un scratchpad): el PDF, p01.png..., mapa.txt e informe.md.
+Deja en DIR (por defecto, <carpeta del deck>/_revision/<nombre>/; mejor un scratchpad): el PDF, p01.png..., mapa.txt e informe.md,
+y en zoom/ los recortes ampliados de las uniones finas (puntas de flecha, guías, iconos junto a texto), que a tamaño de slide no se ven.
 Código de salida: 0 sin errores, 1 con errores, 2 si las páginas no cuadran.
 """
 import argparse, html, json, pathlib, re, subprocess, sys
@@ -62,6 +63,22 @@ def pngs(pdf, out, paginas=None):
             pg.get_pixmap(matrix=fitz.Matrix(1280 / pg.rect.width, 1280 / pg.rect.width)).save(str(out / f"p{n:02d}.png"))
 
 
+def zooms(pdf, out, slides, paginas=None):
+    """Recorta al triple, alrededor de cada zona que da el inspector (coordenadas de la slide de 1280 px), lo que a tamaño de slide no se ve."""
+    import fitz
+    doc, z, hechos = fitz.open(str(pdf)), out / "zoom", 0
+    for s in slides:
+        n = s["n"]
+        if not s.get("zonas") or n > len(doc) or (paginas is not None and n not in paginas):
+            continue
+        z.mkdir(exist_ok=True)
+        pg = doc[n - 1]; k = pg.rect.width / 1280
+        for i, c in enumerate(s["zonas"], 1):
+            clip = fitz.Rect((c["x"] - 90) * k, (c["y"] - 50) * k, (c["x"] + 90) * k, (c["y"] + 50) * k) & pg.rect
+            pg.get_pixmap(matrix=fitz.Matrix(3 / k, 3 / k), clip=clip).save(str(z / f"p{n:02d}_{i}.png")); hechos += 1
+    return hechos
+
+
 def revisar(ruta, out=None, paginas=None, png=True):
     """Devuelve {"informe": md, "errores": n, "avisos": n, "marcadas": %, "paginas_ok": bool, "n_pdf": n, "n_html": n, "dir": ruta}."""
     deck = pathlib.Path(ruta).resolve()
@@ -83,6 +100,7 @@ def revisar(ruta, out=None, paginas=None, png=True):
     (out / "medicion.md").write_text(M.informe(med, cal), encoding="utf-8")
     res = I.inspeccionar(deck) if es_html else {"slides": [], "deck": []}
     insp = {s["n"]: s for s in res["slides"]}
+    n_zoom = zooms(pdf, out, res["slides"], paginas) if png else 0
 
     errores = avisos = 0
     cuerpo = []
@@ -113,6 +131,8 @@ def revisar(ruta, out=None, paginas=None, png=True):
          f"- **Páginas:** {n_pdf} en el PDF" + (f", {n_html} slides en el HTML" if es_html else "") + (" · cuadran" if ok else " · **NO CUADRAN** (causa habitual: @page con margen o una slide más alta que 720 px)"),
          f"- **Errores:** {errores} · **Avisos:** {avisos}",
          f"- **Frente a los decks de referencia:** {rs['total']} % de slides fuera de rango (llenado {rs['Llenado']} %, densidad {rs['Densidad']} %, legibilidad {rs['Legibilidad']} %, equilibrio {rs['Equilibrio']} %). Detalle: medicion.md"]
+    if n_zoom:
+        o.append(f"- **Zoom:** {n_zoom} recortes ampliados en zoom/ (puntas de flecha, guías e iconos junto a texto): mirarlos, porque proyectados se ven y en el PNG no")
     if not es_html:
         o.append("- **Sin HTML:** solo se ha medido el PDF.")
     for h in res["deck"]:

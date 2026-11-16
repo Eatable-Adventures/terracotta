@@ -10,10 +10,11 @@ from .marcas import (delta)
 __all__ = ["contadores", "tarjeta_cifra", "tarjeta_kpi", "panel_kpi", "fila_parametros", "cifra_delta", "icono_dato"]
 
 
-def contadores(items, ancho=None, H=None, destacado=None):
+def contadores(items, ancho=None, H=None, destacado=None, filete=None):
     """Contadores apilados: cifra grande en rojo, rótulo en negro y una línea que explica de dónde sale.
     items: [(cifra, rótulo, texto)]. H: alto total (reparte las filas). destacado: índice de la única cifra en rojo, y
     el resto en negro (K1: lo que nombra el título); sin él, todas en rojo.
+    filete: color CSS de la raya superior; por defecto el gris de borde, como las de abajo; «var(--fg1)» la vuelve negra.
     Cuándo usarlo: de 2 a 4 magnitudes que dan base a un mensaje (alcance de una búsqueda, tamaño de una muestra), al lado de un visual.
     Cuándo no: si las cifras se comparan entre sí (usa barras_objetivo) o si son más de 4 (pasa a tabla)."""
     w = f"width:{ancho}px;flex:none;" if ancho else "flex:1;"
@@ -23,18 +24,20 @@ def contadores(items, ancho=None, H=None, destacado=None):
     filas = "".join(f'<div style="{fl}padding:16px 0;border-bottom:1px solid var(--border-1)"><div><span class="big" style="font-size:38px{color(i)}">{E(a)}</span>'
                     f'<span style="font-size:17px;font-weight:600;color:var(--fg1);margin-left:10px">{E(b)}</span></div>'
                     f'<div style="font-size:14px;margin-top:4px">{md(c)}</div></div>' for i, (a, b, c) in enumerate(items))
-    return f'<div class="col" style="{w}{alto}gap:0;border-top:1.5px solid var(--fg1)">{filas}</div>'
+    borde = f"1px solid {filete or 'var(--border-1)'}"
+    return f'<div class="col" style="{w}{alto}gap:0;border-top:{borde}">{filas}</div>'
 
 
-def tarjeta_cifra(cifra, unidad, titulo, texto, visual="", apilada=False, tam_cifra=None):
+def tarjeta_cifra(cifra, unidad, titulo, texto, visual="", apilada=False, tam_cifra=None, arriba=False):
     """Tarjeta con una cifra que hace de etiqueta del mensaje. Lateral: cifra y unidad a la izquierda, separador,
     título y texto a la derecha. Apilada: cifra grande arriba, texto y un visual pequeño opcional debajo.
+    arriba (apilada): el contenido arranca arriba en vez de centrarse, para que las cifras de tarjetas hermanas queden a la misma altura.
     Cuándo usarlo: lecturas de apoyo junto a una gráfica (columna derecha) o tres o cuatro datos de contexto de mercado.
     Cuándo no: como adorno; si la cifra no se puede explicar o no tiene origen, no va. Sin números de orden decorativos."""
     if apilada:
         tc = f' style="font-size:{tam_cifra}px"' if tam_cifra else ""
         mt = "6px 0 14px" if visual else "6px 0 0"
-        return (f'<div class="card" style="flex:1;padding:20px 22px;display:flex;flex-direction:column;justify-content:center">'
+        return (f'<div class="card" style="flex:1;padding:20px 22px;display:flex;flex-direction:column;justify-content:{"flex-start" if arriba else "center"}">'
                 f'<div class="big"{tc}>{E(cifra)}</div>' + (f'<h4 style="margin:6px 0 0">{E(titulo)}</h4>' if titulo else "")
                 + f'<div style="margin:{mt}">{md(texto)}</div>{visual}</div>')
     return (f'<div class="card" style="flex:1;display:flex;align-items:center;gap:18px;padding:12px 20px">'
@@ -87,25 +90,29 @@ def fila_parametros(items, color=None):
         + (f'<div style="font-size:13px;margin-top:4px;opacity:.9">({E(c)})</div>' if c else "") + '</div>' for a, b, c in items) + '</div>')
 
 
-def cifra_delta(cifra, rotulo, variacion=None, comparacion="", valores=None, sube=True, tono="bueno", W=250):
+def cifra_delta(cifra, rotulo, variacion=None, comparacion="", valores=None, sube=True, tono="bueno", W=250, tam_cifra=None):
     """Tarjeta de KPI de seguimiento: rótulo, cifra grande, chip de variación y minilínea opcional.
-    variacion: texto del chip («+12 %»); comparacion: contra qué («vs 2025»); valores: serie para la minilínea.
+    variacion: texto del chip («+12 %»); comparacion: contra qué («vs 2025»), o sin chip, de dónde sale la cifra; valores: serie para la minilínea.
+    tam_cifra: px de la cifra (por defecto, los 40 de .big).
     Cuándo usarlo: filas de 3 o 4 KPI de seguimiento en una slide de situación o de resultados.
     Cuándo no: KPI de un Stage-Gate con umbral y validación (usa tarjeta_kpi)."""
     chip = (f'<div style="display:flex;align-items:center;gap:8px;margin-top:8px">{delta(variacion, sube, tono)}'
-            f'<span style="font-size:12px;color:var(--fg3)">{E(comparacion)}</span></div>') if variacion else ""
+            f'<span style="font-size:12px;color:var(--fg3)">{E(comparacion)}</span></div>') if variacion else (
+            f'<div style="font-size:12px;color:var(--fg3);margin-top:6px">{E(comparacion)}</div>' if comparacion else "")
     sp = f'<div style="margin-top:12px">{sparkline(valores, W - 40, 30)}</div>' if valores else ""
     return (f'<div class="card" style="width:{W}px;flex:none"><span class="k2">{E(rotulo)}</span>'
-            f'<div class="big" style="color:var(--fg1)">{E(cifra)}</div>{chip}{sp}</div>')
+            f'<div class="big" style="color:var(--fg1){f";font-size:{tam_cifra}px" if tam_cifra else ""}">{E(cifra)}</div>{chip}{sp}</div>')
 
 
-def icono_dato(items, W=520, horizontal=False):
+def icono_dato(items, W=520, horizontal=False, compacto=False):
     """Fila de datos con icono: icono en caja, cifra en rojo y una línea de lectura.
-    items: [(icono, cifra, texto)], de 2 a 4. horizontal: en fila, repartidos a lo ancho.
+    items: [(icono, cifra, texto)], de 2 a 4. horizontal: en fila, repartidos a lo ancho. compacto: icono, cifra y texto un
+    escalón más pequeños, cuando los datos acompañan a otra pieza que manda.
     Cuándo usarlo: datos de contexto en el lateral o la cabecera de un bloque (mercado, equipo, alcance).
     Cuándo no: si las cifras se comparan entre sí (usa columnas)."""
     dir_ = "display:grid;grid-template-columns:repeat(%d,1fr);" % len(items) if horizontal else "display:flex;flex-direction:column;"
-    return (f'<div style="{dir_}gap:14px;width:{W}px">' + "".join(
-        f'<div style="display:flex;align-items:center;gap:14px">{icono_caja(ic, 24, caja=46, radio=12)}'
-        f'<b style="font-size:24px;color:var(--red);{"" if horizontal else "width:92px;"}flex:none;letter-spacing:-.02em">{E(c)}</b>'
-        f'<span style="font-size:14px;line-height:1.4;color:var(--fg2)">{md(t)}</span></div>' for ic, c, t in items) + '</div>')
+    ic_, caja, tc, tt, ac = (20, 36, 20, 13, 74) if compacto else (24, 46, 24, 14, 92)
+    return (f'<div style="{dir_}gap:{10 if compacto else 14}px;width:{W}px">' + "".join(
+        f'<div style="display:flex;align-items:center;gap:{12 if compacto else 14}px">{icono_caja(ic, ic_, caja=caja, radio=10 if compacto else 12)}'
+        f'<b style="font-size:{tc}px;color:var(--red);{"" if horizontal else f"width:{ac}px;"}flex:none;letter-spacing:-.02em">{E(c)}</b>'
+        f'<span style="font-size:{tt}px;line-height:1.4;color:var(--fg2)">{md(t)}</span></div>' for ic, c, t in items) + '</div>')

@@ -12,7 +12,7 @@ description: >-
 
 # Taxonomía de elementos
 
-> Generado por `build_galeria_elementos.py` desde `ea_elementos/taxonomia.py`. 158 elementos en 14 familias. Para verlos: «Galería de elementos.html» en esta carpeta. Para colocarlos en una slide: [[Reglas de uso de elementos]].
+> Generado por `build_galeria_elementos.py` desde `ea_elementos/taxonomia.py`. 162 elementos en 14 familias. Para verlos: «Galería de elementos.html» en esta carpeta. Para colocarlos en una slide: [[Reglas de uso de elementos]].
 
 ## Cómo se usa
 
@@ -43,7 +43,7 @@ De 1 a 4 números protagonistas: KPI, tamaño, resultado.
 | Tarjeta con cifra | `tarjeta_cifra` | S | Una cifra que hace de etiqueta del mensaje, con texto | `cifra_delta`, `contadores` |
 | Tarjeta de KPI de éxito | `tarjeta_kpi` | S | KPI con objetivo, referencia, visual y validación | `bala`, `cifra_delta` |
 | Columna de contexto (también) | `columna_contexto` | S | Rótulo, 2 o 3 párrafos y una cifra ancla | `contadores`, `tarjeta_cifra`, `bloque` |
-| Columnas numeradas con cifras (también) | `columnas_numeradas` | L | 2 a 4 ideas con título, texto y una o dos cifras | `lista_numerada`, `pilares`, `tarjetas_miniatura` |
+| Columnas numeradas con cifras (también) | `columnas_numeradas` | L | 2 a 4 ideas con título, texto y una o dos cifras | `lista_numerada`, `tarjetas_miniatura` |
 | Anillo (donut) (también) | `donut` | S | 2 a 5 partes de un total, con cifra central | `waffle`, `barras_apiladas`, `treemap`, `pictograma` |
 | Embudo de discos (también) | `embudo` | M | 3 a 6 etapas de un cribado con su recuento | `dimensionamiento`, `circulos_concentricos`, `escalones` |
 | Miniatura de conteo (también) | `mini_conteo` | S | Hasta 10 círculos con los marcados | `pictograma` |
@@ -67,6 +67,7 @@ Magnitudes de varias categorías en la misma unidad.
 | Mancuerna (dumbbell) (también) | `mancuerna` | M | Dos valores por fila (actual y objetivo, nosotros y líder) | `pendiente`, `barras_agrupadas`, `piruletas` |
 | Mapa de burbujas (también) | `mapa_burbujas` | L | Un valor por lugar, con el área proporcional | `mapa_coropletico`, `mapa_actores`, `barras_ranking` |
 | Marimekko (también) | `marimekko` | M | Tamaño por columna y cuota por segmento | `barras_apiladas`, `treemap` |
+| Matriz de finalistas con peso y validación (también) | `matriz_candidatos` | L | 2 a 5 candidatos en 6 a 12 criterios con peso, nota de 0 a 4, alertas y validación opcional | `matriz_puntuacion`, `tabla_comparativa`, `mapa_calor` |
 | Pequeños múltiplos (también) | `pequenos_multiplos` | L | 4 a 12 series cortas con escala común | `linea`, `barras_agrupadas`, `mapa_calor` |
 | Rangos (football field) (también) | `rangos` | M | Mínimo y máximo por método o fuente sobre un eje común | `escala_log`, `cajas`, `benchmark_rango`, `dimensionamiento` |
 | Tabla con barras (también) | `tabla_con_barras` | L | Filas de texto con una columna numérica | `barras_ranking`, `ficha_linea` |
@@ -178,7 +179,9 @@ Alternativas frente a varios criterios, puntuación.
 | DAFO | `dafo` | M | Fortalezas, debilidades, oportunidades y amenazas | `cinco_fuerzas`, `balanza` |
 | Deslizadores de valoración | `deslizadores` | M | Valoraciones cualitativas de 0 a 1 con su razón | `radar`, `harvey`, `valoracion`, `score_dimensiones` |
 | Bolas de Harvey | `harvey` | S | Nivel de 0 a 4 | `valoracion`, `marca` |
+| Lista de validación con estado | `lista_validacion` | M | 4 a 8 puntos con estado, hallazgo y cita opcional | `tabla_comparativa`, `lista_numerada`, `afirmacion_evidencia` |
 | Mapa de calor | `mapa_calor` | M | Matriz de valores de 4 × 4 a 10 × 12 | `matriz_puntuacion`, `tabla_comparativa`, `pequenos_multiplos` |
+| Matriz de finalistas con peso y validación | `matriz_candidatos` | L | 2 a 5 candidatos en 6 a 12 criterios con peso, nota de 0 a 4, alertas y validación opcional | `matriz_puntuacion`, `tabla_comparativa`, `mapa_calor` |
 | Matriz de puntuación | `matriz_puntuacion` | L | Opciones agrupadas por veredicto con notas de 0 a 3 y total | `mapa_calor`, `tabla_comparativa`, `criterios_puntos` |
 | Araña (radar) | `radar` | M | 1 o 2 perfiles en 5 a 8 criterios de la misma escala | `criterios_puntos`, `tabla_comparativa`, `deslizadores`, `score_dimensiones` |
 | Score por dimensiones | `score_dimensiones` | M | Valor de un actor en 4 a 8 dimensiones y su total | `radar`, `deslizadores`, `criterios_puntos` |
@@ -186,6 +189,7 @@ Alternativas frente a varios criterios, puntuación.
 | Puntos de valoración | `valoracion` | S | Nota de n sobre 5 | `harvey` |
 | Balanza (también) | `balanza` | M | Argumentos a favor y en contra, o dos alternativas | `dafo`, `tabla_comparativa`, `nucleo_dos_lados` |
 | Cadena de valor en capas (también) | `cadena_capas` | L | 4 a 7 eslabones con filas de análisis (actores, margen, tendencia) | `cadena_isometrica`, `circuito_cadena`, `sankey`, `cadena_margen` |
+| Ficha de finalista por etapas (también) | `ficha_finalista` | L | Un finalista: 3 a 6 datos clave, 5 a 10 etapas con estado y texto, y 1 a 3 bloques al pie | `ficha_empresa`, `ficha_linea`, `tarjeta_actor` |
 | Ficha de hipótesis (también) | `ficha_hipotesis` | L | Lo probado, la hipótesis, criterios con nota y ejemplos | `columnas_evolucion`, `ficha_empresa` |
 | Ranking por logo (también) | `ranking_logos` | S | Actores con su puntuación, reconocibles por el logo | `barras_ranking`, `tabla_con_barras` |
 | Scorecard (también) | `scorecard` | L | Criterios eliminatorios y comparativos con su peso | `criterios_puntos`, `tabla_comparativa` |
@@ -254,12 +258,11 @@ Jerarquías, marcos estratégicos, taxonomías, alcance.
 | Abanico desde un foco | `abanico_foco` | L | Un foco y 3 a 6 filas de rótulo y texto | `arbol`, `radial`, `lista_numerada` |
 | Anillo de categorías | `anillo_categorias` | L | Elementos agrupados en 2 a 5 categorías, con un estado transversal | `sunburst`, `mapa_alcance`, `treemap` |
 | Árbol de problemas | `arbol` | M | Una pregunta en ramas y hojas MECE | `arbol_drivers`, `espina_pescado`, `mapa_alcance`, `abanico_foco` |
-| Capas (stack) | `capas` | M | 3 a 6 capas que se apoyan unas en otras | `piramide`, `pilares` |
+| Capas (stack) | `capas` | M | 3 a 6 capas que se apoyan unas en otras | `piramide` |
 | Mapa de categorías con chips | `categorias_chips` | L | 8 a 30 nombres en 3 a 9 categorías, con un estado transversal | `anillo_categorias`, `muro_logos`, `grupo_logos` |
 | Mapa de alcance | `mapa_alcance` | L | Opciones por dimensión que entran, entran en parte o no | `anillo_categorias`, `venn`, `arbol` |
 | Núcleo con dos lados | `nucleo_dos_lados` | L | Dos opciones que salen de un núcleo común, con efectos por fila | `balanza`, `columnas_evolucion` |
 | Organigrama | `organigrama` | L | Personas o unidades en 2 o 3 niveles | `arbol`, `persona` |
-| Casa estratégica (pilares) | `pilares` | L | Ambición, 3 a 5 pilares y bases | `capas`, `lista_numerada` |
 | Pirámide | `piramide` | M | 3 a 5 niveles jerárquicos | `capas`, `escalones` |
 | Radial (hub and spoke) | `radial` | M | Un centro y 4 a 8 componentes o relaciones | `red_nodos`, `capas`, `lienzo_negocio`, `convergencia` |
 | Árbol de opciones (también) | `arbol_opciones` | L | Categorías con opciones numeradas y su explicación | `arbol_tramite`, `tarjetas_salida`, `mapa_alcance` |
@@ -273,6 +276,7 @@ Jerarquías, marcos estratégicos, taxonomías, alcance.
 | Espina de pescado (Ishikawa) (también) | `espina_pescado` | L | Causas de un problema por categoría | `arbol`, `arbol_drivers` |
 | Etiquetas con icono (también) | `etiquetas_icono` | S | 2 a 4 condiciones o capacidades | `fila_parametros`, `icono_dato` |
 | Fila de parámetros técnicos (también) | `fila_parametros` | L | 3 a 6 condiciones técnicas de partida | `icono_dato`, `etiquetas_icono` |
+| Mapa de candidatos por grupos (también) | `mapa_grupos_logos` | L | 20 a 80 actores con logo y nombre en 3 a 7 grupos por estado, con resumen opcional | `ecosistema_logos`, `muro_logos`, `embudo` |
 | Mapa de portfolio (también) | `matriz_portfolio` | M | Productos de un actor por vía o segmento | `tabla_comparativa`, `mapa_calor` |
 | Muro de logos (también) | `muro_logos` | M | Actores de un segmento, solo nombre o logo | `ficha_linea`, `grupo_fichas`, `grupo_logos` |
 | Sunburst (también) | `sunburst` | M | Un total con dos niveles (familia y subcategoría) | `treemap`, `anillo_categorias` |
@@ -303,6 +307,7 @@ Pasos, fases, responsables.
 | Ciclo | `ciclo` | M | 3 a 6 pasos que se repiten | `chevrones`, `radial` |
 | Embudo de discos | `embudo` | M | 3 a 6 etapas de un cribado con su recuento | `dimensionamiento`, `circulos_concentricos`, `escalones` |
 | Escalones | `escalones` | M | Etapas de madurez o ambición que suben | `piramide`, `chevrones`, `curva_s` |
+| Etapas con entregable | `etapas_entregable` | L | 3 a 6 etapas con plazo, qué se hizo y su entregable | `chevrones`, `fases_gates`, `linea_tiempo_vertical` |
 | Fases con gates | `fases_gates` | L | 2 a 4 fases con plazo, acciones y gate | `chevrones`, `gantt`, `proceso_flechas` |
 | Proceso por carriles | `proceso_carriles` | L | Pasos repartidos por responsable con traspasos | `proceso_flechas`, `carriles`, `arbol_tramite` |
 | Proceso en flechas con entregables | `proceso_flechas` | L | 3 a 5 pasos con qué se resuelve, qué sale y quién | `chevrones`, `proceso_carriles` |
@@ -335,7 +340,7 @@ Prioridades, escenarios, criterios y salidas de una decisión.
 | Balanza | `balanza` | M | Argumentos a favor y en contra, o dos alternativas | `dafo`, `tabla_comparativa`, `nucleo_dos_lados` |
 | Columnas de requisitos con coste y plazo | `columnas_requisitos` | L | 2 a 4 dimensiones con requisitos, coste y plazo | `columnas_numeradas`, `tabla_comparativa` |
 | Escalera de prioridad | `escalera_prioridad` | L | Hasta 3 niveles de prioridad con 5 focos cada uno | `matriz_2x2`, `pareto`, `tabla_vigilancia` |
-| Lista numerada | `lista_numerada` | M | 3 a 5 recomendaciones o pasos | `tarjetas_salida`, `pilares`, `columnas_numeradas` |
+| Lista numerada | `lista_numerada` | M | 3 a 5 recomendaciones o pasos | `tarjetas_salida`, `columnas_numeradas` |
 | Scorecard | `scorecard` | L | Criterios eliminatorios y comparativos con su peso | `criterios_puntos`, `tabla_comparativa` |
 | Tabla de vigilancia | `tabla_vigilancia` | L | Opciones no prioritarias con su disparador y actores | `escalera_prioridad`, `tabla_comparativa` |
 | Tarjetas de escenario | `tarjetas_escenario` | L | 2 o 3 escenarios con dato, texto y visual pequeño | `abanico`, `tarjetas_salida`, `balanza` |
@@ -344,6 +349,7 @@ Prioridades, escenarios, criterios y salidas de una decisión.
 | Fases con gates (también) | `fases_gates` | L | 2 a 4 fases con plazo, acciones y gate | `chevrones`, `gantt`, `proceso_flechas` |
 | Mapa de alcance (también) | `mapa_alcance` | L | Opciones por dimensión que entran, entran en parte o no | `anillo_categorias`, `venn`, `arbol` |
 | Matriz 2 × 2 (también) | `matriz_2x2` | M | Elementos en dos ejes cualitativos con cuadrantes | `dispersion`, `escalera_prioridad` |
+| Matriz de finalistas con peso y validación (también) | `matriz_candidatos` | L | 2 a 5 candidatos en 6 a 12 criterios con peso, nota de 0 a 4, alertas y validación opcional | `matriz_puntuacion`, `tabla_comparativa`, `mapa_calor` |
 | Matriz de puntuación (también) | `matriz_puntuacion` | L | Opciones agrupadas por veredicto con notas de 0 a 3 y total | `mapa_calor`, `tabla_comparativa`, `criterios_puntos` |
 | Miniatura de bifurcación (también) | `mini_bifurcacion` | S | Una etapa, un corte y dos ramas | `arbol_tramite` |
 | Miniatura de escalera (también) | `mini_escalera` | S | 3 niveles con códigos | `escalera_prioridad` |
@@ -359,11 +365,13 @@ Empresa, persona, actor u opción en ficha.
 |---|---|---|---|---|
 | Ecosistema de logos por grupos | `ecosistema_logos` | L | De 10 a 70 actores (partners, aliados, candidatos) en 2 a 6 grupos, con logo o nombre | `muro_logos`, `categorias_chips`, `mapa_actores`, `ficha_linea` |
 | Ficha de empresa de un vistazo | `ficha_empresa` | L | Datos clave, ingresos, diferenciadores, cita y madurez | `ficha_linea`, `tarjeta_actor`, `lienzo_negocio`, `combo_financiero` |
+| Ficha de finalista por etapas | `ficha_finalista` | L | Un finalista: 3 a 6 datos clave, 5 a 10 etapas con estado y texto, y 1 a 3 bloques al pie | `ficha_empresa`, `ficha_linea`, `tarjeta_actor` |
 | Ficha de hipótesis | `ficha_hipotesis` | L | Lo probado, la hipótesis, criterios con nota y ejemplos | `columnas_evolucion`, `ficha_empresa` |
 | Ficha de una línea por empresa | `ficha_linea` | L | 10 a 20 empresas con madurez y frase | `tabla_con_barras`, `muro_logos` |
 | Ficha de startup sin ingresos | `ficha_startup` | L | Datos clave y cuatro bloques de texto | `ficha_empresa`, `ficha_linea`, `tarjeta_actor` |
 | Grupo de fichas | `grupo_fichas` | S | 2 a 6 casos con icono, dato y origen | `tarjeta_actor`, `icono_dato` |
 | Grupo de logos | `grupo_logos` | S | Logos o nombres de una columna (tier, vía, segmento) | `muro_logos`, `tarjeta_actor` |
+| Mapa de candidatos por grupos | `mapa_grupos_logos` | L | 20 a 80 actores con logo y nombre en 3 a 7 grupos por estado, con resumen opcional | `ecosistema_logos`, `muro_logos`, `embudo` |
 | Mapa de portfolio | `matriz_portfolio` | M | Productos de un actor por vía o segmento | `tabla_comparativa`, `mapa_calor` |
 | Muro de logos | `muro_logos` | M | Actores de un segmento, solo nombre o logo | `ficha_linea`, `grupo_fichas`, `grupo_logos` |
 | Persona con monograma | `persona` | S | Nombre y cargo | `organigrama`, `tarjeta_actor` |
@@ -397,6 +405,7 @@ Fuentes, confianza, citas, entrevistas.
 | Deslizadores de valoración (también) | `deslizadores` | M | Valoraciones cualitativas de 0 a 1 con su razón | `radar`, `harvey`, `valoracion`, `score_dimensiones` |
 | Fórmula de cálculo (también) | `formula` | L | Factores con cifra y fuente unidos por operadores | `arbol_drivers`, `dimensionamiento`, `cascada` |
 | Grupo de fichas (también) | `grupo_fichas` | S | 2 a 6 casos con icono, dato y origen | `tarjeta_actor`, `icono_dato` |
+| Lista de validación con estado (también) | `lista_validacion` | M | 4 a 8 puntos con estado, hallazgo y cita opcional | `tabla_comparativa`, `lista_numerada`, `afirmacion_evidencia` |
 | Tabla con barra frente a referencia (también) | `tabla_referencia` | L | Filas con una barra frente a objetivo y referencia | `tabla_con_barras`, `barras_objetivo` |
 
 ### ¿Cómo va? (`estado`)
@@ -431,17 +440,17 @@ Resumen que remite a otras slides, mensajes clave.
 
 | Elemento | Función | Escala | Datos | Alternativas |
 |---|---|---|---|---|
-| Columnas numeradas con cifras | `columnas_numeradas` | L | 2 a 4 ideas con título, texto y una o dos cifras | `lista_numerada`, `pilares`, `tarjetas_miniatura` |
+| Columnas numeradas con cifras | `columnas_numeradas` | L | 2 a 4 ideas con título, texto y una o dos cifras | `lista_numerada`, `tarjetas_miniatura` |
 | Miniatura de barras | `mini_barras_objetivo` | S | Hasta 3 barras frente a referencia y objetivo | `barras_objetivo` |
 | Miniatura de bifurcación | `mini_bifurcacion` | S | Una etapa, un corte y dos ramas | `arbol_tramite` |
 | Miniatura de conteo | `mini_conteo` | S | Hasta 10 círculos con los marcados | `pictograma` |
 | Miniatura de escalera | `mini_escalera` | S | 3 niveles con códigos | `escalera_prioridad` |
 | Miniatura de proceso | `mini_flechas` | S | Hasta 4 pasos | `proceso_flechas`, `chevrones` |
 | Miniatura de iconos | `mini_iconos` | S | 2 a 4 iconos con una palabra | `etiquetas_icono` |
-| Tarjetas con miniatura | `tarjetas_miniatura` | L | 2 a 4 conclusiones con una miniatura de la slide que resumen | `lista_numerada`, `pilares` |
+| Tarjetas con miniatura | `tarjetas_miniatura` | L | 2 a 4 conclusiones con una miniatura de la slide que resumen | `lista_numerada` |
 | Afirmación y evidencia (también) | `afirmacion_evidencia` | L | 2 a 4 afirmaciones con su cita y autor | `cita`, `panel_entrevistas` |
-| Lista numerada (también) | `lista_numerada` | M | 3 a 5 recomendaciones o pasos | `tarjetas_salida`, `pilares`, `columnas_numeradas` |
-| Casa estratégica (pilares) (también) | `pilares` | L | Ambición, 3 a 5 pilares y bases | `capas`, `lista_numerada` |
+| Etapas con entregable (también) | `etapas_entregable` | L | 3 a 6 etapas con plazo, qué se hizo y su entregable | `chevrones`, `fases_gates`, `linea_tiempo_vertical` |
+| Lista numerada (también) | `lista_numerada` | M | 3 a 5 recomendaciones o pasos | `tarjetas_salida`, `columnas_numeradas` |
 
 ### Pieza auxiliar (`apoyo`)
 
@@ -564,7 +573,6 @@ Cómo se organiza una idea en un esquema.
 - **`mapa_alcance`** (Mapa de alcance). fijar el alcance de un scouting, una vigilancia o un dimensionamiento antes de empezar. *Cuándo no:* si el alcance es una sola lista (usa lista_numerada o pills).
 - **`dafo`** (DAFO). diagnóstico rápido de una empresa, una tecnología o una opción de entrada. *Cuándo no:* como conclusión (el DAFO ordena, no decide; acompáñalo de la recomendación).
 - **`cinco_fuerzas`** (Cinco fuerzas). atractivo de un sector o de un segmento en una propuesta o un diagnóstico. *Cuándo no:* si el análisis es de una sola empresa frente a sus competidores (usa tabla_comparativa).
-- **`pilares`** (Casa estratégica (pilares)). resumir un plan estratégico o una hoja de ruta de innovación en una sola imagen. *Cuándo no:* si los pilares no comparten una ambición común (usa lista_numerada).
 - **`nucleo_dos_lados`** (Núcleo con dos lados). dos capas o palancas complementarias que se combinan con una pieza central (proceso y conservación alrededor del ingrediente); de 3 a 6 filas por lado, el mismo número a los dos lados. *Cuándo no:* si las dos mitades no comparten núcleo (usa dos columnas) o si hay más de dos capas.
 - **`escalera_prioridad`** (Escalera de prioridad). la recomendación de dónde poner el esfuerzo y qué se busca en cada foco. *Cuándo no:* si la prioridad sale de una puntuación que hay que enseñar (usa antes matriz_puntuacion).
 - **`columnas_evolucion`** (De lo probado a lo nuevo). hacer creíble con un ejemplo concreto un mensaje abstracto («lo nuevo es el producto»); 2 a 4 columnas. *Cuándo no:* si no hay una cifra por columna o si las columnas no comparten estructura.
@@ -611,6 +619,7 @@ En qué orden y cuándo.
 - **`gantt`** (Gantt). el cronograma de un proyecto de 8 a 30 semanas con 3 a 6 fases y una decisión. *Cuándo no:* para más de 6 filas o un plan de detalle por tareas (va en Excel o en el PM); sin fechas, usa proceso_flechas.
 - **`lista_precedentes`** (Lista de precedentes). el historial de decisiones de un regulador, comité o cliente, de 4 a 8 entradas, junto a un árbol. *Cuándo no:* si no hay estado favorable o desfavorable (usa una lista simple); el verde no se usa para nada más.
 - **`fases_gates`** (Fases con gates). próximos pasos con disciplina de decisión (validar demanda antes de invertir). *Cuándo no:* un calendario con fechas reales (usa gantt) o pasos sin punto de decisión (usa chevrones).
+- **`etapas_entregable`** (Etapas con entregable). la metodología de un proyecto de 3 a 6 etapas con lo que sale de cada una (propuesta o cierre). *Cuándo no:* etapas sin entregable propio (usa chevrones) o con fechas que importan como calendario (usa gantt).
 
 ### Cifras y KPI · `ea_elementos/cifras.py`
 
@@ -651,6 +660,9 @@ Quién es, qué dice y qué sale, en tarjetas y bloques de texto.
 - **`grupo_logos`** (Grupo de logos). los actores de una columna (tier, vía, segmento), al pie de su texto, en rejillas de tres columnas. *Cuándo no:* un universo grande de actores sin columnas (usa muro_logos).
 - **`ficha_startup`** (Ficha de startup sin ingresos). fichas de finalistas o candidatos cuando no hay cifras de ingresos que enseñar (una por slide, hermanas). *Cuándo no:* si hay ingresos y una cita (usa ficha_empresa); para listas largas (usa ficha_linea).
 - **`categorias_chips`** (Mapa de categorías con chips). una shortlist o un universo de 8 a 30 nombres repartidos en 3 a 9 categorías, con un estado transversal. *Cuándo no:* de 6 a 12 elementos con definición (usa anillo_categorias) o si no hay categorías (usa muro_logos).
+- **`ficha_finalista`** (Ficha de finalista por etapas). fichas hermanas de 2 a 5 finalistas evaluados contra las mismas etapas o requisitos. *Cuándo no:* fichas de competidores con cifras de negocio (usa ficha_empresa o la ficha en cuadrantes); listas largas de candidatos (usa ficha_linea).
+- **`lista_validacion`** (Lista de validación con estado). el resultado de una validación, una auditoría o una due diligence, de 4 a 8 puntos, junto a sus riesgos. *Cuándo no:* si cada punto se compara entre varios actores (usa tabla_comparativa) o no hay estado (usa lista_numerada).
+- **`mapa_grupos_logos`** (Mapa de candidatos por grupos). el mapa completo de candidatos de un scouting (de 20 a 80) por estado, con nombre y logo de cada uno. *Cuándo no:* si basta con el recuento por grupo (usa embudo o barras); para teselas iguales sin nombre, ecosistema_logos.
 
 ### Marcas y apoyo · `ea_elementos/marcas.py`
 
@@ -661,7 +673,7 @@ Micro piezas para celdas, tarjetas y márgenes.
 - **`marca`** (Marcas sí, parcial y no). tablas de características o de cumplimiento de requisitos. *Cuándo no:* si el matiz importa (usa harvey o texto).
 - **`semaforo`** (Semáforo de estado). estado de proyectos, hitos o requisitos en una tabla de seguimiento. *Cuándo no:* en entregables de contenido (el semáforo es de gestión, no de hallazgos).
 - **`barra_progreso`** (Barra de progreso). avance sobre un total conocido, en tarjetas o tablas. *Cuándo no:* si no hay un máximo real (sin denominador, la barra engaña).
-- **`valoracion`** (Puntos de valoración). una nota cualitativa compacta dentro de una ficha o una tabla. *Cuándo no:* si la escala no es ordinal o hay decimales (da la cifra).
+- **`valoracion`** (Puntos de valoración). una nota cualitativa compacta dentro de una ficha o una tabla. *Cuándo no:* si la escala no es ordinal o hay otros decimales (da la cifra).
 - **`etiqueta_evidencia`** (Nivel de evidencia). junto a cada dato de un informe de vigilancia o una ficha. *Cuándo no:* en slides de síntesis para dirección (se explica una vez y se omite).
 - **`chip_nota`** (Nota 0 a 3 con confianza). 
 - **`pill`** (Píldoras de estado). 
@@ -684,6 +696,7 @@ Comparar en filas y columnas.
 - **`tabla_drivers`** (Tabla de drivers de mercado). resumen de tendencias de un informe de vigilancia o de una slide de mercado. *Cuándo no:* con menos de 4 drivers (usa icono_dato).
 - **`panel_entrevistas`** (Panel de entrevistas). documentar la base de una investigación primaria (llamadas a candidatos, expertos, clientes). *Cuándo no:* si las entrevistas no se pueden mostrar ni anonimizadas (da solo el recuento).
 - **`matriz_portfolio`** (Mapa de portfolio). qué ofrece cada competidor por vía de administración, aplicación o canal, en fichas hermanas. *Cuándo no:* para comparar varios actores en las mismas vías (usa tabla_comparativa o mapa_calor).
+- **`matriz_candidatos`** (Matriz de finalistas con peso y validación). comparar 2 a 5 finalistas con criterios con peso, cuando importa dónde falla cada uno. *Cuándo no:* de 6 a 14 opciones (usa matriz_puntuacion); criterios sin peso ni nota (usa tabla_comparativa).
 
 ### Síntesis · `ea_elementos/sintesis.py`
 

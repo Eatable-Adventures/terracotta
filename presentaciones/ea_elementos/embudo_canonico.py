@@ -1,11 +1,10 @@
 """embudo_canonico: generador SVG del embudo de discos apilados de Eatable Adventures.
 
-Diseño aprobado el 07-10-2026: escalones de ancho fijo (no proporcionales a
+Diseño canónico: escalones de ancho fijo (no proporcionales a
 los valores), rampa de rojos de oscuro a claro, insignia numerada con flecha a la izquierda y etiquetas alineadas
 a la derecha; máximo 5 etapas más un objetivo discontinuo. Su RAMP es la rampa canónica de rojos de ea_elementos.
 
-Integrado en ea_elementos en Terracotta V2 (01-11-2026), desde pptx/funnel.py, al retirar la capa de PowerPoint
-(archivada en 04. Archivos/Terracotta V1 - PowerPoint (archivado 01-11-2026)/, con la spec original en components.md).
+Integrado en ea_elementos en Terracotta V2, desde pptx/funnel.py, al retirar la capa de PowerPoint.
 Para slides se usa X.embudo(), que lo envuelve. Sin imports relativos: también se puede importar suelto.
 
     from embudo_canonico import funnel_svg
@@ -41,7 +40,7 @@ def _palette_idx(n):
 
 def funnel_svg(stages, goal=None, key=None, label_size=15, sub_size=12):
     """stages: lista de (nombre, subtítulo, valor), de mayor a menor. goal: (nombre, subtítulo, texto) opcional.
-    label_size y sub_size: tamaño de las etiquetas en unidades del lienzo de 800 (opcional, 28-10-2026,
+    label_size y sub_size: tamaño de las etiquetas en unidades del lienzo de 800 (opcional,
     las sube cuando el funnel se muestra reducido junto a texto de cuerpo)."""
     n = len(stages)
     assert 2 <= n <= 5, "Máx. 5 etapas coloreadas (+1 objetivo). Si hay más, dividir en dos funnels."

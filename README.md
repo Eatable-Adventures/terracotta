@@ -119,7 +119,7 @@ Terse, concrete and proof-driven — **confident, not arrogant**. The register o
 | `Charts Catalogue.html` | Index of chart and map types: colour rule, what each is for, its piece in the gallery. Generated. |
 | `Maps Catalogue.html` | Live demos of `maps-brand.js`, the map renderer for apps. For decks, use the map pieces in `presentaciones/ea_elementos/`. |
 | `Navigation Guidelines.html` | Navigation spec with live demos — sidebar & rail, iPhone tab bar, More sheet, iOS install, rules. |
-| `presentaciones/` | **Presentations (Terracotta V2):** decks and reports in HTML and PDF. `ea_deck.py` is the fixed base (cover, agenda, section dividers, slide header, closing; 1280 × 720) and `ea_elementos/` holds 158 visual elements chosen by intent, with a gallery, usage rules, 435 icons and a review tool. **Start with its `README.md`.** |
+| `presentaciones/` | **Presentations (Terracotta V2):** decks and reports in HTML and PDF. `ea_deck.py` is the fixed base (cover, agenda, section dividers, slide header, closing; 1280 × 720) and `ea_elementos/` holds 162 visual elements chosen by intent, with a gallery, usage rules, 435 icons and a review tool. **Start with its `README.md`.** |
 | `charts/` | Canonical **funnel** (stacked discs): spec `funnel.md`, specimen `funnel.html`, and `funnel.py`, which re-exports the generator from `presentaciones/ea_elementos/embudo_canonico.py`. |
 | `maps-brand.js` | Brand map renderers (`EAMaps.load()` / `EAMaps.render.*`) on d3-geo + world-atlas. |
 | `components/` | Exported React components (see Components below). |

@@ -7,19 +7,17 @@ aliases:
   - Base fija de presentaciones HTML
   - ea_deck
   - ea_elementos
-created: 15-10-2026
-actualizado: 03-11-2026
 description: >-
   Capa de presentaciones de Terracotta para presentaciones HTML de Eatable Adventures: base fija (portada, cabecera y
-  cierre, ea_deck), los 158 elementos visuales del cuerpo de las slides (ea_elementos), su taxonomía por intención,
+  cierre, ea_deck), los 162 elementos visuales del cuerpo de las slides (ea_elementos), su taxonomía por intención,
   las reglas de uso y las referencias oficiales. Es la puerta de entrada: quien no conozca Terracotta empieza aquí.
 ---
 
 # Presentaciones HTML de Eatable Adventures
 
-> Parte de Terracotta. Se publica en el repositorio con todo el sistema, salvo las notas que citan clientes o material de terceros (ver «Qué no está en el repositorio»). Dos capas: **`ea_deck`** fija las tres piezas que no se rediseñan (portada, cabecera de cada slide y cierre) y **`ea_elementos`** pone todo lo que va en el cuerpo. Desde el 01-11-2026 ya no hay catálogo de composiciones de slide: se eligen elementos por intención y se colocan con reglas generales.
+> Parte de Terracotta. Se publica en el repositorio con todo el sistema, salvo las notas que citan clientes o material de terceros (ver «Qué no está en el repositorio»). Dos capas: **`ea_deck`** fija las tres piezas que no se rediseñan (portada, cabecera de cada slide y cierre) y **`ea_elementos`** pone todo lo que va en el cuerpo. No hay catálogo de composiciones de slide: se eligen elementos por intención y se colocan con reglas generales.
 
-**Versión: Terracotta V2 (01-11-2026), cerrada el 03-11-2026 con todos los elementos validados.** Qué trae, qué se retiró (la capa de PowerPoint), problemas conocidos y propuesta para el repositorio: [[Versiones de Terracotta]]. Para montar, revisar y aprender de un deck desde cualquier sesión, la skill `terracotta` (`~/.claude/skills/terracotta/`), que desde el 02-11-2026 incluye la antigua `/taste`. Tras cualquier cambio en esta carpeta: `python3 verificar.py`.
+**Versión: Terracotta V2.** Qué trae, qué se retiró (la capa de PowerPoint), problemas conocidos y propuesta para el repositorio: [[Versiones de Terracotta]]. Para montar, revisar y aprender de un deck desde cualquier sesión, la skill `terracotta`, que incluye la antigua `/taste`. Tras cualquier cambio en esta carpeta: `python3 verificar.py`.
 
 ## Empieza aquí
 
@@ -80,7 +78,7 @@ El repositorio `Eatable-Adventures/terracotta` es público. Solo existen en el e
 | Archivo | Para qué |
 |---|---|
 | `ea_deck.py` | Base fija: `portada()`, `agenda()`, `portadilla()`, `cabecera()`, `slide()`, `cierre()`, `documento()`, con `idioma="es"` o `"en"`. Todo embebido en base64 (HTML autocontenido) |
-| `ea_elementos/` | Paquete con los 158 elementos visuales en 14 familias, un módulo por familia, más `base.py` (tokens, primitivas, `Lienzo`, CSS, `cuerpo_slide`, `fila`, `columna`), `taxonomia.py`, `iconos.py` y `embudo_canonico.py` (el embudo de discos apilados, antes `pptx/funnel.py`) |
+| `ea_elementos/` | Paquete con los 162 elementos visuales en 14 familias, un módulo por familia, más `base.py` (tokens, primitivas, `Lienzo`, CSS, `cuerpo_slide`, `fila`, `columna`), `taxonomia.py`, `iconos.py` y `embudo_canonico.py` (el embudo de discos apilados, antes `pptx/funnel.py`) |
 | [[Taxonomía de elementos]] | Menú por intención (qué elemento para cada mensaje), con escala, datos y alternativas. Lo genera `build_galeria_elementos.py`; no se edita a mano |
 | [[Reglas de uso de elementos]] | El único documento de reglas para montar y revisar: selección, maquetación, encaje, color, tipografía, peso visual, tono, contenido, base fija, ilustración, iconos y medición |
 | [[Formatos de slide]] | Para cada tipo de mensaje: estructura, pieza, qué evitar y slide modelo |
@@ -109,13 +107,13 @@ El repositorio `Eatable-Adventures/terracotta` es público. Solo existen en el e
 - **Familias y módulos:** magnitud, evolucion, composicion, comparacion, distribucion, marcos, arboles, cadena (cadena de valor y escenas isométricas), secuencia, cifras, fichas, marcas, tablas y sintesis. `import ea_elementos as X` da acceso a todo.
 - **Elegir:** por intención, nunca por costumbre. `X.buscar("brecha")` da todas las candidatas de una intención y `X.buscar("cadena de valor")` busca en lenguaje natural. Detalle en [[Reglas de uso de elementos]], sección 1.
 - **Colocar:** seis rejillas (`X.REJILLAS`, `X.fila()`), cuerpo de 1152 px de ancho, tamaño con el parámetro `W` de cada función y nunca con CSS.
-- **Llenar (02-11-2026):** el cuerpo llena visualmente la mayoría de las slides sin recargarlas. `X.alto_cuerpo(líneas_de_título, subtítulo, banda, nota)` da el alto disponible para pasárselo a las piezas que aceptan `H`; `X.columna(..., repartir=True)` y `X.fila(..., crecer=True)` reparten el sobrante. Centrar con `align-items:center` es la excepción. Regla M11 de las [[Reglas de uso de elementos]].
+- **Llenar:** el cuerpo llena visualmente la mayoría de las slides sin recargarlas. `X.alto_cuerpo(líneas_de_título, subtítulo, banda, nota)` da el alto disponible para pasárselo a las piezas que aceptan `H`; `X.columna(..., repartir=True)` y `X.fila(..., crecer=True)` reparten el sobrante. Centrar con `align-items:center` es la excepción. Regla M11 de las [[Reglas de uso de elementos]].
 - **Mirar la referencia (S6):** antes de maquetar un tipo de slide con referencia, verla con `referencias.py`. Se toma la forma, no el contenido.
 - **Dato pendiente:** en cualquier texto, `==Por incluir==` sale marcado (`ea_deck.documento` lo resuelve, también en gráficas) y `revisar_deck.py` lo lista.
 - **Añadir un elemento:** la función en el módulo de su familia (con docstring de cuándo usarlo y cuándo no), su ficha en `taxonomia.FICHAS`, su nombre en `taxonomia.FAMILIAS` y un ejemplo en `build_galeria_elementos.py`. La galería no se genera si falta algo.
 - **Portadillas de secciones que no son un eslabón:** las escenas `comunicacion`, `hoja_de_ruta` y `alianzas`. Las fotos van con el proyecto, con licencia libre y su origen en `FUENTES.md`; no hay banco común porque una foto genérica no cumple D7.
 - **Añadir una escena isométrica:** función con `@escena(nombre, descripción, eslabón, alto)` en `ea_elementos/cadena.py`; aparece sola en el catálogo y se puede usar en `cadena_isometrica` y `escena_iso`.
-- **Historial:** `ea_visuals.py` (composiciones de slide) y `ea_elementos.py` se fundieron en el paquete el 01-11-2026, con salida idéntica comprobada byte a byte. Copia de los archivos anteriores en `04. Archivos/Terracotta presentaciones - copia 01-11-2026/`.
+- **Historial:** `ea_visuals.py` (composiciones de slide) y `ea_elementos.py` se fundieron en el paquete, con salida idéntica comprobada byte a byte.
 
 ## Logos
 
@@ -153,8 +151,8 @@ slides = [ea_deck.portada(linea1="Alineación de alcance", linea2="Cliente Demo"
                           subtitulo="Del diagnóstico al piloto",
                           realizado_para="Cliente Demo", equipo="Nombre Apellido",
                           fecha="Octubre 2026")]
-H = X.alto_cuerpo(1, True, 1)                      # el alto disponible: líneas de título, subtítulo, líneas de banda
-cuerpo = ea_deck.cabecera("01. Sección", 'Conclusión con <span class="hl-red">tramo en rojo</span>') + X.cuerpo_slide("Subtítulo", X.fila(X.embudo([("Universo", "Candidaturas", "120"), ("Filtro", "Encajan", "40"), ("Entrevistas", "Con el equipo", "12"), ("Comité", "Evaluados", "8"), ("Final", "Elegidos", "5")], clave=4, W=680), X.contadores([("120", "Candidatos", "Recibidos en la convocatoria"), ("40", "Pasan el filtro", "Encajan en los criterios"), ("5", "Finalistas", "Elegidos por el comité")], H=H, destacado=2), anchos=X.REJILLAS["B"], crecer=True), banda="Conclusión con **negrita**.")
+# Rejilla F (contexto 360 + pieza 764): la columna de contexto a la izquierda y el embudo a la derecha; crecer=True y vertical="flex-start" bajan la cifra ancla al pie
+cuerpo = ea_deck.cabecera("01. Sección", 'Conclusión con <span class="hl-red">tramo en rojo</span>') + X.cuerpo_slide("Subtítulo", X.fila(X.columna_contexto("Cómo se filtró", ["Se parte de **120 candidaturas** y se aplican filtros sucesivos hasta el comité.", "Cada fase se evalúa con los mismos criterios."], cifra=("5", "Finalistas elegidos por el comité")), X.embudo([("Universo", "Candidaturas", "120"), ("Filtro", "Encajan", "40"), ("Entrevistas", "Con el equipo", "12"), ("Comité", "Evaluados", "8"), ("Final", "Elegidos", "5")], clave=4, W=764), anchos=X.REJILLAS["F"], crecer=True, vertical="flex-start"), banda="Conclusión con **negrita**.")
 slides.append(ea_deck.slide(cuerpo, n=2, total=3, fuente="Fuente: ...", cliente="Cliente Demo"))
 slides.append(ea_deck.cierre("Mensaje clave en una frase.", "Cliente Demo"))
 open("salida.html", "w", encoding="utf-8").write(ea_deck.documento("Título", slides, css_extra=X.CSS + X.fuente_iconos()))
@@ -176,37 +174,37 @@ Tomada del sistema de referencia de la portada (10 × 5,625 in) y escalada a 128
 | 6 | Línea vertical blanca de 1 px | 655, 486 · alto 106 |
 | 7 | Copyright 12,5 px | 319, 672 |
 
-- **Título:** línea 1 = tipo de entregable; línea 2 = cliente o proyecto. Máximo ~22 caracteres por línea; si no cabe, acortar, no reducir el tamaño. **Norma (15-10-2026):** el título va en frase normal, nunca en mayúsculas, a 44 px y a 200 px del borde superior (antes 50 px, MAYÚSCULAS y 180 px). Cambiado en `ea_deck.py`: todas las portadas nuevas lo heredan.
+- **Título:** línea 1 = tipo de entregable; línea 2 = cliente o proyecto. Máximo ~22 caracteres por línea; si no cabe, acortar, no reducir el tamaño. **Norma:** el título va en frase normal, nunca en mayúsculas, a 44 px y a 200 px del borde superior (antes 50 px, MAYÚSCULAS y 180 px). Cambiado en `ea_deck.py`: todas las portadas nuevas lo heredan.
 - **Subtítulo:** una línea, bloques separados por ` · `, frase normal, sin punto final.
-- **Etiquetas e idioma (01-11-2026):** todas en el idioma del deck, también el copyright: en español «Realizado para», «Fecha», «Equipo», «Clasificación» (por defecto «Confidencial») y «© 2026 Eatable Adventures. Todos los derechos reservados.»; en inglés («idioma="en"») «Prepared for», «Date», «Consultant Team», «Classification» y «Private & Confidential». Sustituye a la norma anterior de mezclar idiomas.
-- **Fecha:** mes con la primera letra en mayúscula y año (`Octubre 2026`). Norma del 15-10-2026.
-- **Equipo (01-11-2026 y 02-11-2026):** las personas reales del proyecto, tal como figuran en la sección «Equipo» de su PM, una por línea (`equipo=[...]`); si no consta, se pregunta; con más de dos líneas, el bloque de metadatos sube 24 px para dejar aire sobre el copyright. «Delivery Excellence» solo si quien encarga el deck lo pide.
+- **Etiquetas e idioma:** todas en el idioma del deck, también el copyright: en español «Realizado para», «Fecha», «Equipo», «Clasificación» (por defecto «Confidencial») y «© 2026 Eatable Adventures. Todos los derechos reservados.»; en inglés («idioma="en"») «Prepared for», «Date», «Consultant Team», «Classification» y «Private & Confidential». Sustituye a la norma anterior de mezclar idiomas.
+- **Fecha:** mes con la primera letra en mayúscula y año (`Octubre 2026`).
+- **Equipo:** las personas reales del proyecto, tal como figuran en la sección «Equipo» de su PM, una por línea (`equipo=[...]`); si no consta, se pregunta; con más de dos líneas, el bloque de metadatos sube 24 px para dejar aire sobre el copyright. «Delivery Excellence» solo si quien encarga el deck lo pide.
 - **Nunca en la portada:** fotos, logos de cliente, iconos, ilustraciones, colores extra (solo crema y blanco sobre burgundy), número de página, pie con sección, título de acción ni glow delante del título.
 - No dibujar la portada con un degradado CSS ni con un relleno sólido: siempre `cover-background.png`. Sus franjas verticales son de marca, no un defecto.
 
 ## Cabecera de las slides de contenido
 
 - Eyebrow gris en frase normal con número de sección (`01. Proteína funcional`), y a su derecha las píldoras de estado si hacen falta.
-- Título entero en negrita (700), tanto la parte negra como el tramo conclusivo en rojo (`.hl-red`). Máximo 2 líneas. **Norma (28-10-2026):** los títulos van siempre en negrita completa; manda sobre la regla de Terracotta de titulares en Regular (antes 600 con el rojo en 700).
+- Título entero en negrita (700), tanto la parte negra como el tramo conclusivo en rojo (`.hl-red`). Máximo 2 líneas. **Norma:** los títulos van siempre en negrita completa; manda sobre la regla de Terracotta de titulares en Regular (antes 600 con el rojo en 700).
 - Glow ámbar (`amber-glow.png`) a la izquierda del título, detrás del texto, nunca un punto sólido.
-- **Alineación (28-10-2026):** eyebrow, título y subtítulo empiezan en el mismo eje vertical (margen izquierdo de la slide, sin sangría del título). El glow queda centrado unos 6 px a la izquierda de la primera letra (`.glow{left:-81px}`), no detrás de ella. La fila del eyebrow tiene altura fija (22 px), así que una píldora de estado o un eyebrow vacío no desplazan el título.
+- **Alineación:** eyebrow, título y subtítulo empiezan en el mismo eje vertical (margen izquierdo de la slide, sin sangría del título). El glow queda centrado unos 6 px a la izquierda de la primera letra (`.glow{left:-81px}`), no detrás de ella. La fila del eyebrow tiene altura fija (22 px), así que una píldora de estado o un eyebrow vacío no desplazan el título.
 - Logo wordmark arriba a la derecha. El título no debe pasar por debajo del logo.
-- Pie: fuente a la izquierda, sin fechas; a la derecha `Confidencial · Solo para uso de {cliente} · n / total`, sin «Eatable Adventures» (01-11-2026).
+- Pie: fuente a la izquierda, sin fechas; a la derecha `Confidencial · Solo para uso de {cliente} · n / total`, sin «Eatable Adventures».
 
-## Agenda (01-11-2026)
+## Agenda
 
-`agenda(secciones, subtitulo)`: el formato del Google Slides de EA (28-10-2026). A la izquierda, el rótulo rojo «Estructura del documento», «AGENDA» a 64 px con el glow y un subtítulo en cursiva; una línea vertical; a la derecha, las secciones numeradas en rojo con una línea de descripción y separadores. Sin pie. Con más de cinco secciones pasa a la versión densa.
+`agenda(secciones, subtitulo)`: el formato del Google Slides de EA. A la izquierda, el rótulo rojo «Estructura del documento», «AGENDA» a 64 px con el glow y un subtítulo en cursiva; una línea vertical; a la derecha, las secciones numeradas en rojo con una línea de descripción y separadores. Sin pie. Con más de cinco secciones pasa a la versión densa.
 
-## Portadillas de sección (01-11-2026)
+## Portadillas de sección
 
 `portadilla(numero, titulo, subtitulo, foto=... | visual_html=...)`: foto a sangre en color con la tarjeta blanca abajo a la izquierda (número a 72 px en rojo y peso 300, título en negrita y subtítulo). La foto tiene que mostrar el objeto del proyecto (D7) y registrar su origen. Si no hay una foto así, la misma tarjeta sobre fondo gris claro con una escena isométrica del eslabón a la derecha (`visual_html=ea_elementos.escena_iso(...)`), según la regla I1 de [[Reglas de uso de elementos]].
 
 ## Cierre
 
-Izquierda blanca (40%): "Gracias." ("Thank you." en inglés), un próximo paso opcional (`siguiente="Siguiente entrega"`, 01-11-2026) y un callout con el mensaje en una o dos frases (gris claro `--surface-fill`, por B3, borde rojo de 3 px), sin la etiqueta "Mensaje clave" (29-10-2026) y con `**negrita**` para destacar una parte. Derecha (60%): degradado de marca de Terracotta, "Let's Beat", wordmark y confidencialidad. Va siempre como última slide, aparte de la slide de decisión.
+Izquierda blanca (40%): "Gracias." ("Thank you." en inglés), un próximo paso opcional (`siguiente="Siguiente entrega"`) y un callout con el mensaje en una o dos frases (gris claro `--surface-fill`, por B3, borde rojo de 3 px), sin la etiqueta "Mensaje clave" y con `**negrita**` para destacar una parte. Derecha (60%): degradado de marca de Terracotta, "Let's Beat", wordmark y confidencialidad. Va siempre como última slide, aparte de la slide de decisión.
 
-- **Verde de validación (29-10-2026):** `--validacion: #2F7D4A`, definido en `CSS_BASE`. Solo para estados de validación (favorable, validado, aprobado), nunca como color de marca ni de series. Vive en esta capa de presentaciones y no en `colors_and_type.css`, que se sobrescribe al sincronizar con el repositorio de Terracotta.
-- **"Let's Beat" centrado en altura (29-10-2026):** `.cl-right h2{top:50%;transform:translateY(-50%)}`, a 64 px del borde izquierdo de la mitad derecha. Antes estaba a la altura de "Gracias." (`top:228px`).
+- **Verde de validación:** `--validacion: #2F7D4A`, definido en `CSS_BASE`. Solo para estados de validación (favorable, validado, aprobado), nunca como color de marca ni de series. Vive en esta capa de presentaciones y no en `colors_and_type.css`, que se sobrescribe al sincronizar con el repositorio de Terracotta.
+- **"Let's Beat" centrado en altura:** `.cl-right h2{top:50%;transform:translateY(-50%)}`, a 64 px del borde izquierdo de la mitad derecha. Antes estaba a la altura de "Gracias." (`top:228px`).
 
 ## De dónde sale la portada
 

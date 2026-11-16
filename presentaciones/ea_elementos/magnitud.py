@@ -11,7 +11,7 @@ from .base import (
 )
 from .marcas import (_con_leyenda, delta)
 
-from .base import (_logo_html, flecha_svg)  # añadidos el 01-11-2026
+from .base import (_logo_html, flecha_svg)
 
 __all__ = ["embudo", "columnas", "barras_ranking", "barras_agrupadas", "barras_apiladas", "piruletas", "pictograma", "pareto", "comparador_unidad", "barras_variacion", "ranking_logos"]
 
@@ -75,20 +75,45 @@ def columnas(datos, destacado=None, unidad="", eje="", W=520, H=260, fmt_valor=N
     return _svg(W, H, "".join(s), hdef)
 
 
-def barras_ranking(datos, destacado=None, unidad="", W=520, ancho_rotulo=150, alto=18, sep=11, ordenar=True, fmt_valor=None, H=None):
+def barras_ranking(datos, destacado=None, unidad="", W=520, ancho_rotulo=150, alto=18, sep=11, ordenar=True, fmt_valor=None, H=None,
+                   columnas=None, cabecera_rotulo="", cabecera_valor="", maximo=None, tam=13, unir_eje=False):
     """Ranking en barras horizontales, ordenado de mayor a menor, con el valor al final de cada barra.
     datos: [(rótulo, valor)]; destacado: rótulo o lista de rótulos en rojo (sobrevive a la ordenación).
     H: alto total; si se da, calcula el grueso y la separación de las barras (máximo 30 px de barra) y sobreescribe alto y sep.
+    columnas: [(cabecera, ancho_px)] para una tabla con barra: cada fila de datos pasa a (rótulo, valor, [celdas]), con celdas de
+    texto o HTML (un logo de logo()) entre el rótulo y la barra, y una fila de cabecera (cabecera_rotulo, cabeceras y cabecera_valor).
+    maximo: valor que llena la barra (el tope de una escala de notas); por defecto, el mayor de los datos.
+    tam: px de rótulos, celdas y valores en la versión con columnas; unir_eje: la línea del eje de las barras arranca
+    en la raya de la cabecera, sin hueco.
     Cuándo usarlo: ordenar de 5 a 15 elementos con rótulos largos (mercados, empresas, ingredientes).
     Cuándo no: series temporales (usa columnas o linea) o si el orden no importa."""
     f = fmt_valor or (lambda v: fmt(v) + unidad)
     dest = _set(destacado)
     filas = sorted(datos, key=lambda d: -d[1]) if ordenar else list(datos)
+    if H and columnas:
+        H -= 30
     if H:
         paso_ = (H + 4) / len(filas)
         alto, sep = min(paso_ * .62, 30), paso_ - min(paso_ * .62, 30)
+    if columnas:
+        anchos = [a for _, a in columnas]
+        wb = W - ancho_rotulo - sum(anchos)
+        xb = lin(0, maximo or max(d[1] for d in filas), 0, wb - 52)
+        rej = f"display:grid;grid-template-columns:{ancho_rotulo}px {' '.join(f'{a}px' for a in anchos)} {wb}px;align-items:center"
+        th = "font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3)"
+        cab = (f'<div style="{rej};{th};height:24px;border-bottom:1px solid {FG4};margin-bottom:{0 if unir_eje else 6}px"><span>{E(cabecera_rotulo)}</span>'
+               + "".join(f"<span>{E(c)}</span>" for c, _ in columnas) + f'<span style="padding-left:10px">{E(cabecera_valor)}</span></div>')
+        celda = lambda c: c if str(c).lstrip().startswith("<") else f'<span style="font-size:{tam}px;color:var(--fg2)">{md(c)}</span>'
+        cuerpo = ""
+        for r, v, cels in filas:
+            hot = r in dest
+            barra = _svg(wb, alto, _bh(0, 0, xb(v), alto, RED if hot else NEUTRO) + text(xb(v) + 7, alto / 2 + tam * .35, f(v), tam, 700, RED if hot else FG1))
+            cuerpo += (f'<div style="{rej};height:{alto + sep:.1f}px"><span style="font-size:{tam}px;font-weight:{600 if hot else 400};color:{FG1 if hot else FG2}">{E(r)}</span>'
+                       + "".join(f"<div>{celda(c)}</div>" for c in cels)
+                       + f'<div style="height:100%;border-left:1px solid {FG4};display:flex;align-items:center">{barra}</div></div>')
+        return f'<div style="width:{W}px;flex:none">{cab}{cuerpo}</div>'
     H = len(filas) * (alto + sep) - sep
-    x = lin(0, max(v for _, v in filas), ancho_rotulo, W - 48)
+    x = lin(0, maximo or max(v for _, v in filas), ancho_rotulo, W - 48)
     s = []
     for i, (r, v) in enumerate(filas):
         y0, hot = i * (alto + sep), r in dest

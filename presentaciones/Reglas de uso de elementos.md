@@ -8,19 +8,17 @@ aliases:
   - Reglas de maquetación de slides
   - Cómo usar ea_elementos en una slide
   - Criterios de EA para presentaciones
-created: 01-11-2026
-actualizado: 03-11-2026
 description: >-
   Todas las reglas de Terracotta para montar y revisar una slide de Eatable Adventures, en un solo sitio: selección,
   maquetación, encaje, color, tipografía, peso visual, tono, contenido, base fija, ilustración, iconos y medición, con
-  cómo se detecta y se arregla cada una. Funde las antiguas reglas de uso y los criterios de /taste (02-11-2026).
+  cómo se detecta y se arregla cada una. Funde las antiguas reglas de uso y los criterios de /taste.
 ---
 
 # Reglas de uso de elementos
 
-> Parte de Terracotta V2, capa de presentaciones. **Es el único documento de reglas:** desde el 02-11-2026 recoge también los criterios de la antigua skill `/taste`, salvo lo que haya en la tabla de códigos retirados. [[Taxonomía de elementos]] dice qué elemento responde a cada mensaje, [[Formatos de slide]] cómo se estructura cada tipo de mensaje, y estas reglas cómo se monta y se revisa. Ejemplos aplicados: `Reglas de uso de elementos.html` (`build_reglas_uso.py`).
+> Parte de Terracotta V2, capa de presentaciones. **Es el único documento de reglas:** recoge también los criterios de la antigua skill `/taste`, salvo lo que haya en la tabla de códigos retirados. [[Taxonomía de elementos]] dice qué elemento responde a cada mensaje, [[Formatos de slide]] cómo se estructura cada tipo de mensaje, y estas reglas cómo se monta y se revisa. Ejemplos aplicados: `Reglas de uso de elementos.html` (`build_reglas_uso.py`).
 
-**Sin casos concretos (02-11-2026).** Estas reglas, los formatos, los microajustes y los ejemplos son generales: no nombran ningún cliente, proyecto ni caso, y sus ejemplos se inventan, sin adaptar cifras ni frases de un deck real. Lo que cita clientes está solo en [[Referencias de Terracotta]] y [[Medición de decks]], que son solo internas. Los nombres del equipo de EA sí se incluyen: en la autoría de las reglas y en cada deck, donde el equipo de la portada sale del PM de su proyecto (G1).
+**Sin casos concretos.** Estas reglas, los formatos, los microajustes y los ejemplos son generales: no nombran ningún cliente, proyecto ni caso, y sus ejemplos se inventan, sin adaptar cifras ni frases de un deck real. Lo que cita clientes está solo en [[Referencias de Terracotta]] y [[Medición de decks]], que son solo internas. Los nombres del equipo de EA sí se incluyen: en la autoría de las reglas y en cada deck, donde el equipo de la portada sale del PM de su proyecto (G1).
 
 No hay composiciones fijas. Cada slide se monta con elementos sueltos siguiendo estas reglas, así que dos slides con el mismo mensaje pueden verse distintas si los datos lo piden.
 
@@ -52,10 +50,15 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 
 - **S5 · Sin pieza, se compone; no se improvisa.** Si ninguna pieza encaja, se combina con las existentes. Si de verdad falta una, se crea en el módulo de su familia con su ficha en la taxonomía y su ejemplo en la galería; nunca se dibuja a mano dentro del script de un deck. Lo mismo al revisar: si el defecto está en una pieza, se arregla en la pieza con un parámetro opcional (`CLAUDE.md` de la carpeta), no con CSS suelto en el deck.
 
-- **S7 · Si la elección es de gusto, se enseñan opciones (03-11-2026).** Si varias piezas responden igual de bien al mensaje, no se decide a ciegas: de 2 a 5 opciones con los mismos datos, cada una con lo que gana y lo que pierde (`laboratorio.py`), y elige quien encarga el deck. Sin duda real, se elige y se dice por qué.
+- **S7 · Si la elección es de gusto, se enseñan opciones.** Si varias piezas responden igual de bien al mensaje, no se decide a ciegas: de 2 a 5 opciones con los mismos datos, cada una con lo que gana y lo que pierde (`laboratorio.py`), y elige quien encarga el deck. Sin duda real, se elige y se dice por qué. Entre las opciones va siempre una discreta (puntos, bolas, iconos que se llenan) y una tabular cuando el dato lo admita: quien elige a menudo combina o pide una forma que no estaba.
   - Modo: propone.
 
-- **S6 · Mirar antes de maquetar (02-11-2026, al hacer oficiales las referencias).** Si el tipo de slide tiene referencia, se mira antes de componerla: `python3 referencias.py <tipo> --png <scratchpad>` ([[Referencias de Terracotta]]). Se toma la forma y la densidad, nunca el contenido ni el estilo antiguo. No es una plantilla: si los datos piden otra forma, manda S1.
+- **S6 · Mirar antes de maquetar (al hacer oficiales las referencias).** Si el tipo de slide tiene referencia, se mira antes de componerla: `python3 referencias.py <tipo> --png <scratchpad>` ([[Referencias de Terracotta]]). Se toma la forma y la densidad, nunca el contenido ni el estilo antiguo. No es una plantilla: si los datos piden otra forma, manda S1.
+
+- **S8 · Lo que el cliente ya vio, con el mismo formato.** Antes de diseñar una slide cuyo contenido el cliente ya vio en otra entrega del mismo proyecto (el mapa del universo, el método de la propuesta, el calendario), se busca esa slide y se parte de su formato; solo se actualiza el contenido. Si quien encarga cita otro deck como modelo, se abre antes de maquetar (S6).
+  - Por qué: un formato nuevo para algo ya visto obliga a releerlo y se lee como otra cosa; rediseñar desde cero acabó volviendo al formato anterior.
+  - Detección: en el storyline, una columna «formato que ya vio el cliente» con la entrega de origen.
+  - Modo: aplica.
 
 ## 2. Maquetación: rejillas, escala y jerarquía
 
@@ -73,7 +76,7 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 | E · Tres columnas | 365 × 3 | Tres fichas, opciones o escenarios hermanos con la misma plantilla. Si son escenarios, el de referencia (normalmente el central) va destacado con `tarjetas_escenario` |
 | F · Contexto y pieza | 360 + 764 | `columna_contexto` a la izquierda (rótulo en píldora, dos o tres párrafos y una cifra ancla al pie) y la pieza que explica a la derecha: un embudo, un Gantt, un mapa, un dimensionamiento |
 
-- **M3 · La escala manda el sitio.** Una pieza S va dentro de una tarjeta, una celda o junto a otra pieza, nunca sola en medio de la slide. Una M ocupa una columna de las rejillas B o C. Una L va a todo ancho. El tamaño se ajusta con el parámetro `W` (y `H`) de cada función, **nunca escalando con CSS**, porque eso cambia el tamaño de la letra (C8).
+- **M3 · La escala manda el sitio.** Una pieza S va dentro de una tarjeta, una celda o junto a otra pieza, nunca sola en medio de la slide. Una M ocupa una columna de las rejillas B o C. Una L va a todo ancho. El tamaño se ajusta con el parámetro `W` (y `H`) de cada función, **nunca escalando con CSS**, porque eso cambia el tamaño de la letra (C8). Un gráfico ocupa el ancho que su información necesita: el sobrante va al texto de al lado o al hueco entre columnas.
 
 - **M7 · Fuente en el pie, leyenda solo si hace falta.** La fuente va en el pie de `ea_deck`, no bajo la gráfica. La leyenda solo aparece cuando la etiqueta directa no cabe; si hay leyenda, va arriba a la izquierda de su pieza.
 
@@ -81,19 +84,25 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 
 - **M10 · Slides hermanas de actor en cuadrantes.** Para fichas de competidor, proveedor o candidato que se repiten (de 4 a 12 slides), rejilla C en dos filas con rótulo de bloque en cada cuadrante: arriba la descripción (`bloque` o puntos) y lo que ofrece (`matriz_portfolio`); abajo las cifras (`combo_financiero`) y la valoración (`score_dimensiones`). El logo del actor va en el título, a la derecha, y todas las fichas usan el mismo orden, los mismos ejes y la misma escala (S4, A5).
 
-- **M11 · El cuerpo llena la slide, sin recargarla (02-11-2026).** La mayoría de las slides llenan el alto disponible: el visual empieza justo bajo el subtítulo y llega hasta la banda o el pie. Se hace con contenido y con el tamaño de las piezas (`H=X.alto_cuerpo(...)`, `columna(repartir=True)`, `fila(crecer=True)`), no estirando tarjetas vacías: si una caja se ve hueca, le falta contenido o sobra la caja. Referencia de densidad: los rangos de Q1 a Q4.
+- **M12 · Hermanas: una completa primero, después se replica.** En un deck de slides hermanas (fichas por empresa, por territorio), se monta y se revisa un elemento hasta que quien encarga lo aprueba; ese queda como modelo y el resto se replica desde el generador, con los datos en un archivo por elemento. Un cambio de formato posterior va al generador y vale para todos. El mismo concepto lleva el mismo visual en todas las hermanas: si una enseña el mercado con círculos concéntricos, todas lo hacen, y lo que solo tiene un elemento va en otro sitio.
+  - Por qué: replicar antes de cerrar el modelo obliga a corregir cada hermana por separado, y una hermana con otro visual se lee como error.
+  - Detección: PNG de todas las hermanas en fila.
+  - Modo: aplica.
+
+- **M11 · El cuerpo llena la slide, sin recargarla.** La mayoría de las slides llenan el alto disponible: el visual empieza justo bajo el subtítulo y llega hasta la banda o el pie. Se hace con contenido y con el tamaño de las piezas (`H=X.alto_cuerpo(...)`, `columna(repartir=True)`, `fila(crecer=True)`), no estirando tarjetas vacías: si una caja se ve hueca, le falta contenido o sobra la caja. Referencia de densidad: los rangos de Q1 a Q4.
   - **Si la pieza no acepta `H`** (`X.llena("pieza")` lo dice; la galería las marca): su alto sale de `W`, de sus datos o del cuerpo. Primero se sube `W` y, si sobra alto, se acompaña: `X.fila(pieza, X.columna(a, b, repartir=True), anchos=..., crecer=True)`.
   - **Aceptar `H` no garantiza llenar:** con poco contenido sigue quedando hueco. Se mira en el PNG.
   - **Centrar es la excepción:** solo si la pieza no puede crecer y no hay nada útil que añadir, con `estilo_vis="align-items:center"`. El aviso `insp:llenado` sigue saliendo, y se justifica en la verificación.
+  - **Lo que no llena va centrado a lo alto, nunca pegado al título:** el mismo hueco arriba y abajo. Vale también dentro de una fila: la columna más baja se centra frente a la alta (`fila(vertical="center")`). Es el comentario de forma que sale cuando una pieza baja (mapa, embudo, fases) se queda arriba.
   - Por qué: un cuerpo que flota o se queda a medias parece una slide a medio llenar.
   - Detección: `insp:llenado`, `med:llenado`; PNG.
-  - Arreglo: dar a la pieza el alto disponible. Si sobra mucho (más de 120 px), no es un problema de colocación sino de contenido: suplementar con información útil, redistribuir, añadir un visual o proponer quitar la slide (F1). No se usa `align-items:center` en el cuerpo. Si de verdad una pieza no puede llenar (pocos datos y nada útil que añadir), se centra como excepción mirada, nunca pegada arriba con un hueco abajo. En slides hermanas manda que arranquen todas a la misma altura (S4).
+  - Arreglo: dar a la pieza el alto disponible. Si sobra mucho (más de 120 px), no es un problema de colocación sino de contenido: suplementar con información útil, redistribuir, añadir un visual o proponer quitar la slide (revisión de contenido). No se usa `align-items:center` en el cuerpo. Si de verdad una pieza no puede llenar (pocos datos y nada útil que añadir), se centra como excepción mirada, nunca pegada arriba con un hueco abajo. En slides hermanas manda que arranquen todas a la misma altura (S4).
   - Modo: aplica (tamaños y reparto); propone (contenido nuevo o quitar la slide).
 
 ## 3. Encaje
 
-**A1 · Columnas del mismo alto.** Las columnas hermanas (izquierda y derecha, tres tarjetas en fila) acaban a la misma altura y empiezan a la misma altura. Dos gráficas lado a lado alinean su eje base (`fila(..., alinear="flex-end")`).
-- Por qué: es el comentario que más se repite. Un desfase de 20 px se lee como descuido aunque nadie sepa decir por qué.
+**A1 · Columnas del mismo alto.** Las columnas hermanas (izquierda y derecha, tres tarjetas en fila) acaban a la misma altura y empiezan a la misma altura. Dos gráficas lado a lado alinean su eje base (`fila(..., alinear="flex-end")`) y también sus pies de gráfica; una columna con imagen acaba, con su pie, donde acaba la de al lado. Dentro de tarjetas hermanas con los mismos campos, cada campo arranca a la misma altura en todas aunque el texto de una sea más largo, y los campos se reparten el alto en vez de dejar un hueco al pie; los títulos de las tarjetas, en una línea. Detección: `insp:campos`. Arreglo: `proceso_flechas(uniforme=True, repartir=True)`; en bloques, contenido arriba y el último campo al pie con alto fijo.
+- Por qué: es el comentario que más se repite, también después de escribir esta regla. En slides hermanas se comprueba en todas, no solo en la tocada. Un desfase de 20 px se lee como descuido aunque nadie sepa decir por qué.
 - Detección: `insp:alto`, `insp:arranque`; PNG.
 - Arreglo: si el desfase es grande (más de 40 px), primero rebalancea los anchos de las columnas (la que sobra de alto se ensancha, la otra se estrecha) y el padding de sus filas; después, contenedor en fila con `align-items:stretch` y las tarjetas como columna flex con el contenido repartido (`justify-content:space-between`) o centrado; si una columna es lista, igualar el número de filas o el interlineado; en último caso, `min-height` igual al de la más alta. No estirar texto para rellenar: mejor centrar el bloque corto en su caja.
 - Modo: aplica.
@@ -103,10 +112,10 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 - Arreglo: `align-items:center` en filas; tarjeta como columna flex con `justify-content:center`; en SVG, calcular `y` por el centro y usar `dominant-baseline:middle`.
 - Modo: aplica.
 
-**A4 · Alinear con el elemento de referencia.** Las tarjetas laterales acaban en el eje x de la gráfica (no en el final del SVG), una ficha lateral baja hasta la última fila de la tabla, dos listas paralelas empiezan y acaban a la misma altura.
-- Por qué: el ojo alinea con la línea visible (el eje, la última fila), no con la caja invisible del gráfico.
-- Detección: `insp:eje` (aviso informativo) y PNG.
-- Arreglo: primero con `H` de la pieza; si no, calcular la coordenada del eje dentro del SVG y dar a la tarjeta `height = ejeY - top`; o mover el contenido del SVG para que su eje coincida con el final de la caja.
+**A4 · Alinear con el elemento de referencia, arriba y abajo.** Las tarjetas laterales acaban en el eje x de la gráfica (no en el final del SVG), una ficha lateral baja hasta la última fila de la tabla, dos listas paralelas empiezan y acaban a la misma altura. También arriba: una tabla junto a un gráfico pone la línea bajo su cabecera a la altura del borde superior del dibujo y su última línea en el eje; una lista junto a una tabla empieza en la cabecera y acaba en la última fila; una columna junto a otra de tarjetas acaba con el último texto de la otra, no con su caja.
+- Por qué: el ojo alinea con la línea visible (el eje, la última fila, el último texto), no con la caja invisible del gráfico. Es el comentario que más se repite aun con la regla escrita: en un solo deck salió seis veces, casi todas por el borde de arriba.
+- Detección: `insp:eje` avisa cuando una tabla junto a un gráfico no acaba en su eje o su cabecera no cuadra con el borde de arriba, y cuando dos gráficas de la misma fila tienen el eje a distinto alto; si no hay tabla ni eje reconocible, queda como «Mirar». PNG.
+- Arreglo: primero con `H` de la pieza (`tabla_comparativa(H)`, `etiquetas_icono(llenar=True)`, `lista_validacion(H)`); para el borde de arriba, desplazar el gráfico el alto de la cabecera (`columna("<div></div>", grafico, gap=alto_cabecera)`). Si no, calcular la coordenada del eje dentro del SVG y dar a la tarjeta `height = ejeY - top`; o mover el contenido del SVG para que su eje coincida con el final de la caja.
 - Modo: aplica.
 
 **A5 · Elementos repetidos idénticos.** Disparadores, tarjetas, píldoras, bloques de «reto» o «quién lo hace»: mismo ancho, mismo alto, mismo padding, centrados.
@@ -114,29 +123,29 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 - Arreglo: tamaño fijo o `flex:1` con `min-height` común; contenido centrado.
 - Modo: aplica.
 
-**A6 · Separaciones claras.** Las partes de una slide se separan con claridad (en vertical, o con un panel de fondo propio para una columna de ejemplos). Las líneas separadoras no van más allá de su sección y no se dibuja una línea bajo el último elemento de una lista.
+**A6 · Separaciones claras.** Las partes de una slide se separan con claridad (en vertical, o con un panel de fondo propio para una columna de ejemplos). Las líneas separadoras no van más allá de su sección y no se dibuja una línea bajo el último elemento de una lista. **En una tabla,** la línea de cierre de la última fila es igual a las demás en color y grosor.
 - Detección: PNG.
 - Arreglo: `:last-child{border-bottom:0}`; ancho de la línea igual al de su bloque; panel `--surface-fill` con radio para separar una columna de apoyo.
 - Modo: aplica.
 
-**A7 · Sin desbordes, cortes ni solapes.** Ningún texto cortado, bajo la banda, fuera del margen ni pisando otro texto o el logo.
-- Detección: `insp:fuera`, `insp:cortado`, `insp:pie`, `insp:banda`, `insp:solape`, `insp:logo`, `insp:margen`; PNG.
+**A7 · Sin desbordes, cortes ni solapes.** Ningún texto cortado, bajo la banda, fuera del margen ni pisando otro texto o el logo, y al menos 8 px de aire entre el cuerpo y la banda o el pie. Con datos de longitud variable (slides hermanas), tras cada regeneración se miran todas las páginas, no solo las tocadas.
+- Detección: `insp:fuera`, `insp:cortado`, `insp:pie`, `insp:banda`, `insp:holgura`, `insp:solape`, `insp:logo`, `insp:margen`; PNG.
 - Arreglo, en este orden: compactar (padding, interlineado), acortar el texto (si acortar cambia el mensaje, proponer) y, solo al final, bajar 1 px la letra sin pasar el mínimo de C8. Si una etiqueta de gráfica choca con la banda, se quita una de las dos (proponer cuál).
 - Modo: aplica (compactar); propone (acortar o quitar).
 
 **A8 · Menos carga cuando la slide pesa.** Como máximo unas 40 etiquetas de dato por slide. Si una pieza pide más (una matriz de 10 × 12), va sola en rejilla A y sin piezas de apoyo; si no cabe así, se parte o se pasa a anexo. En una slide densa sobran los pies de gráfica, las leyendas que repiten lo evidente, las notas al pie, los títulos de bloque que ya dice el título y las etiquetas redundantes (por ejemplo, la ubicación si ya está en la cabecera de la ficha).
 - Por qué: la carga se percibe antes de leer; quitar un elemento alivia más que bajar la letra.
 - Detección: `med:densidad` (rango de Q2); PNG.
-- Arreglo: quitar lo redundante (propone, salvo pies y leyendas evidentes, que aplica); alargar en vertical la zona central si hay sitio (aplica). No se baja la letra para que quepa más (C8). Si aun así pesa, priorizar contenido (F1).
+- Arreglo: quitar lo redundante (propone, salvo pies y leyendas evidentes, que aplica); alargar en vertical la zona central si hay sitio (aplica). No se baja la letra para que quepa más (C8). Si aun así pesa, priorizar contenido (revisión de contenido).
 - Modo: aplica o propone según el caso.
 
 ## 4. Color y cifras en la slide
 
-- **K1 · El rojo es el mensaje.** El elemento en rojo es justo lo que nombra el tramo rojo del título. Un solo foco rojo por pieza, salvo las rampas de categorías, y como mucho dos en la slide. Las piezas que pintan en rojo por defecto se ajustan con su parámetro (`contadores(destacado=)`, `destacado` en gráficas); el embudo canónico tiene su rampa propia y no cuenta.
+- **K1 · El rojo es el mensaje.** El elemento en rojo es justo lo que nombra el tramo rojo del título. Un solo foco rojo por pieza, salvo las rampas de categorías. **En una misma slide pueden convivir varias piezas con rojo,** cada una con su foco: una rampa continua en una y, en otra, una categoría destacada en rojo con una segunda en rojo claro y el resto en gris. Las piezas que pintan en rojo por defecto se ajustan con su parámetro (`contadores(destacado=)`, `destacado` en gráficas); el embudo canónico tiene su rampa propia y no cuenta. **K1 rige el énfasis del contenido, no la estructura:** las bandas de rótulo, los filetes y otros elementos que ordenan la slide pueden ir en el rojo de la marca o en su rampa sin contar como foco.
 
-- **K2 · La cifra del título está en el visual.** Si el título da una cifra, el visual la enseña como etiqueta, con la misma unidad y el mismo redondeo (C4, F7).
+- **K2 · La cifra del título está en el visual.** Si el título da una cifra, el visual la enseña como etiqueta, con la misma unidad y el mismo redondeo (C4).
 
-- **K3 · Verde y colores de estado, solo en sus usos (autorizados el 30-10-2026 y confirmados el 02-11-2026).** `--validacion` (#2F7D4A) para estados favorables, validados o aprobados; verde, amarillo y rojo de semáforo, check verde y chip de variación en piezas de estado. No para «ventajas», ni series, ni decoración. Fuera de esas piezas, la regla de Terracotta: gris más rojo y rampa de rojos para categorías (B1). Una celda de puntuación no es una pieza de estado (B9).
+- **K3 · Verde y colores de estado, solo en sus usos.** `--validacion` (#2F7D4A) para estados favorables, validados o aprobados; verde, amarillo y rojo de semáforo, check verde y chip de variación en piezas de estado. No para «ventajas», ni series, ni decoración. Fuera de esas piezas, la regla de Terracotta: gris más rojo y rampa de rojos para categorías (B1). Una celda de puntuación no es una pieza de estado (B9).
   - Detección: `insp:verde` avisa de un verde ajeno a estos; el buen uso del verde de validación se juzga en el PNG.
   - Arreglo: ventajas y limitaciones con el mismo color neutro y un icono que las distinga; o rojo y neutro.
   - Modo: aplica si es decorativo; propone si cambia la lectura.
@@ -153,7 +162,7 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 - Arreglo: añadir el marcador de estado (si hay varias opciones razonables, laboratorio).
 - Modo: propone.
 
-**B3 · Gris claro, no crema ni amarillo claro, en los bloques de apoyo.** Bandas, callouts de implicación, tarjetas de apoyo, cabeceras de ficha: `--surface-fill` (#F3EFE7).
+**B3 · Gris claro, no crema ni amarillo claro, en los bloques de apoyo.** Bandas, callouts de implicación, tarjetas de apoyo, cabeceras de ficha, teselas y etiquetas: `--surface-fill`, el gris neutro #F3F3F3.
 - Detección: `insp:crema`.
 - Arreglo: `background:var(--surface-fill)`.
 - Modo: aplica. Excepción: si el usuario pide expresamente el amarillo claro de EA para resaltar unas celdas concretas, se usa `--dark-cream` solo ahí.
@@ -179,6 +188,12 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 - Arreglo: rampa neutra a roja (`X.chip_nota`, `X.matriz_puntuacion`); si hay varias lecturas posibles de la escala, laboratorio.
 - Modo: propone (la escala cambia la lectura).
 
+**B10 · Las parejas verticales llevan el mismo color.** Si una etapa, una fase o una flecha tiene debajo su bloque de texto, el filete o el rótulo del bloque repite el color de la etapa (rosa bajo rosa, rojo bajo rojo); no un negro por defecto.
+- Por qué: un filete de otro color bajo su etapa se lee como incoherencia o como otra categoría.
+- Detección: PNG.
+- Arreglo: `bloque(filete="rosa")` o el color de la etapa.
+- Modo: aplica.
+
 ## 5. Tipografía y formato
 
 **C1 · Título entero en negrita con fragmento rojo.** Todo el título a 700, y un fragmento en rojo (`.hl-red`) que es el mensaje de la slide. Máximo 2 líneas.
@@ -190,7 +205,7 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 - Detección: `insp:mayuscula`.
 - Modo: aplica.
 
-**C3 · Negrita puntual.** Destaca una parte, no todo. En tablas, negrita solo en los datos directos; en la banda, en la idea clave.
+**C3 · Negrita puntual.** Destaca una parte, no todo. En tablas, negrita solo en los datos directos; en la banda, en la idea clave. Un párrafo de argumento de más de dos líneas (posicionamiento, por qué) lleva una negrita en la idea que decide.
 - Detección: PNG y texto.
 - Modo: aplica.
 
@@ -203,10 +218,22 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 
 **C7 · Rótulos de bloque visibles, solo si hay bloques.** Con dos o más piezas que dicen cosas distintas, cada una lleva su rótulo (`rotulo_bloque()`); con una sola pieza, el título de la slide ya hace de rótulo. Los títulos de sección dentro de la slide («Lo que dicen los números», «Ventajas») se tienen que ver: 700, en `--fg1` o rojo, a 13 o 14 px. No grises en versalitas de 10 px que desaparecen.
 - Por qué: si el rótulo no se ve, la slide no tiene jerarquía y parece un bloque de texto.
+- **En banda, para fichas densas:** en una ficha de dos por dos bloques, el rótulo en banda (`rotulo_bloque(banda=…)`, también en el rojo de la marca, ver K1) separa columnas y filas mejor que el rótulo suelto. Con banda redondeada, el contenido de debajo va de 8 a 12 px hacia dentro por cada lado (`W` 20 px menor y centrado): las esquinas hacen que la banda parezca más estrecha que lo que tiene debajo.
 - Modo: aplica.
 
-**C8 · Letra legible.** Nada por debajo de 11 px en el cuerpo ni de 10 px en etiquetas de gráfica, desde la subida de letra del 02-11-2026. Las etiquetas de una gráfica van a la escala del texto vecino.
-- Detección: `insp:letra`, `med:legibilidad`.
+**C8 · Letra legible.** Nada por debajo de 11 px en el cuerpo ni de 10 px en etiquetas de gráfica. Las etiquetas de una gráfica van a la escala del texto vecino.
+- **Presentación para proyectar:** la letra de lectura (bloques de perfil, argumentos, puntos, columnas de razones) va a 14 px o más por defecto, salvo que quien encarga pida otra cosa; los 11 px quedan para etiquetas. Si no cabe, se quita o se fusiona contenido (A8) antes que bajar la letra. En un informe para leer sigue en estudio (12 a 13 px como hipótesis).
+- Detección: `insp:letra`, `med:legibilidad`; `insp:lectura` («Mirar») marca texto de lectura por debajo de 14 px, que en una presentación hay que subir.
+- Modo: aplica.
+
+**C9 · Un KPI es una cifra y un rótulo corto.** Cifra centrada, rótulo de cinco palabras como mucho y fondo gris claro (`bloque(fondo="claro")` o la pieza de cifra). Si necesita una frase, no es un KPI: va a un bloque de texto. Si la fila de KPI resta alto a una gráfica, se baja la cifra de 2 a 4 px antes que la gráfica.
+- Detección: rótulo de KPI de más de cinco palabras o en dos líneas; PNG.
+- Modo: aplica (centrar, fondo, tamaño); propone (acortar el rótulo).
+
+**C10 · En las tablas, el texto a la izquierda.** Las columnas de texto de una tabla de parámetros, condiciones o comparación van alineadas a la izquierda; se centran solo las marcas, los iconos y las cifras cortas.
+- Por qué: el texto centrado en varias líneas no tiene un borde que guíe la lectura.
+- Detección: PNG (celda centrada con más de unas 25 letras).
+- Arreglo: `tabla_comparativa(alinear="left")`.
 - Modo: aplica.
 
 ## 6. Peso visual
@@ -228,91 +255,28 @@ Orden habitual para revisar una slide (útil para priorizar): título y fragment
 **D5 · Cifras como etiquetas del visual.** Una cifra por elemento; si hay rango, un valor central y el rango tenue detrás.
 - Modo: aplica (formato) / propone (si cambia el dato mostrado).
 
-**D6 · Logos siempre que se nombra una empresa.** A color, del mismo alto, alineados (a la derecha en tarjetas con el nombre a la izquierda), sin pixelar. Si falta el logo oficial, se busca en la web oficial o en Wikimedia y se registra su origen; si no aparece, se pide ayuda al usuario antes de dejar un hueco.
+**D6 · Logos siempre que se nombra una empresa.** A color, del mismo alto, alineados (a la derecha en tarjetas con el nombre a la izquierda), sin pixelar. En una misma lista, todos con logo o todos en texto, nunca mezclados; en una tabla de comparables, un logo pequeño por fila. Si falta el logo oficial, se busca en la web oficial o en Wikimedia y se registra su origen; si no aparece, se pide ayuda al usuario antes de dejar un hueco.
 - Detección: `insp:logos`; PNG (calidad, color).
 - Modo: aplica (alto y alineación) / propone (búsqueda de logos).
 
-**D7 · Fotos con relación con el proyecto.** La foto muestra el objeto del proyecto, no un genérico del sector. Marcas de terceros en la foto, retocadas.
+**D7 · Fotos con relación con el proyecto.** La foto muestra el objeto del proyecto, no un genérico del sector. Marcas de terceros en la foto, retocadas. Un producto se enseña como lo vería el comprador (en el lineal, en la nevera o servido), con un encuadre que lo muestre entero; si aún no existe, una maqueta marcada como ilustrativa. Las tarjetas de gama llevan una línea por producto o variante y los mismos campos en todas.
 - Modo: propone.
 
-## 7. Tono y redacción
+## 7. Tono, redacción y contenido: fuera de Terracotta
 
-**E1 · Rótulos profesionales, nunca los internos.** Los nombres de trabajo del equipo no llegan a la slide: se sustituyen por rótulos pensados para quien la lee.
-- Modo: propone.
+Terracotta guarda solo el diseño y la construcción del deck. Lo que el deck dice (rótulos, jerga, cifras y su origen, conclusiones, coherencia entre slides, alcance) es de la revisión de contenido, una skill aparte. Hasta que exista, sus criterios, con los antiguos códigos E y F, están en `03. Recursos/EA Design System/revision/Bandeja · Revisión de contenido.md`. Las comprobaciones automáticas que ya había (`insp:coherencia`, `insp:fecha` y las referencias internas de `insp:formato`) siguen en `revisar_deck.py`.
 
-**E2 · Jerga explicada la primera vez.** Siglas y nombres propios del sector se despliegan en su primera mención; las siglas internas o de un proveedor que el cliente no conoce no se usan.
-- Modo: propone.
-
-**E3 · Cada cifra se puede explicar.** Rotular qué mide la métrica, marcar las estimaciones propias («(estimación)»), y sustituir el dato que no informa.
-- Detección: texto (para cada cifra, ¿se entiende de dónde sale y de qué es?).
-- Modo: propone.
-
-**E4 · Frases cortas, una por elemento**, sin prefijos tipo «Ofrece:» o «Se sabe:».
-- Modo: aplica si es solo quitar el prefijo; propone si hay que reescribir.
-
-**E5 · Realista sin ser negativo.** Cada limitación va con la vía o la condición que la resuelve. El título no debe dar a entender que no hay salida si la hay.
-- Modo: propone.
-
-**E6 · Conclusiones que aportan.** La banda de `cuerpo_slide()` o la implicación saca una conclusión (qué significa, qué decide, qué cambia), con una parte en negrita; no describe lo que ya se ve. Compacta: una o dos frases. Si la conclusión ya está en el título y en el visual, la slide va sin banda y gana alto. Cuando la banda no es la conclusión sino otra cosa (un supuesto, una implicación, el patrón que se repite), lleva rótulo a la izquierda: `rotulo_banda="Asunción clave"`, «Implicación», «El patrón», «Conclusión».
-- Detección: texto (si la banda se puede deducir mirando la slide, no aporta).
-- Modo: propone, con la conclusión reescrita.
-
-**E7 · Sin referencias internas ni avisos repetidos.** Fuera «(slide 18)» dentro de un texto (además se desfasa al renumerar) y los avisos repetidos en cada tarjeta: se dicen una vez, en el título o el subtítulo.
-- Detección: `insp:formato` (referencias); texto.
-- Modo: aplica (referencias) / propone (avisos).
-
-**E8 · Todo en el idioma del cliente**, también las etiquetas de la portada, el pie y el cierre (`idioma=` en `ea_deck`, decisión del 01-11-2026).
-- Modo: aplica.
-
-**E9 · Nomenclatura consistente.** Sin subcódigos, familias numeradas seguidas, el mismo nombre para lo mismo en todo el deck.
-- Modo: propone.
-
-**E10 · Sin nombres que no aportan o comprometen.** En embudos, matrices de proceso o representaciones de conjunto no se nombra a quién declinó o a quién se descartó, salvo que sea el objeto de la slide.
-- Modo: propone.
-
-## 8. Contenido y coherencia
-
-**F1 · Cada slide aporta valor.** Antes de pulir una slide floja, preguntarse si merece estar: si repite otra o es poco probable que sirva, proponer quitarla o fusionarla.
-- Modo: propone.
-
-**F2 · No comprometer lo que no se controla.** Cifras de contactos, número de agentes, plazos de terceros: mejor cualitativo («limitado») o con su aviso.
-- Modo: propone.
-
-**F3 · No invadir la experiencia del cliente.** La slide dice qué se resuelve, qué sale y quién lo hace; el cómo técnico del cliente (su protocolo de ensayo) no se dicta.
-- Modo: propone.
-
-**F4 · Solo lo que pide el alcance.** Lo que el contrato no pide no entra (o va como opcional, sin insistir).
-- Modo: propone.
-
-**F5 · Ejemplos que el cliente no tenga.** No mostrar proveedores que ya evaluó ni precios suyos o de su competidor.
-- Modo: propone.
-
-**F6 · Explicar antes de usar.** Un concepto se presenta antes de que otras slides lo citen; si se explica tarde, la slide está fuera de sitio.
-- Modo: propone.
-
-**F7 · Coherencia entre slides.** La misma cifra, el mismo recuento y el mismo nombre en todas las slides que lo citan (si una slide dice 40 y otra suma 39, una está mal). Al rehacer un bloque, revisar las que lo citan.
-- Detección: `insp:coherencia` (cifras con la misma etiqueta que cambian entre páginas); texto.
-- Modo: propone (con la cifra correcta si se puede verificar en la fuente).
-
-**F8 · No pasar preguntas al cliente.** Lo que se pueda resolver se resuelve; si no, se supone con criterio y se anota el supuesto.
-- Modo: propone.
-
-**F9 · Fechas vigentes.** La portada, la línea de «hoy» de un calendario, los «próximos pasos» y las ventanas de plazo cuadran con la fecha en que se presenta el deck. Un deck montado días antes arrastra fechas que ya no valen y plazos que pueden haber caducado.
-- Detección: `insp:fecha` (aviso de deck); texto.
-- Arreglo: preguntar la fecha de presentación si no se sabe; actualizar portada y «hoy» (aplica); si mover «hoy» deja un plazo imposible, proponer cómo se reescribe (propone).
-- Modo: aplica / propone. Va en la línea de «Urgente antes de presentar».
-
-## 9. Base fija
+## 8. Base fija
 
 **G1 · Portada, agenda, portadillas, cabecera, pie y cierre de `ea_deck`.** El deck usa `portada()`, `agenda()`, `portadilla()`, `cabecera()`, `slide()` y `cierre()` de `presentaciones/ea_deck.py`: fondo de portada oficial con las etiquetas en el idioma del deck y el equipo real, agenda con «AGENDA» a la izquierda, portadilla con foto relacionada o escena isométrica, eyebrow gris en frase normal, glow detrás del título, pie con la fuente a la izquierda y la confidencialidad sin «Eatable Adventures», cierre con «Let's Beat» y próximo paso opcional. No se rediseñan.
 - Detección: `insp:base` (aviso de deck).
-- Arreglo: migrar el generador a `ea_deck` (`portada()`, `agenda()`, `portadilla()`, `cabecera()`, `slide()`, `cierre()`) conservando el cuerpo de cada slide. Es forma: no cambia lo que se dice. El equipo de la portada sale de la sección «Equipo» del PM del proyecto (02-11-2026); «realizado para» y el resto, del deck actual. Lo que falte se deja marcado y se pregunta en la respuesta, nunca se inventa.
+- Arreglo: migrar el generador a `ea_deck` (`portada()`, `agenda()`, `portadilla()`, `cabecera()`, `slide()`, `cierre()`) conservando el cuerpo de cada slide. Es forma: no cambia lo que se dice. El equipo de la portada sale de la sección «Equipo» del PM del proyecto; «realizado para» y el resto, del deck actual. Lo que falte se deja marcado y se pregunta en la respuesta, nunca se inventa.
 - Modo: aplica.
 
-**G2 · Pie sin fechas** en la línea de fuente y sin «Eatable Adventures» a la derecha (el pie fijo ya no lo lleva desde el 01-11-2026).
+**G2 · Pie sin fechas** en la línea de fuente y sin «Eatable Adventures» a la derecha (el pie fijo no lo lleva).
 - Modo: aplica.
 
-## 10. Ilustración isométrica
+## 9. Ilustración isométrica
 
 Las escenas (`cadena_isometrica`, `escena_iso`, catálogo `ESCENAS`) dan contexto: dicen de qué eslabón o de qué tipo de instalación se habla. No sustituyen al dato.
 
@@ -336,17 +300,19 @@ Las escenas (`cadena_isometrica`, `escena_iso`, catálogo `ESCENAS`) dan context
 
 - **I8 · Escenas nuevas en el catálogo.** Si falta un eslabón, se añade con `@escena(nombre, descripción, eslabón, alto)` en `ea_elementos/cadena.py` y aparece sola en el catálogo y en las cadenas. Se dibuja con el kit `Iso` y los tonos de `_paleta`, sin colores nuevos.
 
-## 11. Iconos
+## 10. Iconos
 
 - **N1 · Primero el catálogo.** Una sola familia: Material Symbols Outlined, peso 300, del mismo tamaño en cada grupo y con significado (lupa para características, mazo para regulación); nunca emojis (`insp:formato`). `buscar_icono("palabra")` en español. El icono tiene que significar lo que dice el texto de al lado, no solo parecerse. Modo: aplica; propone si hace falta añadir un icono al catálogo.
 
-- **N2 · Si no hay uno apto, buscar más (01-11-2026).** No se conforma con el menos malo: `buscar_completo("english words")` busca en toda la familia por nombre y por las etiquetas oficiales de Google. Si aparece uno que encaja, se mira dibujado (no basta el nombre: `polymer` es un logo y `bubbles` una pantalla), se añade a `iconos.py` en su tema con palabras clave en español y se regenera con `build_galeria_elementos.py`.
+- **N2 · Si no hay uno apto, buscar más.** No se conforma con el menos malo: `buscar_completo("english words")` busca en toda la familia por nombre y por las etiquetas oficiales de Google. Si aparece uno que encaja, se mira dibujado (no basta el nombre: `polymer` es un logo y `bubbles` una pantalla), se añade a `iconos.py` en su tema con palabras clave en español y se regenera con `build_galeria_elementos.py`.
 
 - **N3 · Si tampoco está, buscar en la web dentro de la familia.** Google añade iconos a Material Symbols con frecuencia: se consulta fonts.google.com/icons y, si hay uno nuevo que encaja, se vuelven a descargar la fuente, los codepoints y las etiquetas del repositorio oficial (pasos en `assets/fonts/LICENCIA material-symbols.md`).
 
 - **N4 · Nunca otra familia.** Si el concepto no existe en Material Symbols (no hay vaca, por ejemplo), se usa el concepto más cercano que sí exista (`pets` para ganado), una escena isométrica si hay sitio (I1) o texto; nunca iconos de otra familia, emojis ni dibujos sueltos.
 
-## 12. Medición
+- **N5 · En listas, el icono va sin caja.** En una lista de capacidades, atributos o condiciones, el icono va solo, en el rojo de la marca; la caja de color queda para cuando el icono es protagonista (una cifra con icono, una tarjeta). Las cajas repetidas en cada fila pesan más que el texto. `etiquetas_icono(caja=False)`. Modo: aplica.
+
+## 11. Medición
 
 `python3 revisar_deck.py deck.html` da en un solo informe el render, la inspección del HTML y la medición del PDF frente a los rangos de los decks de referencia ([[Medición de decks]]). Orienta, no sustituye al ojo: una marca se mira y se decide.
 
@@ -358,7 +324,7 @@ Las escenas (`cadena_isometrica`, `escena_iso`, catálogo `ESCENAS`) dan context
 
 - **Q4 · Coherencia.** El deck no debería saltar de slides llenas a slides medio vacías (dispersión de ocupación hasta 23), y las slides hermanas tienen que parecerse entre sí.
 
-## 13. Antes de dar la slide por montada
+## 12. Antes de dar la slide por montada
 
 1. La intención está escrita y se han mirado todas sus candidatas (S1, S2).
 2. Hay una protagonista y la rejilla es una de las seis (M1, M2).
@@ -367,10 +333,10 @@ Las escenas (`cadena_isometrica`, `escena_iso`, catálogo `ESCENAS`) dan context
 5. Si hay escena isométrica: una, con el eslabón correcto en rojo, sin iconos planos en su bloque (I3, I4).
 6. Cada icono significa lo que dice su texto y, si no había uno apto en el catálogo, se buscó en toda la familia antes de conformarse (N1, N2).
 7. Se ha mirado la slide de referencia de su tipo, si la hay (S6), y el cuerpo llena el alto sin cajas huecas (M11).
-8. La banda concluye, cada cifra se puede explicar y el texto no compromete al equipo (E3, E6, F2).
+8. El contenido ha pasado la revisión de contenido (la banda concluye, cada cifra se puede explicar, nada compromete al equipo).
 9. Revisión con `revisar_deck.py`, cada aviso mirado y cada PNG revisado.
 
-## Códigos retirados (02-11-2026)
+## Códigos retirados
 
 Eran la misma regla en dos sitios. Los documentos fechados los siguen citando: esta tabla dice dónde está cada una ahora.
 
@@ -382,6 +348,25 @@ Eran la misma regla en dos sitios. Los documentos fechados los siguen citando: e
 | M4 | A1 y A4 | Mismo alto y mismos ejes |
 | M5 | C7 | Rótulo de bloque |
 | M6 | A8 | Máximo de etiquetas |
-| M8 | E6 | La banda concluye |
+| M8 | E6, hoy en la revisión de contenido | La banda concluye |
 | B5 | K3 | Verde solo en sus usos |
 | C6 | N1 | Una sola familia de iconos |
+| E1 | Revisión de contenido | Rótulos profesionales, nunca los internos |
+| E2 | Revisión de contenido | Jerga explicada la primera vez |
+| E3 | Revisión de contenido | Cada cifra se puede explicar |
+| E4 | Revisión de contenido | Frases cortas, una por elemento |
+| E5 | Revisión de contenido | Realista sin ser negativo |
+| E6 | Revisión de contenido | Conclusiones que aportan |
+| E7 | Revisión de contenido | Sin referencias internas ni avisos repetidos |
+| E8 | Revisión de contenido | Todo en el idioma del cliente |
+| E9 | Revisión de contenido | Nomenclatura consistente |
+| E10 | Revisión de contenido | Sin nombres que no aportan o comprometen |
+| F1 | Revisión de contenido | Cada slide aporta valor |
+| F2 | Revisión de contenido | No comprometer lo que no se controla |
+| F3 | Revisión de contenido | No invadir la experiencia del cliente |
+| F4 | Revisión de contenido | Solo lo que pide el alcance |
+| F5 | Revisión de contenido | Ejemplos que el cliente no tenga |
+| F6 | Revisión de contenido | Explicar antes de usar |
+| F7 | Revisión de contenido | Coherencia entre slides |
+| F8 | Revisión de contenido | No pasar preguntas al cliente |
+| F9 | Revisión de contenido | Fechas vigentes |

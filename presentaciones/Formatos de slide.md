@@ -5,8 +5,6 @@ tags:
   - presentaciones
 aliases:
   - Qué formato para qué mensaje
-created: 30-10-2026
-actualizado: 03-11-2026
 description: >-
   Qué formato de slide usar para cada tipo de mensaje: estructura, pieza de ea_elementos, qué evitar y slide modelo. Antes en la skill /taste; sin datos de cliente.
 ---
@@ -16,7 +14,7 @@ description: >-
 > Parte de Terracotta V2. Para cada tipo de mensaje: cuándo usarlo, su estructura en esquema, la pieza con la que se construye, qué evitar y, si la hay, su slide modelo (`Modelo: tipo` se ve con `python3 referencias.py tipo --png <carpeta>`). Se usa al montar y al revisar. Sin casos concretos: las slides modelo y sus decks están en [[Referencias de Terracotta]], que es solo interna.
 
 **Dónde están las piezas.** En esta carpeta:
-- `ea_elementos/` (paquete, importado como `X`): los 158 elementos en 14 familias, un módulo por familia. Ejemplo de cada uno en `Galería de elementos.html`.
+- `ea_elementos/` (paquete, importado como `X`): los 162 elementos en 14 familias, un módulo por familia. Ejemplo de cada uno en `Galería de elementos.html`.
 - `Taxonomía de elementos.md` (generada desde `ea_elementos/taxonomia.py`): qué elementos responden a cada intención, con escala y alternativas. **Antes de proponer una pieza, mira todas las candidatas de la intención** (`X.buscar("brecha")`), no solo la que se cita aquí.
 - `Reglas de uso de elementos.md`: rejillas, escala, jerarquía, color e ilustración isométrica todas las reglas de montar y revisar.
 - `ea_elementos/embudo_canonico.py` (desde Terracotta V2, antes `pptx/funnel.py`): el embudo canónico, que `X.embudo` envuelve.
@@ -42,14 +40,15 @@ Para el cuerpo de cualquier slide, `X.cuerpo_slide(subtítulo, visual, banda=...
 
 **Dónde estamos en el calendario.** Fases hechas, en curso y pendientes con la fecha de hoy.
 - Estructura: Gantt con una fila por fase, barras de estado, línea vertical de «hoy», hitos como rombos.
-- Pieza: `X.gantt`; para algo más ligero, `linea_tiempo` o `X.carriles`.
-- Evitar: leyenda de colores larga; la línea de «hoy» con una fecha que ya no es hoy.
+- **Calendario real de un proyecto:** una barra por fase, todas con el mismo estilo (un subestado no lleva otro color); las reuniones con el cliente, como hitos en círculo de otro color rotulados solo con su fecha, centrada bajo el hito; rejilla solo de semanas y filas que llenan el alto. Las fechas salen del calendario, no de memoria.
+- Pieza: `X.gantt` (`lineas_mes=False`, `alto_fila=`, barras de tipo `"hito"` y fechas en modo `"centro"`); para algo más ligero, `linea_tiempo` o `X.carriles`.
+- Evitar: leyenda de colores larga; la línea de «hoy» con una fecha que ya no es hoy; líneas de mes sobre las de semana (descuadran la cuadrícula); un rótulo distinto para cada reunión.
 - Modelo: `cronograma`.
 
 **Proceso de N pasos con entregables.** Qué se hace en cada paso, qué sale y quién lo hace.
 - Estructura: flechas encadenadas en rampa de rojos, una llave que agrupa pasos en fases y, por paso, «qué se resuelve, qué sale, quién».
 - Pieza: `X.proceso_flechas` o `X.fases_gates`, que crecen con el cuerpo y llenan la slide; `X.chevrones` si es solo la secuencia, que es una pieza baja y necesita algo debajo.
-- Evitar: cuatro tarjetas de texto iguales sin dirección; dictar el protocolo técnico del cliente (F3).
+- Evitar: cuatro tarjetas de texto iguales sin dirección; dictar el protocolo técnico del cliente.
 - Modelo: `proceso`.
 
 **Decisión en el tiempo o trámite con bifurcación.**
@@ -69,9 +68,16 @@ Para el cuerpo de cualquier slide, `X.cuerpo_slide(subtítulo, visual, banda=...
 
 **Ficha de perfil de candidato (top N).** Entender a cada finalista con el mismo formato.
 - Estructura: cabecera con teselas grises redondeadas de datos clave (tipo, ubicación, escala, certificación, puntuación); cuerpo con capacidades frente a cada etapa del proceso del cliente, con ventajas y limitaciones integradas en esas capacidades (no en dos listas genéricas); abajo, lo que falta por demostrar. Las fichas hermanas comparten plantilla exacta y arrancan a la misma altura.
-- Pieza: si las fichas son de competidores con cifras, ficha en cuadrantes (M10 de las reglas): `X.bloque`, `X.matriz_portfolio`, `X.combo_financiero` y `X.score_dimensiones`; si no, `X.fila_parametros`, `X.etiquetas_icono` y `X.grupo_fichas` como bloques.
+- Pieza: si las fichas son de competidores con cifras, ficha en cuadrantes (M10 de las reglas): `X.bloque`, `X.matriz_portfolio`, `X.combo_financiero` y `X.score_dimensiones`; si no, `X.fila_parametros`, `X.etiquetas_icono` y `X.grupo_fichas` como bloques. Rótulos de cuadrante en banda (C7).
+- Nota por bloque en escala corta (0 a 4 o 0 a 5): puntos que se llenan hasta la nota (con medio punto), la cifra al lado y el total grande justo a la derecha de los puntos, no al fondo del bloque ni en una fila aparte: `X.score_dimensiones(puntos=True)`. Las pistas con un punto se leen como deslizadores sueltos.
 - Evitar: títulos de bloque redundantes, datos repetidos (la ubicación arriba y en la tabla), letra por debajo de 12 px en el cuerpo, demasiados colores, lo de due diligence mezclado con lo que ya se sabe.
 - Modelo: `ficha`.
+
+**Comparables en el lineal.** Dónde se colocaría un producto frente a los que ya se venden.
+- Estructura: una fila por producto con su nombre, el formato en una métrica común (ml, g o unidad), el logo de la cadena y una barra del precio por unidad; el producto evaluado en rojo y los precios sin verificar marcados. Al lado, el tamaño de la oportunidad o el posicionamiento, con negrita en la idea clave (C3).
+- Pieza: `X.barras_ranking` con `columnas=`; los logos de las cadenas, todos o ninguno (D6).
+- Evitar: una tabla pequeña solo de texto; mezclar volumen y peso; comparar con productos de otra categoría.
+- Modelo: `puntuacion`.
 
 **Cobertura de un proceso por candidatos.** Quién cubre qué etapa (y por qué ninguno lo cubre todo).
 - Estructura: etapas en columnas, candidatos en filas, celdas llenas, parciales o vacías, y franjas que agrupan etapas (piloto, industrial).
@@ -94,7 +100,7 @@ Para el cuerpo de cualquier slide, `X.cuerpo_slide(subtítulo, visual, banda=...
 
 ## Explicar un mecanismo
 
-**Cadena de valor o modelo de negocio.** Cada pieza responde a una pregunta distinta. Por defecto, `X.cadena_isometrica` para abrir y `X.cadena_capas` para analizar (30-10-2026). Si el mensaje no decide, se enseñan opciones con los mismos datos: `laboratorio.opciones_cadena()` (S7).
+**Cadena de valor o modelo de negocio.** Cada pieza responde a una pregunta distinta. Por defecto, `X.cadena_isometrica` para abrir y `X.cadena_capas` para analizar. Si el mensaje no decide, se enseñan opciones con los mismos datos: `laboratorio.opciones_cadena()` (S7).
 
 | Pieza | Para | Gana | Pierde |
 |---|---|---|---|
@@ -135,11 +141,27 @@ Para el cuerpo de cualquier slide, `X.cuerpo_slide(subtítulo, visual, banda=...
 - Modelo: `resumen`.
 
 **KPI o métricas de éxito.** Pocos números que deciden.
-- Estructura: la cifra como protagonista, el rótulo debajo con mayúscula inicial y de dónde sale; o barras frente a una línea de objetivo. Nunca una lista de texto.
+- Estructura: la cifra como protagonista, el rótulo debajo con mayúscula inicial y de dónde sale; o barras frente a una línea de objetivo. Nunca una lista de texto. Rótulo de cinco palabras como mucho (C9).
 - Pieza: `X.contadores`, `X.tarjeta_cifra`, `X.panel_kpi`, `X.barras_objetivo`, `X.regleta_objetivo`; `indicador` y `X.cifra_delta`.
 - Evitar: un gráfico ilegible por querer meterlo todo (prima que se lea).
 
 - Modelo: `cifra`.
+
+**Recomendación sobre un candidato u opción.** Qué se hace, por qué y qué falta.
+- Estructura: el veredicto en una frase arriba; tres razones como tarjetas con su cifra; tres condiciones antes de firmar, cada una con quién la cierra y su estado en píldora; la propuesta concreta en un bloque gris claro.
+- Pieza: `X.tarjeta_cifra` para las razones, `X.bloque` con `fondo="claro"` para la propuesta.
+- Evitar: una slide de texto pequeño; nombrar la recomendación con una palabra que ya es un tipo de acuerdo.
+- Modelo: `recomendacion`.
+
+**Próximos pasos con un caso por elemento.** De la decisión de hoy a la acción.
+- Estructura: chevrones arriba con el paso actual destacado; debajo, una tarjeta por elemento prioritario con su cifra, su tipo de acuerdo, lo que tiene que cerrar y una foto pequeña del producto; la banda suma las cifras.
+- Pieza: `X.chevrones` con `activo=` y `X.tarjeta_cifra` con `visual=`, `apilada=True` y `arriba=True`.
+- Evitar: una lista de tareas sin cifras; imágenes que empujan las tarjetas bajo la banda (A7).
+
+**Próximos pasos de cierre de proyecto.** Cómo sigue el cliente cuando el proyecto acaba.
+- Estructura: tres o cuatro fases en una línea grande (círculos numerados), con su nombre y su plazo; debajo de cada una, título, puntos juntos y el gate justo debajo. De 18 a 28 px de aire entre la línea, el título y los puntos. El conjunto centrado a lo alto (M11) y la banda con la fecha de la siguiente decisión.
+- Pieza: `X.fases_gates(grande=True)`.
+- Evitar: bloques añadidos que compitan con las fases (decisiones que se piden, fila de cifras): lo que se pide al cliente va en la banda o en los propios gates. Para decks de cartera con un caso por elemento, el formato anterior.
 
 **Solo texto.** Cuando el mensaje no admite gráfica.
 - Estructura: dos o tres bloques con cabecera que llegan hasta el pie, con una idea por bloque.
@@ -154,8 +176,14 @@ Para el cuerpo de cualquier slide, `X.cuerpo_slide(subtítulo, visual, banda=...
 - Pieza: `X.mapa_coropletico`, `X.muro_logos`.
 - Modelo: `mapa`.
 
+**Reparto por regiones.** Dónde se buscó o dónde está cada cosa, por zonas.
+- Estructura: mapa coroplético con las zonas enteras coloreadas por densidad, sin líneas entre países, y los rótulos «zona · valor» fuera del territorio, en el mar, unidos con una guía a su zona. Al lado, la lectura (embudo, criterios).
+- Pieza: `X.mapa_coropletico(zonas=…, bordes=False)`, con `ancla` en cada zona.
+- Evitar: barras o burbujas por región (no se ven o tapan el mapa); rótulos encima del territorio (tapan su color); bordes de país.
+- Modelo: `mapa`.
+
 **Tabla comparativa con conclusión.** Pocas opciones frente a pocos criterios.
-- Estructura: pocas columnas, filas con aire y conclusión al pie.
+- Estructura: pocas columnas, filas con aire, el texto a la izquierda (C10) y conclusión al pie.
 - Pieza: `X.tabla_comparativa`; con una barra por fila, `X.tabla_referencia`.
 - Modelo: `comparacion`.
 

@@ -1,10 +1,10 @@
 """ea_elementos: todos los elementos visuales de Terracotta V2 para slides HTML de Eatable Adventures.
 
 Capa de presentaciones (presentaciones/), junto a ea_deck.py, que fija portada, cabecera y cierre. Aquí está todo lo
-que va en el cuerpo de una slide: 158 elementos en 14 familias, un módulo por familia, más las primitivas
+que va en el cuerpo de una slide: 162 elementos en 14 familias, un módulo por familia, más las primitivas
 (base.py). Cada función devuelve un fragmento HTML de tamaño fijo (SVG en línea, un Lienzo o HTML con flexbox),
-sin JavaScript, así que el PDF sale igual que la pantalla. Desde el 01-11-2026 incluye lo que antes era
-ea_visuals.py (composiciones de slide), integrado como elementos. El mismo día se sumaron 18 piezas (cadena_margen,
+sin JavaScript, así que el PDF sale igual que la pantalla. Incluye lo que antes era
+ea_visuals.py (composiciones de slide), integrado como elementos. Se sumaron además 18 piezas (cadena_margen,
 fichas de competidor, abanico_foco, fases_gates...).
 
 Cómo elegir: por intención, no por costumbre. taxonomia.buscar("brecha") da todas las candidatas; la versión
@@ -22,7 +22,7 @@ Añadir un elemento: la función en el módulo de su familia, su ficha en taxono
 taxonomia.FAMILIAS y un ejemplo en build_galeria_elementos.py. La galería no se genera si falta alguno.
 Después de cualquier cambio: python3 verificar.py. Historial de versiones: Versiones de Terracotta.md.
 """
-__version__ = "V2"   # Terracotta V2, 01-11-2026 (ver Versiones de Terracotta.md)
+__version__ = "V2"   # Terracotta V2
 from .base import *          # noqa: F401,F403  tokens, primitivas, Lienzo, CSS, cuerpo_slide
 from .marcas import *        # noqa: F401,F403
 from .magnitud import *      # noqa: F401,F403

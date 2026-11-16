@@ -55,24 +55,24 @@ FAMILIAS = [  # (módulo, familia, lema, elementos)
      "dispersion mapa_calor histograma cajas red_nodos mapa_coropletico mapa_burbujas mapa_flujos mapa_madurez mapa_actores"),
     ("marcos", "Marcos y matrices", "Cómo se organiza una idea en un esquema",
      "matriz_2x2 venn circulos_concentricos radial piramide capas balanza lienzo_negocio mapa_alcance dafo cinco_fuerzas "
-     "pilares nucleo_dos_lados escalera_prioridad columnas_evolucion convergencia"),
+     "nucleo_dos_lados escalera_prioridad columnas_evolucion convergencia"),
     ("arboles", "Árboles y descomposición", "De qué depende algo, rama a rama",
      "arbol espina_pescado organigrama formula arbol_drivers arbol_tramite abanico_foco arbol_opciones"),
     ("cadena", "Cadena de valor", "Cómo fluye el valor entre eslabones y actores, con escenas isométricas",
      "cadena_capas circuito_cadena cadena_isometrica escena_iso catalogo_escenas cadena_margen trayecto"),
     ("secuencia", "Secuencia y tiempo", "En qué orden y cuándo",
      "chevrones linea_tiempo ciclo carriles escalones calendario_calor linea_tiempo_vertical proceso_carriles proceso_flechas "
-     "gantt lista_precedentes fases_gates"),
+     "gantt lista_precedentes fases_gates etapas_entregable"),
     ("cifras", "Cifras y KPI", "Una o pocas cifras que mandan",
      "cifra_delta icono_dato contadores tarjeta_cifra tarjeta_kpi panel_kpi fila_parametros"),
     ("fichas", "Fichas y texto", "Quién es, qué dice y qué sale, en tarjetas y bloques de texto",
      "ficha_empresa ficha_linea tarjeta_actor persona muro_logos ecosistema_logos grupo_fichas ficha_hipotesis tarjetas_salida cita "
-     "lista_numerada aviso etiquetas_icono antes_despues_imagen columna_contexto bloque columnas_numeradas afirmacion_evidencia columnas_requisitos tarjetas_escenario grupo_logos ficha_startup categorias_chips"),
+     "lista_numerada aviso etiquetas_icono antes_despues_imagen columna_contexto bloque columnas_numeradas afirmacion_evidencia columnas_requisitos tarjetas_escenario grupo_logos ficha_startup categorias_chips ficha_finalista lista_validacion mapa_grupos_logos"),
     ("marcas", "Marcas y apoyo", "Micro piezas para celdas, tarjetas y márgenes",
      "delta harvey marca semaforo barra_progreso valoracion etiqueta_evidencia chip_nota pill icono_caja llave separador leyenda"),
     ("tablas", "Tablas", "Comparar en filas y columnas",
      "tabla_comparativa tabla_con_barras tabla_referencia tabla_grafica matriz_puntuacion scorecard tabla_vigilancia "
-     "tabla_drivers panel_entrevistas matriz_portfolio"),
+     "tabla_drivers panel_entrevistas matriz_portfolio matriz_candidatos"),
     ("sintesis", "Síntesis", "Resumir y remitir a otras slides con miniaturas",
      "tarjetas_miniatura mini_barras_objetivo mini_conteo mini_iconos mini_escalera mini_flechas mini_bifurcacion"),
 ]
@@ -201,7 +201,7 @@ FICHAS = {
     "piramide": F("Pirámide", "estructura", "3 a 5 niveles jerárquicos", "M",
                   "capas escalones"),
     "capas": F("Capas (stack)", "estructura", "3 a 6 capas que se apoyan unas en otras", "M",
-               "piramide pilares"),
+               "piramide"),
     "balanza": F("Balanza", "decidir evaluar", "Argumentos a favor y en contra, o dos alternativas", "M",
                  "dafo tabla_comparativa nucleo_dos_lados"),
     "lienzo_negocio": F("Lienzo de modelo de negocio", "cadena perfil", "Las nueve cajas del business model canvas", "L",
@@ -212,8 +212,6 @@ FICHAS = {
               "cinco_fuerzas balanza"),
     "cinco_fuerzas": F("Cinco fuerzas", "evaluar estructura", "Intensidad y explicación de las cinco fuerzas de un sector", "M",
                        "dafo tabla_drivers"),
-    "pilares": F("Casa estratégica (pilares)", "estructura resumir", "Ambición, 3 a 5 pilares y bases", "L",
-                 "capas lista_numerada"),
     "nucleo_dos_lados": F("Núcleo con dos lados", "estructura explicar_cambio", "Dos opciones que salen de un núcleo común, con efectos por fila", "L",
                           "balanza columnas_evolucion"),
     "escalera_prioridad": F("Escalera de prioridad", "decidir ordenar", "Hasta 3 niveles de prioridad con 5 focos cada uno", "L",
@@ -289,6 +287,12 @@ FICHAS = {
                        "ficha_empresa ficha_linea tarjeta_actor"),
     "categorias_chips": F("Mapa de categorías con chips", "estructura perfil", "8 a 30 nombres en 3 a 9 categorías, con un estado transversal", "L",
                           "anillo_categorias muro_logos grupo_logos"),
+    "mapa_grupos_logos": F("Mapa de candidatos por grupos", "perfil estructura", "20 a 80 actores con logo y nombre en 3 a 7 grupos por estado, con resumen opcional", "L",
+                           "ecosistema_logos muro_logos embudo"),
+    "lista_validacion": F("Lista de validación con estado", "evaluar evidencia", "4 a 8 puntos con estado, hallazgo y cita opcional", "M",
+                          "tabla_comparativa lista_numerada afirmacion_evidencia"),
+    "ficha_finalista": F("Ficha de finalista por etapas", "perfil evaluar", "Un finalista: 3 a 6 datos clave, 5 a 10 etapas con estado y texto, y 1 a 3 bloques al pie", "L",
+                         "ficha_empresa ficha_linea tarjeta_actor"),
     "ficha_linea": F("Ficha de una línea por empresa", "perfil ordenar", "10 a 20 empresas con madurez y frase", "L",
                      "tabla_con_barras muro_logos"),
     "tarjeta_actor": F("Tarjeta de empresa", "perfil", "Nombre, país y tipo, logo y una frase", "S",
@@ -308,7 +312,7 @@ FICHAS = {
     "cita": F("Cita destacada", "evidencia", "Una cita con autor", "S",
               "panel_entrevistas aviso afirmacion_evidencia"),
     "lista_numerada": F("Lista numerada", "decidir resumir", "3 a 5 recomendaciones o pasos", "M",
-                        "tarjetas_salida pilares columnas_numeradas"),
+                        "tarjetas_salida columnas_numeradas"),
     "aviso": F("Recuadro de llamada", "apoyo evidencia", "Un supuesto crítico o una advertencia", "S",
                "cita"),
     "etiquetas_icono": F("Etiquetas con icono", "apoyo estructura", "2 a 4 condiciones o capacidades", "S",
@@ -330,6 +334,8 @@ FICHAS = {
     "separador": F("Separador de bloque", "apoyo", "Número y título de un bloque dentro de la slide", "S", ""),
     "leyenda": F("Leyenda", "apoyo", "Colores y formas de las series, solo si no cabe la etiqueta directa", "S", ""),
     # ---------------------------------------------------------------- tablas
+    "matriz_candidatos": F("Matriz de finalistas con peso y validación", "evaluar decidir comparar", "2 a 5 candidatos en 6 a 12 criterios con peso, nota de 0 a 4, alertas y validación opcional", "L",
+                           "matriz_puntuacion tabla_comparativa mapa_calor"),
     "tabla_comparativa": F("Tabla comparativa", "evaluar decidir", "2 a 5 opciones en 4 a 10 criterios", "L",
                            "criterios_puntos matriz_puntuacion radar"),
     "tabla_con_barras": F("Tabla con barras", "ordenar comparar", "Filas de texto con una columna numérica", "L",
@@ -350,14 +356,14 @@ FICHAS = {
                            "cita contadores"),
     # ---------------------------------------------------------------- síntesis
     "tarjetas_miniatura": F("Tarjetas con miniatura", "resumir", "2 a 4 conclusiones con una miniatura de la slide que resumen", "L",
-                            "lista_numerada pilares"),
+                            "lista_numerada"),
     "mini_barras_objetivo": F("Miniatura de barras", "resumir brecha", "Hasta 3 barras frente a referencia y objetivo", "S", "barras_objetivo"),
     "mini_conteo": F("Miniatura de conteo", "resumir cifra", "Hasta 10 círculos con los marcados", "S", "pictograma"),
     "mini_iconos": F("Miniatura de iconos", "resumir", "2 a 4 iconos con una palabra", "S", "etiquetas_icono"),
     "mini_escalera": F("Miniatura de escalera", "resumir decidir", "3 niveles con códigos", "S", "escalera_prioridad"),
     "mini_flechas": F("Miniatura de proceso", "resumir proceso", "Hasta 4 pasos", "S", "proceso_flechas chevrones"),
     "mini_bifurcacion": F("Miniatura de bifurcación", "resumir decidir", "Una etapa, un corte y dos ramas", "S", "arbol_tramite"),
-    # ---------------------------------------------------------------- añadidos del 01-11-2026
+    # ---------------------------------------------------------------- añadidos
     "ranking_logos": F("Ranking por logo", "ordenar evaluar", "Actores con su puntuación, reconocibles por el logo", "S",
                        "barras_ranking tabla_con_barras"),
     "combo_financiero": F("Métricas financieras (combo)", "tendencia perfil", "Ingresos, EBITDA y margen de una empresa en 3 a 6 periodos", "M",
@@ -376,6 +382,8 @@ FICHAS = {
                        "cadena_capas cadena_isometrica"),
     "trayecto": F("Trayecto de hoy al destino", "decidir cadena", "2 a 4 etapas: hoy, destino y vía", "L",
                   "chevrones escalones fases_gates"),
+    "etapas_entregable": F("Etapas con entregable", "proceso resumir", "3 a 6 etapas con plazo, qué se hizo y su entregable", "L",
+                           "chevrones fases_gates linea_tiempo_vertical"),
     "fases_gates": F("Fases con gates", "proceso calendario decidir", "2 a 4 fases con plazo, acciones y gate", "L",
                      "chevrones gantt proceso_flechas"),
     "columna_contexto": F("Columna de contexto", "evidencia cifra", "Rótulo, 2 o 3 párrafos y una cifra ancla", "S",
@@ -383,7 +391,7 @@ FICHAS = {
     "bloque": F("Bloque con filete superior", "apoyo estructura", "Título y texto corto o HTML", "S",
                 "aviso tarjeta_cifra columna_contexto"),
     "columnas_numeradas": F("Columnas numeradas con cifras", "resumir cifra", "2 a 4 ideas con título, texto y una o dos cifras", "L",
-                            "lista_numerada pilares tarjetas_miniatura"),
+                            "lista_numerada tarjetas_miniatura"),
     "afirmacion_evidencia": F("Afirmación y evidencia", "evidencia resumir", "2 a 4 afirmaciones con su cita y autor", "L",
                               "cita panel_entrevistas"),
     "columnas_requisitos": F("Columnas de requisitos con coste y plazo", "decidir estructura", "2 a 4 dimensiones con requisitos, coste y plazo", "L",
@@ -499,4 +507,5 @@ def comprobar(paquete):
     return err
 
 
-NO_ELEMENTOS = {"escena"}   # funciones públicas que no son elementos (el decorador de escenas)
+NO_ELEMENTOS = {"escena",   # funciones públicas que no son elementos (el decorador de escenas)
+                "pilares"}  # casa estratégica, retirada del catálogo; sigue importable solo para que los scripts de entregables ya generados no se rompan

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """huella_slide: huella anónima de una slide de un PDF. Enseña cuánto contenido lleva, dónde está y qué visuales usa, no qué dice.
 
-Variante máscara (decisión del 02-11-2026): quita de verdad el texto y las imágenes del PDF y conserva la forma de lo dibujado en
+Variante máscara: quita de verdad el texto y las imágenes del PDF y conserva la forma de lo dibujado en
 vector, para poder analizar cómo se usaron los gráficos. Cada línea de texto pasa a una barra gris, cada imagen a una caja gris y la
 decoración «glow» de la cabecera desaparece. Como lo dibujado en vector pasa la limpieza, un filtro cambia por una caja gris lo que
 parece un logo. Se quedan el wordmark de la base fija y los iconos sueltos.
@@ -37,7 +37,7 @@ GIRO_PIEZA = .6                  # con menos giro, el trazo es liso: disco, barr
 GLIFO_LADO = 80                  # hasta este lado, un trazo con curvas y dos o más contornos entra aunque sea liso (una «o»)
 SEPARACION = 8.0                 # dos trazos a menos de esta distancia son del mismo grupo
 RESTO_LADO = 40                  # trazos lisos pequeños pegados a un logo (la «I», el punto de la «i») van dentro de su caja
-# Cuándo un grupo es un logo. Calibrado el 02-11-2026: las 15 apariciones de logos vectoriales en los 9 decks de referencia dan
+# Cuándo un grupo es un logo. Calibrado: las 15 apariciones de logos vectoriales en los 9 decks de referencia dan
 # giro >= 11,3 y densidad >= 0,29; los iconos sueltos, giro <= 5,8; lo demás con varios trazos (anillos, marcos a trazos, radares), densidad <= 0,10
 GIRO_VARIOS = 4.0                # dos o más trazos, con al menos este giro total
 GIRO_UNICO = 8.0                 # un trazo solo: por debajo es un icono, que se queda

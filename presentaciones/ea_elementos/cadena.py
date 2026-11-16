@@ -10,7 +10,7 @@ from .base import (
     _impacto, _svg, calor, circle, fmt, head, icono, line, md, mezcla, pill, rect, sobre, uid,
 )
 
-from .base import (arrow, flecha_svg)  # añadidos el 01-11-2026
+from .base import (arrow, flecha_svg)
 
 __all__ = ["circuito_cadena", "cadena_capas", "Iso", "ESCENAS", "escena", "escena_iso", "catalogo_escenas", "cadena_isometrica", "cadena_margen", "trayecto"]
 

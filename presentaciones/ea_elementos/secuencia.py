@@ -12,9 +12,9 @@ from .base import (
     mezcla, rampa, rect, sobre, text,
 )
 
-from .base import (oscuro)  # añadidos el 01-11-2026
+from .base import (oscuro)
 
-__all__ = ["proceso_flechas", "lista_precedentes", "gantt", "chevrones", "linea_tiempo", "ciclo", "carriles", "escalones", "calendario_calor", "linea_tiempo_vertical", "proceso_carriles", "fases_gates"]
+__all__ = ["proceso_flechas", "lista_precedentes", "gantt", "chevrones", "linea_tiempo", "ciclo", "carriles", "escalones", "calendario_calor", "linea_tiempo_vertical", "proceso_carriles", "fases_gates", "etapas_entregable"]
 
 
 def _fecha(d):
@@ -25,13 +25,21 @@ def _fecha(d):
     return datetime.date(aa, mm, dd)
 
 
-def proceso_flechas(pasos, fases=None, destacado=None, rotulos=("Qué se resuelve", "Qué sale", "Quién"), W=1152):
+_ROTULOS_PROCESO = {"es": ("Qué se resuelve", "Qué sale", "Quién"), "en": ("What it solves", "Output", "Who")}
+
+
+def proceso_flechas(pasos, fases=None, destacado=None, rotulos=None, W=1152, idioma="es", uniforme=False, repartir=False):
     """Proceso en flechas encadenadas (rampa de rojos, de claro a oscuro) con una llave de fases encima y una tarjeta
     por paso: qué se resuelve (pregunta), qué sale y quién lo hace.
     pasos: [{"icono", "nombre", "pregunta", "sale", "quien"}], sin número en el nombre (numera sola); fases: [(primer paso, último paso, rótulo)] por índice;
-    destacado: índice del paso con borde rojo (la decisión).
+    destacado: índice del paso con borde rojo (la decisión). rotulos: los tres rótulos de la tarjeta; si faltan, los de `idioma` (es o en).
+    uniforme: los tres campos con el mismo tamaño de letra y seguidos desde arriba, separados por una línea y
+    alineados entre tarjetas (cada campo arranca a la misma altura en todas),
+    en lugar de la pregunta destacada arriba y el resto al pie; para tarjetas en las que los tres campos pesan igual.
+    repartir (con uniforme): los tres campos se reparten el alto de la tarjeta a partes iguales, sin hueco al pie.
     Cuándo usarlo: un método de 3 a 5 pasos en el que importa quién hace qué y qué entrega cada paso.
     Cuándo no: si el proceso tiene ramas (usa arbol_tramite) o fechas (usa gantt); no dictar el protocolo del cliente."""
+    rotulos = rotulos or _ROTULOS_PROCESO.get(idioma, _ROTULOS_PROCESO["es"])
     n, gap = len(pasos), 16
     cw = (W - (n - 1) * gap) / n
     alto = 82 if fases else 60
@@ -54,6 +62,13 @@ def proceso_flechas(pasos, fases=None, destacado=None, rotulos=("Qué se resuelv
 
     def tarjeta(k, p):
         hot = k == destacado
+        if uniforme:
+            campos = [(rotulos[0], p["pregunta"]), (rotulos[1], p["sale"]), (rotulos[2], p["quien"])]
+            return (f'<div class="card{" hot" if hot else ""}" style="min-width:0;padding:16px 18px;display:grid;grid-row:span 3;grid-template-rows:subgrid;row-gap:12px;align-content:start;background:var(--paper)">'
+                    + "".join(f'<div style="{"border-top:1px solid var(--border-2);padding-top:12px" if i else ""}">'
+                              f'<span class="k2 {"red" if hot and not i else ""}" style="margin:0 0 4px">{E(r)}</span>'
+                              f'<div style="font-size:15px;line-height:1.42;color:var(--fg1)">{md(t)}</div></div>' for i, (r, t) in enumerate(campos))
+                    + '</div>')
         return (f'<div class="card{" hot" if hot else ""}" style="flex:1;min-width:0;padding:14px 16px;display:flex;flex-direction:column;gap:6px;background:var(--paper)">'
                 f'<span class="k2 {"red" if hot else ""}" style="margin:0">{E(rotulos[0])}</span>'
                 f'<b style="font-size:15.5px;line-height:1.38;color:var(--fg1)">{E(p["pregunta"])}</b>'
@@ -61,7 +76,9 @@ def proceso_flechas(pasos, fases=None, destacado=None, rotulos=("Qué se resuelv
                 f'<div><span class="k2" style="margin:0 0 2px">{E(rotulos[1])}</span><div style="font-size:14px;line-height:1.4;color:var(--fg1)">{md(p["sale"])}</div></div>'
                 f'<div><span class="k2" style="margin:0 0 2px">{E(rotulos[2])}</span><div style="font-size:14px;line-height:1.4;color:var(--fg1)">{md(p["quien"])}</div></div></div></div>')
     return (f'<div class="col" style="flex:1;width:100%;gap:10px">{L.render()}'
-            f'<div class="row" style="flex:1;width:100%;gap:{gap}px">{"".join(tarjeta(k, p) for k, p in enumerate(pasos))}</div></div>')
+            + (f'<div style="flex:1;width:100%;display:grid;grid-template-columns:repeat({n},1fr);grid-template-rows:{"repeat(3,1fr)" if repartir else "auto auto 1fr"};column-gap:{gap}px">'
+               if uniforme else f'<div class="row" style="flex:1;width:100%;gap:{gap}px">')
+            + f'{"".join(tarjeta(k, p) for k, p in enumerate(pasos))}</div></div>')
 
 
 def lista_precedentes(items, titulo="Precedentes", ancho=330):
@@ -78,13 +95,16 @@ def lista_precedentes(items, titulo="Precedentes", ancho=330):
                       for k, (a, t, e, fav) in enumerate(items)) + '</div>')
 
 
-def gantt(inicio, semanas, filas, hoy=None, decision=None, leyenda=None, ancho=978, ancho_rotulo=172):
+def gantt(inicio, semanas, filas, hoy=None, decision=None, leyenda=None, ancho=978, ancho_rotulo=172, lineas_mes=True, alto_fila=54):
     """Gantt por días: meses y semanas arriba, una fila por fase con barras (llena en rojo o pausa en crema oscuro),
     fechas clave bajo las barras, la línea de decisión con su píldora granate y la marca de «Hoy».
     inicio: fecha de la semana 1 (date o 'DD-MM-YYYY'); semanas: número de semanas; filas: [{"rotulo", "sub",
-    "barras": [(desde, hasta, 'lleno' | 'pausa', texto)], "fechas": [(fecha, texto, 'inicio' | 'fin', dx)]}];
+    "barras": [(desde, hasta, 'lleno' | 'pausa', texto)], "fechas": [(fecha, texto, 'inicio' | 'fin' | 'centro', dx)]}]
+    ('centro' centra el texto bajo la barra de un día que empieza en esa fecha: reuniones e hitos);
     hoy = (fecha, texto); decision = {"fecha", "titulo", "texto", "rotulo", "sub"} (añade su fila);
-    leyenda: [(color css, texto, recto)].
+    leyenda: [(color css, texto, recto)]. Una barra de tipo 'hito' es un círculo negro en esa fecha (reuniones con el cliente),
+    para no confundirlas con el trabajo. lineas_mes: False deja en la rejilla solo las semanas (sin la doble línea donde
+    empieza un mes). alto_fila: alto de cada fila en px, para que el Gantt llene el cuerpo; barras y fechas van centradas.
     Cuándo usarlo: el cronograma de un proyecto de 8 a 30 semanas con 3 a 6 fases y una decisión.
     Cuándo no: para más de 6 filas o un plan de detalle por tareas (va en Excel o en el PM); sin fechas, usa proceso_flechas."""
     g0 = _fecha(inicio)
@@ -106,22 +126,30 @@ def gantt(inicio, semanas, filas, hoy=None, decision=None, leyenda=None, ancho=9
     def rejilla():
         out = [f'<i class="cg-gl" style="left:{gx(g0 + datetime.timedelta(days=7 * k))}px"></i>' for k in range(semanas + 1)]
         d = g0
-        while d <= fin:
+        while lineas_mes and d <= fin:
             out.append(f'<i class="cg-gm" style="left:{gx(d)}px"></i>')
             d = datetime.date(d.year + (d.month == 12), d.month % 12 + 1, 1)
         return f'<div class="cg-grid">{"".join(out)}</div>'
 
+    dy = round((alto_fila - 54) / 2, 1)
+
     def barra(d1, d2, tipo, txt):
+        if tipo == "hito":  # centrado como el rótulo 'centro': la barra de un día mide al menos 20 px
+            return (f'<i style="position:absolute;left:{round(gx(d1) + max(gxe(d1) - gx(d1), 20) / 2 - 8, 1)}px;top:{15 + dy}px;width:16px;height:16px;'
+                    f'border-radius:50%;background:var(--fg1);box-shadow:0 0 0 3px var(--paper)"></i>')
         cls = "pausa" if tipo == "pausa" else "prop"
-        return f'<div class="cg-bar {cls}" style="left:{gx(d1)}px;width:{round(gxe(d2) - gx(d1), 1)}px;top:11px;height:24px">{E(txt)}</div>'
+        return f'<div class="cg-bar {cls}" style="left:{gx(d1)}px;width:{round(gxe(d2) - gx(d1), 1)}px;top:{11 + dy}px;height:24px">{E(txt)}</div>'
 
     def cap(f):
         d, t, modo, dx = (list(f) + ["inicio", 0])[:4] if len(f) < 4 else f
+        top = f"top:{37 + dy}px;" if dy else ""
         if modo == "fin":
-            return f'<span class="cg-cap r" style="left:{gxe(d)}px">{E(t)}</span>'
-        return f'<span class="cg-cap" style="left:{round(gx(d) + dx, 1)}px">{E(t)}</span>'
+            return f'<span class="cg-cap r" style="left:{gxe(d)}px;{top}">{E(t)}</span>'
+        if modo == "centro":  # la barra de un día mide al menos 20 px por su padding (.cg-bar)
+            return f'<span class="cg-cap c" style="left:{round(gx(d) + max(gxe(d) - gx(d), 20) / 2 + dx, 1)}px;{top}">{E(t)}</span>'
+        return f'<span class="cg-cap" style="left:{round(gx(d) + dx, 1)}px;{top}">{E(t)}</span>'
 
-    fila = lambda lab, sub, dentro: (f'<div class="cg-row" style="{cols}"><div class="cg-lab"><b>{E(lab)}</b>{E(sub)}</div>'
+    fila = lambda lab, sub, dentro: (f'<div class="cg-row" style="{cols}{f";height:{alto_fila}px" if alto_fila != 54 else ""}"><div class="cg-lab"><b>{E(lab)}</b>{E(sub)}</div>'
                                      f'<div class="cg-time">{rejilla()}{dentro}</div></div>')
     sems = "".join(f'<div class="cg-sem" style="left:{gx(g0 + datetime.timedelta(days=7 * (k - 1)))}px;width:{round(7 * ppd, 1)}px">{k}</div>'
                    for k in range(1, semanas + 1))
@@ -141,15 +169,16 @@ def gantt(inicio, semanas, filas, hoy=None, decision=None, leyenda=None, ancho=9
                                                for c, t, recto in leyenda) + '</div>'
     tabla = (f'<div class="cg"><div class="cg-head" style="{cols}"><div class="cg-lab"></div><div class="cg-time"><div class="cg-meses">{meses()}</div>'
              f'<div class="cg-sems">{sems}</div></div></div><div class="cg-body">{cuerpo}</div></div>')
-    # con leyenda, un solo bloque: como hermanos, un contenedor en fila encogía el Gantt y lo cortaba (corregido el 03-11-2026)
+    # con leyenda, un solo bloque: como hermanos, un contenedor en fila encogía el Gantt y lo cortaba
     return f'<div style="flex:none;width:{ancho_rotulo + ancho:g}px">{tabla}{ley}</div>' if ley else tabla
 
 
-def chevrones(pasos, activo=None, W=1100, alto=54, punta=20, H=None):
+def chevrones(pasos, activo=None, W=1100, alto=54, punta=20, H=None, tam_texto=None):
     """Chevrones de proceso: flechas encadenadas con el rótulo dentro y una explicación corta debajo.
     pasos: [(rótulo, texto)] o [(rótulo, texto, [puntos])]; activo: índice del paso actual (los anteriores en rojo claro, el actual en
     rojo y los siguientes en gris). Sin activo, rampa de rojos de claro a oscuro.
     H: sube el chevrón y el texto, y con puntos por paso gana alto, pero sigue siendo una pieza baja: para llenar una slide, proceso_flechas.
+    tam_texto: texto bajo el chevrón en px (el rótulo, uno más), para slides de apertura con poco texto.
     Cuándo usarlo: un proceso lineal de 3 a 6 etapas, o dónde estamos dentro de él.
     Cuándo no: si cada etapa necesita más de dos líneas (usa proceso_flechas)."""
     n = len(pasos)
@@ -157,6 +186,8 @@ def chevrones(pasos, activo=None, W=1100, alto=54, punta=20, H=None):
     if H:
         alto = max(alto, min(110, int(H * .3)))
         tam, tam_rot, sep_txt = 15, 16, 20
+    if tam_texto:
+        tam, tam_rot = tam_texto, tam_texto + 1
     g = 6
     w = (W - g * (n - 1)) / n
     if activo is None:
@@ -236,10 +267,11 @@ def ciclo(pasos, centro="", W=420, H=360):
     return L.render()
 
 
-def carriles(carriles_, periodos, items, W=1100, ancho_rotulo=170, alto=56):
+def carriles(carriles_, periodos, items, W=1100, ancho_rotulo=170, alto=56, cerrar=False):
     """Hoja de ruta por carriles (swimlanes): un carril por equipo o línea de trabajo y periodos en columnas.
     carriles_: nombres; periodos: rótulos de columna (trimestres, horizontes); items: [(carril, desde, hasta,
     texto, destacado)] con desde y hasta en unidades de periodo (0 = inicio del primero; admite decimales).
+    cerrar: traza también la línea vertical del final del último periodo, para que la rejilla quede cerrada a la derecha.
     Cuándo usarlo: roadmap a 12 o 24 meses o horizontes H1, H2 y H3 con 3 a 6 carriles.
     Cuándo no: planificación semanal con dependencias (usa gantt)."""
     n = len(periodos)
@@ -257,6 +289,8 @@ def carriles(carriles_, periodos, items, W=1100, ancho_rotulo=170, alto=56):
         L.add(rect(0, y0 + 10, 4, alto - 20, cols[i], rx=2))
         L.div(14, y0 + alto / 2, ancho_rotulo - 20, f'<b style="font-size:14px;color:var(--fg1)">{E(c)}</b>', va="middle")
     L.add(line(0, H, W, H, GREY, 1))
+    if cerrar:
+        L.add(line(W - .5, 30, W - .5, H, GREY, 1))
     for ci, d, h, tx, hot in items:
         y0 = 30 + ci * alto + 10
         x0, x1 = ancho_rotulo + d * cw + 4, ancho_rotulo + h * cw - 4
@@ -340,6 +374,37 @@ def linea_tiempo_vertical(hitos, hoy=None, W=520):
     return f'<div style="width:{W}px">{"".join(filas)}</div>'
 
 
+def etapas_entregable(etapas, destacado=None, rotulo="Entregable", W=1152, H=None, ancho_titulo=230, ancho_salida=360):
+    """Etapas de un método en filas: código en círculo unido por una línea, título y plazo, qué se hizo y, a la derecha,
+    el entregable o resultado en una caja con filete rojo. La etapa destacada (normalmente la final) lleva el título en rojo.
+    etapas: [(código, título, plazo, texto, salida)]; rotulo: encabezado de la caja ('Entregable', 'Resultado').
+    H: alto total, repartido entre las filas.
+    Cuándo usarlo: la metodología de un proyecto de 3 a 6 etapas con lo que sale de cada una (propuesta o cierre).
+    Cuándo no: etapas sin entregable propio (usa chevrones) o con fechas que importan como calendario (usa gantt)."""
+    n = len(etapas)
+    gap = 10
+    alto = (H - gap * (n - 1)) / n if H else None
+    filas = []
+    for i, (cod, tit, plazo, tx, sal) in enumerate(etapas):
+        dest = destacado == i
+        h_ = f"height:{alto:.0f}px;" if alto else "min-height:76px;"
+        linea_ = "" if i == n - 1 else f'<span style="position:absolute;left:50%;top:50%;height:calc(100% + {gap}px);border-left:2px solid {INPUT}"></span>'
+        filas.append(
+            f'<div style="display:flex;gap:14px;align-items:stretch;{h_}">'
+            f'<div style="position:relative;width:52px;flex:none;display:flex;align-items:center;justify-content:center">{linea_}'
+            f'<b style="position:relative;width:46px;height:46px;border-radius:50%;background:{PAPER};box-shadow:inset 0 0 0 3px {RED};'
+            f'display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--red)">{E(cod)}</b></div>'
+            f'<div style="flex:1;display:flex;gap:18px;align-items:center;background:{FILL};border-radius:12px;padding:10px 12px 10px 18px">'
+            f'<div style="width:{ancho_titulo}px;flex:none"><b style="font-size:15.5px;line-height:1.25;color:{RED if dest else "var(--fg1)"}">{E(tit)}</b>'
+            f'<div style="font-size:12.5px;color:var(--fg3);margin-top:4px">{E(plazo)}</div></div>'
+            f'<div style="flex:1;font-size:13px;line-height:1.4;color:var(--fg2)">{md(tx)}</div>'
+            f'<div style="width:{ancho_salida}px;flex:none;align-self:stretch;display:flex;flex-direction:column;justify-content:center;background:{PAPER};'
+            f'border-left:3px solid {RED};border-radius:4px;padding:8px 14px">'
+            f'<span style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:{RED if dest else "var(--fg3)"}">{E(rotulo)}</span>'
+            f'<span style="font-size:13px;line-height:1.35;color:var(--fg1);margin-top:2px">{md(sal)}</span></div></div></div>')
+    return f'<div style="width:{W}px;display:flex;flex-direction:column;gap:{gap}px">{"".join(filas)}</div>'
+
+
 def proceso_carriles(carriles_, pasos, flujos, columnas, W=1100, ancho_rotulo=130, alto=92, caja=(150, 46)):
     """Proceso por carriles (BPMN simple): pasos repartidos por responsable, con flechas entre carriles.
     pasos: [dict(id, carril, col, texto, tipo='tarea' | 'decision' | 'inicio' | 'fin', destacado=False)];
@@ -391,10 +456,13 @@ def proceso_carriles(carriles_, pasos, flujos, columnas, W=1100, ancho_rotulo=13
     return L.render()
 
 
-def fases_gates(fases, W=1100):
+def fases_gates(fases, W=1100, H=None, tam=13, grande=False, compacto=False):
     """Fases en secuencia con su punto de parada: una línea con un punto por fase, la fase y su plazo, el título,
     lo que se hace y, al pie, el gate que hay que pasar para seguir. De claro a oscuro según se avanza.
-    fases: [dict(nombre, plazo="", titulo, puntos=[...], gate)], de 2 a 4.
+    fases: [dict(nombre, plazo="", titulo, puntos=[...], gate)], de 2 a 4. H: alto total; los puntos reparten el aire y los gates
+    bajan al pie (para que la pieza llene la slide sola). tam: texto de los puntos en px (título, tres más; gate, uno menos).
+    grande: la línea de fases gana peso (círculos de 52 px con el número, línea gruesa y nombre y título más grandes), para que mande en la slide.
+    compacto: con H, los puntos van juntos arriba en vez de repartidos, y el aire queda entre los puntos y el gate.
     Cuándo usarlo: próximos pasos con disciplina de decisión (validar demanda antes de invertir).
     Cuándo no: un calendario con fechas reales (usa gantt) o pasos sin punto de decisión (usa chevrones)."""
     n = len(fases)
@@ -404,19 +472,28 @@ def fases_gates(fases, W=1100):
         c = cols[i]
         flecha = (f'<i style="position:absolute;right:-4px;top:4px;width:0;height:0;border-left:7px solid {INPUT};border-top:5px solid transparent;border-bottom:5px solid transparent"></i>'
                   if i < n - 1 else "")
+        if grande:
+            # la línea acaba bajo la base de la flecha y la punta queda a 10 px del círculo siguiente
+            fl = (f'<i style="position:absolute;right:-12px;top:17px;width:0;height:0;border-left:16px solid {INPUT};border-top:9px solid transparent;border-bottom:9px solid transparent"></i>'
+                  if i < n - 1 else "")
+            celdas.append(f'<div style="position:relative;height:52px;margin-bottom:28px"><i style="position:absolute;left:0;right:{"2px" if i < n - 1 else "0"};top:23px;height:6px;'
+                          f'border-radius:{"3px 0 0 3px" if i < n - 1 else "3px"};background:{INPUT}"></i><b style="position:absolute;left:0;top:0;width:52px;height:52px;border-radius:50%;background:{c};color:#fff;'
+                          f'font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px #fff">{i + 1}</b>{fl}</div>')
+            continue
         celdas.append(f'<div style="position:relative;height:14px;margin-bottom:12px"><i style="position:absolute;left:0;right:{"-20px" if i < n - 1 else "0"};top:6px;height:2px;background:{INPUT}"></i>'
                       f'<i style="position:absolute;left:0;top:0;width:14px;height:14px;border-radius:50%;background:{c}"></i>{flecha}</div>')
     for i, f in enumerate(fases):
-        celdas.append(f'<div style="font-size:12px;font-weight:700;color:{cols[i]};letter-spacing:.06em">{E(f["nombre"]).upper()}'
+        celdas.append(f'<div style="font-size:{15 if grande else 12}px;font-weight:700;color:{cols[i]};letter-spacing:.06em">{E(f["nombre"]).upper()}'
                       f'<span style="font-weight:400;color:var(--fg3);letter-spacing:0;margin-left:6px">{E(f.get("plazo", ""))}</span></div>')
     for i, f in enumerate(fases):
-        celdas.append(f'<b style="display:block;font-size:15px;color:var(--fg1);padding:4px 0 8px;border-bottom:3px solid {cols[i]}">{E(f["titulo"])}</b>')
+        celdas.append(f'<b style="display:block;font-size:{(tam + 7 if grande else tam + 2) if tam != 13 else (20 if grande else 15)}px;color:var(--fg1);padding:{"6px 0 12px" if grande else "4px 0 8px"};border-bottom:3px solid {cols[i]}">{E(f["titulo"])}</b>')
     for i, f in enumerate(fases):
-        celdas.append('<div style="display:flex;flex-direction:column;gap:7px;padding:10px 0 12px">' + "".join(
-            f'<div style="display:flex;gap:8px;font-size:13px;line-height:1.38;color:var(--fg2)"><i style="flex:none;width:6px;height:6px;border-radius:50%;'
-            f'background:{cols[i]};margin-top:5px"></i><span>{md(p)}</span></div>' for p in f.get("puntos", [])) + '</div>')
+        celdas.append(f'<div style="display:flex;flex-direction:column;gap:7px;padding:{"18px 0 18px" if grande else "10px 0 12px"};{"height:100%;justify-content:space-evenly;" if H and not compacto else ""}">' + "".join(
+            f'<div style="display:flex;gap:8px;font-size:{tam}px;line-height:1.38;color:var(--fg2)"><i style="flex:none;width:6px;height:6px;border-radius:50%;'
+            f'background:{cols[i]};margin-top:{round(tam * .4)}px"></i><span>{md(p)}</span></div>' for p in f.get("puntos", [])) + '</div>')
     for i, f in enumerate(fases):
         c = cols[i]
         celdas.append(f'<div style="background:{mezcla(c, "#FFFFFF", .88)};box-shadow:inset 0 0 0 1px {mezcla(c, "#FFFFFF", .4)};border-radius:6px;padding:8px 12px;'
-                      f'font-size:12px;font-weight:700;line-height:1.3;color:{c if oscuro(c) else FG1}">Gate: {md(f["gate"])}</div>')
-    return f'<div style="width:{W}px;display:grid;grid-template-columns:repeat({n},1fr);column-gap:22px;align-items:start">{"".join(celdas)}</div>'
+                      f'font-size:{tam - 1}px;font-weight:700;line-height:1.3;color:{c if oscuro(c) else FG1}">Gate: {md(f["gate"])}</div>')
+    filas = f"height:{H}px;grid-template-rows:auto auto auto 1fr auto;" if H else ""
+    return f'<div style="width:{W}px;{filas}display:grid;grid-template-columns:repeat({n},1fr);column-gap:22px;align-items:{"stretch" if H else "start"}">{"".join(celdas)}</div>'

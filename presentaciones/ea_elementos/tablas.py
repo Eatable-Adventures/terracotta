@@ -12,9 +12,10 @@ from .base import (
 from .fichas import (tarjeta_actor)
 from .marcas import (harvey, marca)
 
-from .base import (RAMP, TINT, mezcla, sobre)  # añadidos el 01-11-2026
+from .base import (RAMP, TINT, mezcla, sobre)
+from .base import (_logo_html)
 
-__all__ = ["tabla_referencia", "tabla_grafica", "matriz_puntuacion", "scorecard", "tabla_vigilancia", "tabla_comparativa", "tabla_con_barras", "tabla_drivers", "panel_entrevistas", "matriz_portfolio"]
+__all__ = ["tabla_referencia", "tabla_grafica", "matriz_puntuacion", "scorecard", "tabla_vigilancia", "tabla_comparativa", "tabla_con_barras", "tabla_drivers", "panel_entrevistas", "matriz_portfolio", "matriz_candidatos"]
 
 
 def _barra_ref(v, dominio, objetivo, referencia, w=170, h=22):
@@ -155,8 +156,11 @@ def matriz_puntuacion(filas, dimensiones, grupos, extra=("Extra", ""), total=("T
     return L.render()
 
 
-def scorecard(eliminatorios, comparativos, iconos=("warning", "rate_review"), rotulos=("Criterios eliminatorios", "Criterios comparativos")):
-    # comparativos admite dimensiones (nombre, peso, [(criterio, peso)]) y, con más de 8 criterios sueltos, pasa a tres columnas (03-11-2026)
+def scorecard(eliminatorios, comparativos, iconos=("warning", "rate_review"), rotulos=("Criterios eliminatorios", "Criterios comparativos"),
+              columnas=None, alto_al_contenido=False):
+    # columnas: 2 o 3 fuerza las columnas de los criterios sueltos (por defecto, tres con más de 8); alto_al_contenido: el bloque
+    # de eliminatorios mide lo que su texto y los comparativos llenan el resto
+    # comparativos admite dimensiones (nombre, peso, [(criterio, peso)]) y, con más de 8 criterios sueltos, pasa a tres columnas
     """Scorecard en dos bloques: criterios eliminatorios numerados y criterios comparativos con su peso en barra
     sobre 100%; cada bloque en dos columnas con filas compartidas y el hueco libre abajo a la derecha.
     eliminatorios: [(criterio, explicación)] (explicación puede ir vacía); comparativos: [(criterio, peso)] o, para agrupar,
@@ -191,7 +195,7 @@ def scorecard(eliminatorios, comparativos, iconos=("warning", "rate_review"), ro
                   f'<div style="display:grid;grid-template-columns:repeat({len(comparativos)},minmax(0,1fr));column-gap:28px">{cols}</div></div></div>')
     co = [f'<div class="cr"><b>{E(t)}</b><div class="cr-b"><div class="cr-t"><i style="width:{w}%"></i></div><span>{w}%</span></div></div>'
           for t, w in comparativos]
-    tres = len(comparativos) > 8
+    tres = len(comparativos) > 8 if columnas is None else columnas == 3
 
     def bloque(ic, items, flex):
         if tres and items is co:
@@ -206,7 +210,9 @@ def scorecard(eliminatorios, comparativos, iconos=("warning", "rate_review"), ro
         n = max(len(izq), len(der))
         celdas = "".join(f'<div style="grid-column:{c};grid-row:{i + 1};align-self:start">{x}</div>'
                          for c, lista in ((2, izq), (3, der)) for i, x in enumerate(lista))
-        return (f'<div class="sc-b" style="flex:{flex};grid-template-rows:repeat({n},1fr);row-gap:10px">'
+        filas_css = "auto" if (alto_al_contenido and items is el) else "1fr"
+        flex_css = "0 0 auto" if (alto_al_contenido and items is el) else flex
+        return (f'<div class="sc-b" style="flex:{flex_css};grid-template-rows:repeat({n},{filas_css});row-gap:10px">'
                 f'<div class="sc-i" style="grid-column:1;grid-row:1/{n + 1}">{icono(ic, 48, RED)}</div>{celdas}</div>')
     return (f'<div class="sc"><div class="sc-h">{E(rotulos[0])}</div>{bloque(iconos[0], el, 0.85)}'
             f'<div class="sc-h">{E(rotulos[1])}</div>{bloque(iconos[1], co, 1.15)}</div>')
@@ -234,10 +240,12 @@ def tabla_vigilancia(filas, cabeceras=("Opción", "Por qué se vigila", "Qué la
             f'<tbody>{trs}</tbody></table>')
 
 
-def tabla_comparativa(columnas_, filas, destacada=None, W=520, ancho_criterio=180):
+def tabla_comparativa(columnas_, filas, destacada=None, W=520, ancho_criterio=180, alinear="center", H=None):
     """Tabla comparativa de opciones por criterio, con la columna recomendada sombreada en gris cálido.
     columnas_: nombres de las opciones; filas: [(criterio, [valores])], donde cada valor es 'si', 'no',
-    'parcial', 'nd', un entero de 0 a 4 (bola de Harvey) o un texto corto.
+    'parcial', 'nd', un entero de 0 a 4 (bola de Harvey) o un texto corto. alinear: 'left' para columnas de texto
+    (fichas de parámetros), que se leen mejor alineadas que centradas. H: alto total (las filas reparten el sobrante), para acabar
+    a ras de la pieza de al lado.
     Cuándo usarlo: comparar 2 a 5 opciones en 4 a 10 criterios cualitativos.
     Cuándo no: si los criterios tienen pesos y notas (usa matriz_puntuacion)."""
     def celda(v):
@@ -246,13 +254,13 @@ def tabla_comparativa(columnas_, filas, destacada=None, W=520, ancho_criterio=18
         if isinstance(v, int):
             return harvey(v)
         return f'<span style="font-size:13px">{md(v)}</span>'
-    hd = "".join(f'<th style="text-align:center;padding-top:8px;{f"color:{FG1};background:{FILL};border-radius:8px 8px 0 0;" if j == destacada else ""}">{E(c)}</th>'
+    hd = "".join(f'<th style="text-align:{alinear};padding-top:8px;{f"color:{FG1};background:{FILL};border-radius:8px 8px 0 0;" if j == destacada else ""}">{E(c)}</th>'
                  for j, c in enumerate(columnas_))
     cuerpo = "".join(
         f'<tr><td class="nm" style="width:{ancho_criterio}px">{E(cr)}</td>' + "".join(
-            f'<td style="text-align:center;{f"background:{FILL};" if j == destacada else ""}">{celda(v)}</td>' for j, v in enumerate(vals)) + '</tr>'
+            f'<td style="text-align:{alinear};{f"background:{FILL};" if j == destacada else ""}">{celda(v)}</td>' for j, v in enumerate(vals)) + '</tr>'
         for cr, vals in filas)
-    return f'<table class="tb" style="width:{W}px"><thead><tr><th></th>{hd}</tr></thead><tbody>{cuerpo}</tbody></table>'
+    return f'<table class="tb" style="width:{W}px;{f"height:{H}px;" if H else ""}"><thead><tr><th></th>{hd}</tr></thead><tbody>{cuerpo}</tbody></table>'
 
 
 def tabla_con_barras(cabeceras, filas, col_valor, destacado=None, unidad="", W=520, ancho_barra=120, H=None):
@@ -347,3 +355,69 @@ def matriz_portfolio(filas, max_items=3, W=540, ancho_rotulo=110, vacio="Sin pro
                    f'font-weight:700;display:flex;align-items:center;padding:0 12px">{E(via)}</div>'
                    f'<div style="flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:6px 12px;border:1px solid var(--border-1);border-left:0">{cuerpo}</div></div>')
     return f'<div style="width:{W}px;display:flex;flex-direction:column;gap:4px">{"".join(out)}</div>'
+
+
+def matriz_candidatos(criterios, candidatos, notas, totales, maximo=4, fallo=1, banderas=(), validacion=None,
+                      rotulo_validacion="Validado", destacado=None, total=("Puntuación", "sobre 100"), W=1152, H=None):
+    """Matriz de pocos candidatos (2 a 5) por criterios ponderados, con la nota de cada celda, las alertas dentro
+    de la celda y, opcional, una marca de validación posterior junto a cada nota.
+    criterios: [(código, nombre, peso)]; candidatos: [dict(nombre, logo_html="")]; notas: una lista por criterio
+    con la nota de cada candidato (0 a maximo, o None = sin evaluar); totales: [número | texto] por candidato.
+    fallo: notas iguales o por debajo van en rojo claro (B9: neutros para lo normal, rojo solo para el fallo).
+    banderas: [(fila, columna)] con un no negociable incumplido; sale una bandera dentro de la celda (B8).
+    validacion: lista por criterio con 'si', 'parcial', 'no' o 'nd' por candidato (la marca de cumplimiento:
+    confirmado, matizado, contradicho, sin validar); la leyenda va en la cabecera con rotulo_validacion.
+    destacado: índice del candidato recomendado (columna en gris claro y su barra en rojo, K1).
+    H: alto total; las filas reparten el sobrante.
+    Cuándo usarlo: comparar 2 a 5 finalistas con criterios con peso, cuando importa dónde falla cada uno.
+    Cuándo no: de 6 a 14 opciones (usa matriz_puntuacion); criterios sin peso ni nota (usa tabla_comparativa)."""
+    n = len(candidatos)
+    gris = [FILL, mezcla(FG1, "#FFFFFF", .84), mezcla(FG1, "#FFFFFF", .72)]   # de claro a medio: neutros para lo normal (B9)
+    def chip(v, flag):
+        base = "display:inline-flex;align-items:center;justify-content:center;gap:3px;min-width:34px;height:24px;padding:0 7px;border-radius:6px;font-size:13.5px;font-weight:700;"
+        if v is None:
+            return f'<span style="{base}background:#fff;box-shadow:inset 0 0 0 1px {INPUT};color:{FG4};font-size:11px">NE</span>'
+        if v <= fallo:
+            fondo, color = TINT, RED
+        else:
+            fondo, color = gris[min(len(gris) - 1, max(0, v - fallo - 1))], FG1
+        b = icono("flag", 14, RED) if flag else ""
+        return f'<span style="{base}background:{fondo};color:{color}">{b}{v}</span>'
+    fondo_col = lambda j: f"background:{FILL};" if j == destacado else ""
+    cab = "".join(
+        f'<th style="padding:6px 6px 8px;text-align:center;vertical-align:bottom;{fondo_col(j)}{"border-radius:8px 8px 0 0;" if j == destacado else ""}">'
+        + (f'<div style="display:flex;justify-content:center;margin-bottom:4px">{_logo_html(c["logo_html"], 26)}</div>' if c.get("logo_html") else "")
+        + f'<div style="font-size:13px;font-weight:700;color:var(--fg1)">{E(c["nombre"])}</div></th>' for j, c in enumerate(candidatos))
+    leyenda = (f'<div style="font-size:11px;font-weight:600;color:var(--fg3);display:flex;gap:10px;justify-content:flex-end;margin-bottom:4px">'
+               f'<span>{E(rotulo_validacion)}:</span>' + "".join(
+                   f'<span style="display:inline-flex;align-items:center;gap:4px">{marca(k, 13)}{E(t)}</span>'
+                   for k, t in (("si", "Sí"), ("parcial", "Con matices"), ("no", "No"), ("nd", "Sin validar"))) + '</div>') if validacion else ""
+    filas = ""
+    for i, (cod, nom, peso) in enumerate(criterios):
+        celdas = ""
+        for j in range(n):
+            v = notas[i][j]
+            mk = f'<span style="margin-left:8px">{marca(validacion[i][j], 16)}</span>' if validacion else ""
+            celdas += (f'<td style="text-align:center;padding:0 6px;border-bottom:1px solid {INPUT};{fondo_col(j)}">'
+                       f'<span style="display:inline-flex;align-items:center">{chip(v, (i, j) in banderas)}{mk}</span></td>')
+        filas += (f'<tr><td style="padding:0 8px 0 0;border-bottom:1px solid {INPUT};font-size:13.5px;color:var(--fg1)">'
+                  f'<b>{E(cod)}</b> {E(nom)}</td><td style="text-align:center;border-bottom:1px solid {INPUT};font-size:13px;color:var(--fg3)">{E(str(peso))}</td>{celdas}</tr>')
+    maxt = max((t for t in totales if isinstance(t, (int, float))), default=100)
+    def tot(j, t):
+        num = isinstance(t, (int, float))
+        txt = f"{t:.1f}".replace(".", ",") if num else md(str(t))
+        barra = (f'<div style="height:6px;width:90px;margin:5px auto 0;background:{INPUT};border-radius:9px;overflow:hidden">'
+                 f'<div style="height:100%;width:{t / max(maxt, 1) * 100:.0f}%;background:{RED if j == destacado else FG2}"></div></div>') if num else ""
+        return (f'<td style="text-align:center;padding:8px 6px;border-top:2px solid {FG1};{fondo_col(j)}{"border-radius:0 0 8px 8px;" if j == destacado else ""}">'
+                f'<b style="font-size:16px;color:{RED if j == destacado else FG1}">{txt}</b>{barra}</td>')
+    pie = (f'<tr><td style="padding:8px 0;border-top:2px solid {FG1}"><b style="font-size:14px">{E(total[0])}</b> '
+           f'<span style="font-size:12px;color:var(--fg3)">{E(total[1])}</span></td><td style="border-top:2px solid {FG1}"></td>'
+           + "".join(tot(j, t) for j, t in enumerate(totales)) + '</tr>')
+    alto = f"height:{H}px;" if H else ""
+    ancho_col = (W - 330 - 60) // max(n, 1)
+    return (f'<div style="width:{W}px;{alto}display:flex;flex-direction:column">{leyenda}'
+            f'<table style="width:100%;flex:1;border-collapse:collapse;table-layout:fixed">'
+            f'<colgroup><col style="width:330px"><col style="width:60px">{"".join(f"<col style=width:{ancho_col}px>" for _ in range(n))}</colgroup>'
+            f'<thead><tr><th style="text-align:left;vertical-align:bottom;padding-bottom:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3)">Criterio</th>'
+            f'<th style="vertical-align:bottom;padding-bottom:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3)">Peso</th>{cab}</tr></thead>'
+            f'<tbody>{filas}{pie}</tbody></table></div>')

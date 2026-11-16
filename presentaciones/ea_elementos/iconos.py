@@ -37,7 +37,7 @@ TEMAS = [
         ("egg", "huevo"), ("egg_alt", "huevo avícola"), ("set_meal", "pescado pesca marisco"), ("phishing", "pesca anzuelo"),
         ("sailing", "barco pesca puerto"), ("landscape", "paisaje territorio"), ("energy_savings_leaf", "ahorro energía sostenible"),
         ("recycling", "reciclaje circular"), ("public", "mundo global planeta"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("wheat", "trigo cereal espiga"),
         ("avocado_bean", "aguacate legumbre vegetal fruta"),
         ("outdoor_garden", "huerto jardín exterior"),
@@ -64,7 +64,7 @@ TEMAS = [
         ("tapas", "tapas aperitivo"), ("food_bank", "banco de alimentos donación"), ("grocery", "alimentación compra cesta"),
         ("shopping_basket", "cesta compra"), ("flatware", "cubiertos"), ("brunch_dining", "brunch desayuno"), ("allergies", "alergia alérgeno"),
         ("no_food", "sin comida ayuno"), ("spa", "bienestar natural"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("hand_meal", "servir comida plato"),
         ("calendar_meal", "menú planificación de comidas"),
         ("no_meals", "sin comida ayuno"),
@@ -85,7 +85,7 @@ TEMAS = [
         ("lab_panel", "panel de laboratorio"), ("coronavirus", "virus patógeno"), ("sanitizer", "higiene desinfección"),
         ("immunology", "inmunidad sistema inmune"), ("gastroenterology", "digestivo intestino microbiota"), ("dermatology", "piel dermatología"),
         ("oncology", "oncología célula"), ("pediatrics", "infantil pediatría"), ("elderly", "mayores envejecimiento"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("glucose", "glucosa diabetes azúcar en sangre"),
         ("ecg_heart", "electrocardiograma corazón"),
         ("health_metrics", "métricas de salud"),
@@ -115,7 +115,7 @@ TEMAS = [
         ("autorenew", "ciclo renovar"), ("cycle", "ciclo proceso"), ("sync", "sincronizar ciclo"), ("bolt", "energía rayo"),
         ("electric_bolt", "electricidad"), ("solar_power", "solar fotovoltaica"), ("wind_power", "eólica viento"), ("gas_meter", "contador gas"),
         ("valve", "válvula"), ("plumbing", "fontanería tubería"), ("tune", "ajustar parámetros"), ("science_off", "sin química"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("manufacturing", "fabricación producción industria"),
         ("package", "paquete envase"),
         ("hand_package", "entrega de paquete"),
@@ -133,7 +133,7 @@ TEMAS = [
         ("shopping_cart", "carrito compra supermercado"), ("shopping_bag", "bolsa compra"), ("local_mall", "compra"), ("sell", "venta etiqueta precio"),
         ("point_of_sale", "caja venta tpv"), ("barcode", "código de barras"), ("qr_code_2", "código qr"), ("home", "hogar casa consumidor"),
         ("apartment", "edificio oficina ciudad"), ("location_city", "ciudad urbano"), ("cottage", "rural casa de campo"), ("ac_unit", "cadena de frío"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("delivery_truck_speed", "entrega rápida última milla"),
         ("delivery_truck_bolt", "camión eléctrico"),
         ("moped_package", "reparto en moto"),
@@ -155,7 +155,7 @@ TEMAS = [
         ("stacked_line_chart", "series apiladas"), ("currency_exchange", "divisas cambio"), ("contract", "contrato"), ("store_mall_directory", "canal retail"),
         ("monetization_on", "monetizar ingresos"), ("price_change", "cambio de precio"), ("shopping_cart_checkout", "conversión venta"),
         ("hub", "ecosistema red nodo"), ("diversity_2", "comunidad red"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("paid", "pagado dinero"),
         ("money_bag", "inversión financiación capital"),
         ("money", "dinero billetes"),
@@ -176,7 +176,7 @@ TEMAS = [
         ("gpp_good", "protección buena práctica"), ("rate_review", "revisión evaluación"), ("plagiarism", "búsqueda documental"), ("copyright", "derechos propiedad intelectual"),
         ("balance", "equilibrio justicia"), ("flag", "bandera alerta hito"), ("history_edu", "historial certificado"), ("labs", "ensayo de calidad"),
         ("eco", "sello ecológico"), ("health_and_safety", "seguridad alimentaria"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("high_quality", "alta calidad"),
         ("verified_off", "no verificado"),
         ("crisis_alert", "crisis alerta"),
@@ -193,7 +193,7 @@ TEMAS = [
         ("accessibility_new", "accesibilidad persona"), ("sentiment_satisfied", "satisfecho contento"), ("sentiment_dissatisfied", "insatisfecho"),
         ("thumb_up", "me gusta aprobación"), ("thumb_down", "rechazo"), ("favorite", "corazón preferencia"), ("star", "estrella valoración"),
         ("interpreter_mode", "entrevista experto"), ("co_present", "presentación reunión"), ("account_circle", "perfil"), ("waving_hand", "saludo bienvenida"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("person_add", "alta persona añadir"),
         ("group_add", "unir al equipo"),
         ("manage_accounts", "gestión de cuentas"),
@@ -223,7 +223,7 @@ TEMAS = [
         ("extension", "pieza encaje módulo"), ("stacks", "pila capas"), ("account_tree", "árbol jerarquía estructura"), ("schema", "esquema flujo"),
         ("filter_list", "filtrar lista"), ("sort", "ordenar"), ("format_list_numbered", "lista numerada"), ("table_chart", "tabla"),
         ("sensors", "sensor señal"), ("satellite_alt", "satélite teledetección"), ("qr_code_scanner", "escanear trazabilidad"), ("token", "token blockchain"),
-        # añadidos el 01-11-2026 con buscar_completo()
+        # añadidos con buscar_completo()
         ("robot", "robot automatización"),
         ("robot_2", "robot ia"),
         ("network_intelligence", "inteligencia artificial red"),

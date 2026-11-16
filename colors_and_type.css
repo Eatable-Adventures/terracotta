@@ -59,7 +59,7 @@
   --surface-cream: #FFF9EE;   /* highlighted / editorial block ground  */
   --surface-sand:  #F5EACE;   /* dark-cream well, soft fill            */
   --surface-grey:  #FAFAFA;   /* neutral consulting ground            */
-  --surface-fill:  #F3EFE7;   /* chips / wells — warm faint           */
+  --surface-fill:  #F3F3F3;   /* chips / wells / support blocks — neutral faint */
 
   /* ---- RULES & BORDERS — soft warm hairlines; the ink keyline is reserved
          for structural emphasis, not every divider ---- */
@@ -189,7 +189,7 @@
   --black-hover:#000000;
   --red-strong: #9C231F;
   --paper-2:    #FFF9EE;
-  --n-0:#FFFFFF; --n-50:#FAFAFA; --n-100:#F3EFE7; --n-200:#E8E8E8;
+  --n-0:#FFFFFF; --n-50:#FAFAFA; --n-100:#F3F3F3; --n-200:#E8E8E8;
   --n-300:#DCD6CC; --n-400:#ABA197; --n-500:#857B72; --n-600:#574E48;
   --n-800:#2C2A28; --n-900:#1E1E1E;
   --surface-muted: #FFF9EE;

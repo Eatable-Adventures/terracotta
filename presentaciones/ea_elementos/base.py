@@ -8,7 +8,7 @@ Reglas de color comunes (Terracotta):
 - Categorías de una misma familia: rampa de rojos, rampa(n).
 - Dos cosas de distinta naturaleza (nosotros frente a referencia): rojo y gris oscuro.
 - Verde de validación solo para estados de validación; amarillo solo como punto de luz.
-- Excepción (30-10-2026) para piezas de estado: el semáforo usa verde, amarillo y rojo; las marcas
+- Excepción para piezas de estado: el semáforo usa verde, amarillo y rojo; las marcas
   de cumplimiento, el check en verde; el chip de variación, verde (bueno), gris (neutro) y rojo (malo).
 
 Convenciones de los parámetros: los textos se escapan y admiten **negrita** puntual; los que acaban en
@@ -35,6 +35,7 @@ def _tokens():
 
 
 T = _tokens()
+T.update({"light-grey": "#F3F3F3"})   # gris neutro de apoyo (el --surface-fill del núcleo); en el núcleo --light-grey es el fondo de página. Como en ea_deck.CSS_BASE
 
 
 RED, CREAM, BLACK, PAPER = T["red"], T["cream"], T["black"], T["paper"]
@@ -251,7 +252,7 @@ def logo(ruta, alto=28, lado="right", max_ancho=120):
 
 
 def cuerpo_slide(subtitulo, visual, banda=None, estilo_vis="", estilo_banda="", pre_pie=None, rotulo_banda=None):
-    """Cuerpo estándar bajo ea_deck.cabecera(): subtítulo, visual que llena el espacio libre (alto_cuerpo da su alto; 02-11-2026) y banda de conclusión (una conclusión que aporta, no un resumen de lo que se ve; **negrita** en una parte).
+    """Cuerpo estándar bajo ea_deck.cabecera(): subtítulo, visual que llena el espacio libre (alto_cuerpo da su alto) y banda de conclusión (una conclusión que aporta, no un resumen de lo que se ve; **negrita** en una parte).
     rotulo_banda: rótulo a la izquierda de la banda («Conclusión», «Asunción clave», «Implicación»)."""
     if banda and rotulo_banda:
         b = (f'<div class="banda banda-r" style="{estilo_banda}"><b class="br">{E(rotulo_banda)}</b><div>{md(banda)}</div></div>')
@@ -352,6 +353,7 @@ table.tb td.dt b{color:var(--fg1);font-weight:700;}
 .cg-row{height:54px;border-top:1px solid var(--border-2);position:relative;}
 .cg-cap{position:absolute;top:37px;font-size:12px;font-weight:700;color:var(--fg1);white-space:nowrap;font-variant-numeric:tabular-nums;}
 .cg-cap.r{transform:translateX(-100%);}
+.cg-cap.c{transform:translateX(-50%);}
 .cg-grid{position:absolute;inset:0;pointer-events:none;}
 .cg-gl{position:absolute;top:0;bottom:0;width:1px;background:var(--border-2);opacity:.7;}
 .cg-gm{position:absolute;top:0;bottom:0;width:1px;background:var(--dark-cream);}
@@ -493,7 +495,7 @@ REJILLAS = {            # anchos de columna de las cinco rejillas tipo
 
 def alto_cuerpo(lineas_titulo=2, subtitulo=True, banda=0, nota=0):
     """Alto en px que queda para el visual de una slide de contenido, para dárselo a las piezas (H) y que el cuerpo
-    llene la slide (02-11-2026). lineas_titulo: 1 o 2. banda y nota: número de líneas de cada una (0, sin ella)."""
+    llene la slide. lineas_titulo: 1 o 2. banda y nota: número de líneas de cada una (0, sin ella)."""
     alto = 720 - 48 - 34 - 32 * lineas_titulo - 24 - 14 - 47      # márgenes, eyebrow, título, su margen, .vis y pie
     alto -= 29 if subtitulo else 0
     alto -= 46 + 21 * banda if banda else 0
@@ -520,8 +522,15 @@ def columna(*piezas, gap=14, ancho=None, centrar=False, repartir=False):
     return f'<div style="display:flex;flex-direction:column;gap:{gap}px;min-width:0;{st}">{"".join(piezas)}</div>'
 
 
-def rotulo_bloque(texto, rojo=False):
-    """Rótulo de un bloque dentro de la slide, visible (C7): 700, 13,5 px, negro o rojo."""
+def rotulo_bloque(texto, rojo=False, banda=None, extra=""):
+    """Rótulo de un bloque dentro de la slide, visible (C7): 700, 13,5 px, negro o rojo.
+    banda: 'rojo', 'negro' o 'gris' lo convierte en una banda a todo el ancho del bloque, para separar columnas y filas
+    de una slide densa (fichas de empresa); extra: HTML a la derecha de la banda (un logo pequeño)."""
+    if banda:
+        fondo, color = {"rojo": (RED, "#FFFFFF"), "negro": (FG1, "#FFFFFF"), "gris": (FILL, "var(--fg1)")}[banda]
+        filete = f"border-left:4px solid {RED};" if banda == "gris" else ""
+        return (f'<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:{fondo};{filete}border-radius:8px;'
+                f'padding:7px 14px;margin:0 0 10px;font-size:14.5px;font-weight:700;color:{color}"><span>{E(texto)}</span>{extra}</div>')
     return f'<div style="font-size:14px;font-weight:700;color:var(--{"red" if rojo else "fg1"});margin:0 0 8px">{E(texto)}</div>'
 
 

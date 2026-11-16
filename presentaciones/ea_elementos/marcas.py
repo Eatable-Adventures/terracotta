@@ -115,11 +115,15 @@ def barra_progreso(valor, maximo, rotulo, cifra=None, W=260):
 
 
 def valoracion(n, de=5, tam=10):
-    """Puntos de valoración (n de 5) en rojo y gris.
+    """Puntos de valoración (n de 5) en rojo y gris; con medio punto (2,5), el punto que toca va medio lleno.
     Cuándo usarlo: una nota cualitativa compacta dentro de una ficha o una tabla.
-    Cuándo no: si la escala no es ordinal o hay decimales (da la cifra)."""
-    return ('<span style="display:inline-flex;gap:4px;vertical-align:middle">' + "".join(
-        f'<i style="width:{tam}px;height:{tam}px;border-radius:50%;background:{RED if i < n else INPUT}"></i>' for i in range(de)) + '</span>')
+    Cuándo no: si la escala no es ordinal o hay otros decimales (da la cifra)."""
+    def fondo(i):
+        if n - i >= 1:
+            return RED
+        return f"linear-gradient(90deg,{RED} 50%,{INPUT} 50%)" if n - i >= .5 else INPUT
+    return (f'<span style="display:inline-flex;gap:{max(4, round(tam * .4))}px;vertical-align:middle">' + "".join(
+        f'<i style="width:{tam}px;height:{tam}px;border-radius:50%;background:{fondo(i)}"></i>' for i in range(de)) + '</span>')
 
 
 def etiqueta_evidencia(nivel, texto_=""):

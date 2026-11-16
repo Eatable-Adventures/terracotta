@@ -9,7 +9,7 @@ from .base import (
     E, FG1, FG2, FG3, FG4, FILL, FONT, GREY, INPUT, LGREY, Lienzo, NEUTRO, PAPER, RAMP, RED, VALIDACION,
     _arco, _bv, _paso, _set, _svg, arrow_eje, circle, fmt, lin, line, log, md, mezcla, rect, sobre, text,
 )
-from .marcas import (_con_leyenda)
+from .marcas import (_con_leyenda, valoracion)
 
 __all__ = ["barras_duelo", "regleta_objetivo", "barras_objetivo", "escala_log", "REFERENCIA", "radar", "mancuerna", "bala", "tornado", "rangos", "indicador", "barra_dividida", "dimensionamiento", "deslizadores", "benchmark_rango", "criterios_puntos", "score_dimensiones"]
 
@@ -388,18 +388,20 @@ def benchmark_rango(filas, rotulos=("KPI", "Nosotros", "Peor", "Posición en el 
     return f'<div style="width:{W}px"><table class="tb"><thead><tr>{hd}</tr></thead><tbody>{cuerpo}</tbody></table>{pie}</div>'
 
 
-def criterios_puntos(criterios, actores, destacado, escala=(1, 5), W=520, ancho_rotulo=170, paso=34):
+def criterios_puntos(criterios, actores, destacado, escala=(1, 5), W=520, ancho_rotulo=170, paso=34, importancia=True, rotulo_resto="Resto de actores"):
     """Criterios por importancia con la nota de cada actor como puntos sobre una misma escala; el actor que
     importa en rojo con su nota, el resto en gris.
-    criterios: [(nombre, [nota por actor])] ordenados de más a menos importante; actores: nombres.
+    criterios: [(nombre, [nota por actor])] ordenados de más a menos importante; actores: nombres. importancia: False quita la flecha
+    «Más importante» cuando el orden no es de importancia (bloques de un scorecard); rotulo_resto: leyenda de los puntos grises.
     Cuándo usarlo: candidatos frente a los criterios del cliente, o marca frente a competidores en un estudio.
     Cuándo no: más de 8 actores (los puntos se amontonan; usa tabla_comparativa)."""
     k = actores.index(destacado)
     x = lin(escala[0], escala[1], ancho_rotulo + 20, W - 40)
     H = 26 + len(criterios) * paso
     s = [text(x(v), 12, fmt(v), 11, 400, FG3, "middle") for v in range(escala[0], escala[1] + 1)]
-    s.append(arrow_eje(8, 34, 8, H - 6).replace(f'fill="{FG2}"', f'fill="{FG3}"'))
-    s.append(f'<text transform="translate(20,{26 + paso / 2}) rotate(90)" style="font-family:{FONT};font-size:10px;fill:{FG3}">Más importante</text>')
+    if importancia:
+        s.append(arrow_eje(8, 34, 8, H - 6).replace(f'fill="{FG2}"', f'fill="{FG3}"'))
+        s.append(f'<text transform="translate(20,{26 + paso / 2}) rotate(90)" style="font-family:{FONT};font-size:10px;fill:{FG3}">Más importante</text>')
     for i, (nom, notas) in enumerate(criterios):
         yc = 26 + i * paso + paso / 2
         s.append(text(ancho_rotulo, yc + 4.5, nom, 13, 400, FG1, "end"))
@@ -408,13 +410,15 @@ def criterios_puntos(criterios, actores, destacado, escala=(1, 5), W=520, ancho_
             if j != k:
                 s.append(f'<circle cx="{x(v):.1f}" cy="{yc}" r="5.5" fill="{FG4}" fill-opacity=".85" stroke="#fff" stroke-width="1.5"/>')
         s.append(circle(x(notas[k]), yc, 7.5, RED, "#fff", 2) + text(x(notas[k]) + 12, yc - 7, fmt(notas[k]), 12, 700, RED))
-    return _con_leyenda(_svg(W, H, "".join(s)), [(RED, destacado, "punto"), (FG4, "Resto de actores", "punto")])
+    return _con_leyenda(_svg(W, H, "".join(s)), [(RED, destacado, "punto"), (FG4, rotulo_resto, "punto")])
 
 
-def score_dimensiones(dimensiones, total=None, escala=(0, 10), referencia=None, rotulo_total="Total", W=520, ancho_rotulo=150):
+def score_dimensiones(dimensiones, total=None, escala=(0, 10), referencia=None, rotulo_total="Total", W=520, ancho_rotulo=150, fmt_total=None, puntos=False, total_fila=False):
     """Puntuación por dimensiones: una pista por dimensión con el punto rojo en su valor y, a la derecha, el total
     grande sobre la escala (por defecto la media). Con referencia, un aro gris marca otro actor en cada pista.
-    dimensiones: [(nombre, valor)]; referencia: [valores] en el mismo orden, o None.
+    dimensiones: [(nombre, valor)]; referencia: [valores] en el mismo orden, o None. puntos: en vez de la pista, un punto por
+    nivel de la escala (0 a 4 da cuatro) que se llena hasta la nota, con medios puntos, y la nota escrita al lado; sin referencia.
+    total_fila: el total va en una última fila, alineado con las notas («Total  58,5/100»), en vez de en el bloque de la derecha.
     Cuándo usarlo: el score de un actor en fichas hermanas (RTW, scoring de candidatos) o de un escenario.
     Cuándo no: para comparar muchos actores a la vez (usa matriz_puntuacion o criterios_puntos)."""
     a, b = escala
@@ -424,11 +428,22 @@ def score_dimensiones(dimensiones, total=None, escala=(0, 10), referencia=None, 
     for k, (nom, v) in enumerate(dimensiones):
         ref = (f'<i style="position:absolute;left:calc({pos(referencia[k]):.1f}% - 6px);top:-3px;width:12px;height:12px;border-radius:50%;'
                f'box-shadow:inset 0 0 0 2px {FG3};background:#fff"></i>' if referencia else "")
+        if puntos:
+            filas += (f'<div style="display:flex;align-items:center;gap:12px;height:{24 if total_fila else 30}px"><span style="width:{ancho_rotulo}px;flex:none;font-size:13px;color:var(--fg1)">{E(nom)}</span>'
+                      f'{valoracion(v, de=int(b - a), tam=18)}<b style="font-size:13px;color:var(--red);margin-left:6px">{fmt(v)}</b></div>')
+            continue
         filas += (f'<div style="display:flex;align-items:center;gap:12px;height:30px"><span style="width:{ancho_rotulo}px;flex:none;font-size:13px;color:var(--fg1)">{E(nom)}</span>'
                   f'<span style="position:relative;flex:1;height:6px;border-radius:99px;background:var(--surface-fill)">{ref}'
                   f'<i style="position:absolute;left:calc({pos(v):.1f}% - 7px);top:-4px;width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px #fff"></i></span></div>')
-    return (f'<div style="width:{W}px;display:flex;align-items:center;gap:22px"><div style="flex:1;min-width:0">{filas}</div>'
+    if total_fila:
+        filas += (f'<div style="display:flex;align-items:baseline;gap:12px;margin-top:4px;padding-top:6px;border-top:1px solid var(--border-2)">'
+                  f'<span style="width:{ancho_rotulo}px;flex:none;font-size:14px;font-weight:700;color:var(--fg1)">{E(rotulo_total)}</span>'
+                  f'<b style="font-size:22px;color:var(--red);letter-spacing:-.02em">{fmt_total(tot) if fmt_total else fmt(round(tot, 1))}</b>'
+                  f'<span style="font-size:14px;font-weight:700;color:var(--fg1);margin-left:-10px">/{fmt_total(b).split(".")[0] if fmt_total else fmt(b)}</span></div>')
+        return f'<div style="width:{W}px">{filas}</div>'
+    # con puntos, la lista se ajusta a su contenido y el total queda justo a su derecha
+    return (f'<div style="width:{W}px;display:flex;align-items:center;gap:{40 if puntos else 22}px"><div style="{"flex:none" if puntos else "flex:1"};min-width:0">{filas}</div>'
             f'<div style="flex:none;width:96px;border-left:1px solid var(--border-2);padding-left:18px">'
-            f'<div style="white-space:nowrap"><b style="font-size:30px;color:var(--red);letter-spacing:-.02em">{fmt(round(tot, 1))}</b>'
-            f'<span style="font-size:14px;font-weight:700;color:var(--fg1)">/{fmt(b)}</span></div>'
+            f'<div style="white-space:nowrap"><b style="font-size:30px;color:var(--red);letter-spacing:-.02em">{fmt_total(tot) if fmt_total else fmt(round(tot, 1))}</b>'
+            f'<span style="font-size:14px;font-weight:700;color:var(--fg1)">/{fmt_total(b).split(".")[0] if fmt_total else fmt(b)}</span></div>'
             f'<div style="font-size:13px;font-weight:700;color:var(--fg1);margin-top:2px">{E(rotulo_total)}</div></div></div>')

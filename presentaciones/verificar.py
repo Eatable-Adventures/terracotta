@@ -11,7 +11,8 @@ Comprueba, en orden:
   6. Que las referencias cuadran: decks y páginas citados, dentro de los rangos, y piezas que existen (referencias.comprobar).
   7. Que las reglas cuadran: códigos, piezas y modelos que citan formatos, microajustes, ejemplos y skill (referencias.comprobar_reglas).
   8. Que la revisión funciona: revisar_deck sobre las reglas de uso, con las páginas bien y sin errores.
-  9. Que reglas, ejemplos y código no citan clientes ni proyectos, ni copian frases de un deck de referencia (referencias.comprobar_confidencial).
+  9. Que reglas, ejemplos y código no citan clientes ni proyectos, ni copian frases de un deck de referencia (referencias.comprobar_confidencial),
+     y que lo que se publica no lleva fechas de cuándo entró una norma (las fechas de los datos de ejemplo de la galería sí valen).
  10. Que la huella anónima funciona (sin texto ni imágenes, y sin confundir los gráficos con logos) y que la clave de slide solo se escribe si viene.
  11. Que el ejemplo del README se ejecuta tal cual y sale en PDF con sus páginas.
  12. Que la búsqueda en lenguaje natural responde y que el laboratorio de variantes monta sus opciones en PDF.
@@ -41,6 +42,31 @@ def pdf(html_path, pdf_path):
                     "--run-all-compositor-stages-before-draw", pathlib.Path(html_path).as_uri()], check=True, capture_output=True)
     import pypdf
     return len(pypdf.PdfReader(str(pdf_path)).pages)
+
+
+FECHA = re.compile(r"\b\d{1,2}-\d{1,2}-20\d{2}\b|\b20\d{2}-\d{2}-\d{2}\b")
+NO_PUBLICA = {"revision", "catalogo", "referencia", "__pycache__", "uploads", ".git", "node_modules"}
+NOTAS_INTERNAS = {"CLAUDE.md", "Medición de decks.md", "Referencias de Terracotta.md", "Registro de criterios.md", "Versiones de Terracotta.md"}
+SOLO_COMENTARIOS = {"build_galeria_elementos.py", "build_reglas_uso.py"}   # sus datos de ejemplo pueden llevar fechas
+GENERADOS_CON_EJEMPLOS = {"Galería de elementos.html"}
+
+
+def sin_fechas():
+    """Archivos publicables con una fecha de cuándo entró una norma. La fecha de cada cambio va solo al registro interno."""
+    malos = []
+    for d, ds, fs in os.walk(AQUI.parent):
+        ds[:] = [x for x in ds if x not in NO_PUBLICA]
+        for f in fs:
+            if f in NOTAS_INTERNAS or f in GENERADOS_CON_EJEMPLOS or not f.endswith((".md", ".py", ".html", ".js", ".css")):
+                continue
+            p = pathlib.Path(d) / f
+            texto = p.read_text(encoding="utf-8", errors="ignore")
+            if f in SOLO_COMENTARIOS:
+                texto = "\n".join(l[l.index("#"):] for l in texto.splitlines() if "#" in l)
+            n = len(FECHA.findall(re.sub(r"data:[^\"')]+", "", texto)))
+            if n:
+                malos.append(f"{p.relative_to(AQUI.parent)} ({n})")
+    return malos
 
 
 def main():
@@ -108,6 +134,7 @@ def main():
         paso("Sin casos concretos", not err, "; ".join(err)[:400])
     else:
         print("OMITIDO Sin casos concretos · la lista de términos solo está en el entorno interno")
+    paso("Sin fechas de norma", not (f := sin_fechas()), "; ".join(f)[:400] or "lo publicable no lleva fechas de cuándo entró una norma")
 
     import huella_slide
     _, hu = huella_slide.huella(d / "prueba.pdf", 4)

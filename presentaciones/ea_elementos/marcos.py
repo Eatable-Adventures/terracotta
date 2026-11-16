@@ -125,7 +125,8 @@ def columnas_evolucion(columnas, rotulo_flecha="mismo origen, otro producto", ro
 def matriz_2x2(ejes, cuadrantes, items=(), destacado=1, W=520, H=380):
     """Matriz 2 × 2: dos ejes cualitativos, cuatro cuadrantes con nombre y elementos colocados encima.
     ejes = ((x_bajo, x_alto, nombre_x), (y_bajo, y_alto, nombre_y)); cuadrantes: 4 × (título, texto) en orden
-    sup_izq, sup_der, inf_izq, inf_der; items: [(rótulo, x 0 a 1, y 0 a 1, destacado)]; destacado: cuadrante en rosa.
+    sup_izq, sup_der, inf_izq, inf_der; items: [(rótulo, x 0 a 1, y 0 a 1, destacado)] o con un quinto elemento, el HTML de un
+    logo pequeño (X.logo con alto de 18 a 24), que va entre el punto y el rótulo; destacado: cuadrante en rosa.
     Cuándo usarlo: priorizar con dos criterios (impacto y esfuerzo, atractivo y capacidad).
     Cuándo no: si hay datos numéricos fiables en ambos ejes (usa dispersion)."""
     izq, bot = 34, 34
@@ -144,9 +145,15 @@ def matriz_2x2(ejes, cuadrantes, items=(), destacado=1, W=520, H=380):
     L.add(f'<text transform="translate(16,{H - bot}) rotate(-90)" style="font-family:{FONT};font-size:11px;fill:{FG3}">{E(yb)}</text>',
           f'<text transform="translate(16,4) rotate(-90)" text-anchor="end" style="font-family:{FONT};font-size:11px;fill:{FG3}">{E(ya)}</text>',
           f'<text transform="translate(16,{(H - bot) / 2}) rotate(-90)" text-anchor="middle" style="font-family:{FONT};font-size:12px;font-weight:700;fill:{FG1}">{E(yn)}</text>')
-    for r, px, py, hot in items:
+    for it in items:
+        r, px, py, hot = it[:4]
         cx, cy = izq + px * (W - izq), (1 - py) * (H - bot)
-        L.add(circle(cx, cy, 7, RED if hot else FG1, "#fff", 2), text(cx + 11, cy + 4, r, 12, 700 if hot else 600, RED if hot else FG1, halo=True))
+        if len(it) > 4 and it[4]:
+            L.add(circle(cx, cy, 7, RED if hot else FG1, "#fff", 2))
+            L.div(cx + 12, cy, 220, f'<span style="display:inline-flex;align-items:center;gap:8px;background:#fff;border-radius:8px;padding:3px 8px;'
+                  f'box-shadow:var(--shadow-sm)">{it[4]}<b style="font-size:12px;color:{RED if hot else FG1}">{E(r)}</b></span>', va="middle")
+        else:
+            L.add(circle(cx, cy, 7, RED if hot else FG1, "#fff", 2), text(cx + 11, cy + 4, r, 12, 700 if hot else 600, RED if hot else FG1, halo=True))
     return L.render()
 
 
@@ -181,10 +188,12 @@ def venn(conjuntos, interseccion="", W=520, H=320):
     return L.render()
 
 
-def circulos_concentricos(niveles, W=520, H=300):
+def circulos_concentricos(niveles, W=520, H=300, rotulos="centro"):
     """Círculos concéntricos apoyados en la base (TAM, SAM, SOM o de lo general a lo concreto), con la cifra
     y su lectura a la derecha.
     niveles: [(sigla, cifra, texto)] de fuera adentro; el interior va en rojo.
+    rotulos: 'centro' (por defecto: a media altura de cada anillo y el interior en su centro,
+    con los textos de la derecha más repartidos) o 'arriba' (junto al borde superior de cada círculo).
     Cuándo usarlo: tamaño de mercado por capas o un embudo de alcance sin etapas de filtro.
     Cuándo no: si las capas no están contenidas unas en otras."""
     n = len(niveles)
@@ -196,7 +205,10 @@ def circulos_concentricos(niveles, W=520, H=300):
     for (sig, cif, tx), r, c, i in zip(niveles, rs, cols, range(n)):
         cy = H - 4 - r
         L.add(circle(cx, cy, r, c))
-        ytop = cy - r + 18
+        if rotulos == "centro":
+            ytop = cy if i == n - 1 else (cy - r + H - 4 - 2 * rs[i + 1]) / 2
+        else:
+            ytop = cy - r + 18
         L.add(text(cx, ytop + 4, sig, 13, 700, sobre(c), "middle"))
         L.add(line(cx + 22, ytop, 2 * cx + 20, ytop, FG4, 1, dash="2 3"), circle(cx + 22, ytop, 2.5, sobre(c)))
         L.div(2 * cx + 30, ytop, W - 2 * cx - 30, f'<b style="font-size:20px;color:{RED if i == n - 1 else FG1}">{E(cif)}</b> '

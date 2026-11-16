@@ -36,7 +36,7 @@ nueva("01. Mercado", 'Las ventas crecen por <span class="hl-red">rotación</span
           dict(rotulo="Precio medio", valor="1,48 €/l", delta="−3 %", sube=False, tono="malo", op="−", hijos=[
               dict(rotulo="Precio de lista", valor="1,62 €/l", delta="0 %", sube=None),
               dict(rotulo="Promociones", valor="0,14 €/l", delta="+40 %", tono="malo")])]), W=1152, bw=240, bh=(ALTO - 54) // 4, sep=18),
-      "A · 1152", ["arbol_drivers"], ["S1", "M1", "M2", "M11", "K1", "K2", "E6"],
+      "A · 1152", ["arbol_drivers"], ["S1", "M1", "M2", "M11", "K1", "K2"],
       banda="La palanca es **la rotación en el punto de venta**: subir precio frenaría justo lo que está funcionando.")
 
 # ---------------------------------------------------------------- B · pieza y lectura
@@ -137,7 +137,7 @@ nueva("01. Mercado", 'El mercado accesible para el cliente supera los <span clas
              X.dimensionamiento([("Venta total de lácteos", 42000), ("Bebidas y yogures", 12600), ("Gama con menos azúcar", 5200),
                                  ("Valor del ingrediente", 640), ("Accesible en Europa", 480)], unidad=" M€", W=764, H=ALTO),
              anchos=X.REJILLAS["F"], crecer=True),
-      "F · 360 + 764", ["columna_contexto", "dimensionamiento", "fila"], ["M2", "E6", "M11", "K2"],
+      "F · 360 + 764", ["columna_contexto", "dimensionamiento", "fila"], ["M2", "M11", "K2"],
       banda="El total se valida por otra vía: la categoría de ingredientes valió **900 M€ en 2025**.", rotulo_banda="Validación")
 
 # ---------------------------------------------------------------- C en dos filas · ficha de actor en cuadrantes

@@ -121,7 +121,7 @@ One rule for every chart, in decks and in apps. **One series:** neutral grey (`-
 
 **Funnel:** every funnel uses the canonical stacked-disc design (fixed-step widths, red ramp dark→light, numbered badge + arrow, aligned labels). Spec in `charts/funnel.md`.
 
-**Slides:** HTML decks live in `presentaciones/`: a fixed base (`ea_deck.py`, 1280 × 720) and 158 visual elements chosen by intent (`ea_elementos/`). Entry point, usage rules and review tool: `presentaciones/README.md`.
+**Slides:** HTML decks live in `presentaciones/`: a fixed base (`ea_deck.py`, 1280 × 720) and 162 visual elements chosen by intent (`ea_elementos/`). Entry point, usage rules and review tool: `presentaciones/README.md`.
 
 **Rules:** Rubik everywhere; hairline axes + dashed guides, no boxed plots. Numbers as labels on the chart, one per element. Max five series or segments. No 3D, shadows or full pies. The only gradients inside a chart are the single-series area fade and the heatmap ramp.
 

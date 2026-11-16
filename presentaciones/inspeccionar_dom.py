@@ -3,12 +3,13 @@
 la abre con Chrome headless (--dump-dom) y devuelve, slide a slide (n = página del PDF), lo que se puede medir:
 
   errores  · texto fuera de la slide o cortado, texto que invade el pie, textos que se solapan, título contra el logo
-  avisos   · fecha de «hoy» o de portada distinta de la actual, columnas que acaban o empiezan a distinto alto, elementos repetidos de distinto tamaño, logos de distinto
+  avisos   · cuerpo a menos de 8 px de la banda o del pie, fecha de «hoy» o de portada distinta de la actual, columnas que acaban o empiezan a distinto alto, elementos repetidos de distinto tamaño, logos de distinto
              alto, cuerpo que no llena el alto (M11), título sin fragmento rojo o sin negrita o en 3+
              líneas, rótulos en minúscula, bloques en crema o amarillo claro, verde ajeno al de validación y estado (K3), gama de color
              no uniforme, letra por debajo del mínimo (C8), slide sin visual con peso, emojis, «N veces», decimal con
              punto, fechas con barras, unidades mezcladas, referencias internas «(slide N)»
-  info     · cifras con la misma etiqueta que cambian entre slides (coherencia), deck sin la base fija de ea_deck
+  info     · columna con gráfico sin tabla ni eje reconocible, letra de lectura por debajo de 14 px (C8, en presentación),
+             cifras con la misma etiqueta que cambian entre slides (coherencia), deck sin la base fija de ea_deck
 
 No corrige nada. Es la mitad de revisar_deck.py, que además mide el PDF: cada aviso hay que confirmarlo en el PNG. La carga de
 texto la mide medir_deck frente a los rangos de los decks de referencia, no este inspector.
@@ -167,7 +168,24 @@ slides.forEach((sl, i) => {
     const db = Math.max(...vv.map(v => v.bottom)) - Math.min(...vv.map(v => v.bottom));
     const dt = Math.max(...vv.map(v => v.top)) - Math.min(...vv.map(v => v.top));
     const conGrafico = kids.some(c => c.querySelector('svg, canvas') || /^(svg|canvas)$/i.test(c.tagName));
-    if (conGrafico) { if (db > TOL && db < 320) add('info', 'eje', `Columna con gráfico: comprobar en el PNG que lo de al lado acaba en el eje o la última fila (Δ de cajas ${Math.round(db)} px) en ${name(p).slice(0, 60)}`); continue; }
+    if (conGrafico) {
+      // A4: la línea visible manda. Del gráfico, su dibujo (sin textos) y su eje (la línea horizontal más baja que cruza al menos el 40 % del SVG); de la tabla, la línea bajo la cabecera y la última fila
+      const graf = kids.map(c => { const sv = /^svg$/i.test(c.tagName) ? c : c.querySelector('svg'); if (!sv) return null; const sw = sv.getBoundingClientRect().width;
+        const fs = [...sv.querySelectorAll('rect, line, path, polygon, polyline, circle')].filter(e => cs(e).display !== 'none' && cs(e).visibility !== 'hidden')
+          .map(e => R(e.getBoundingClientRect())).filter(r => (r.width > 0.5 || r.height > 0.5) && r.width < sw + 2);   // una línea recta mide 0 px de alto: vis() la descartaría
+        if (!fs.length || fs.length > 400) return null;
+        const ejes = fs.filter(r => r.height <= 2.5 && r.width > 0.4 * sw);
+        return { top: Math.min(...fs.map(r => r.top)), eje: ejes.length ? Math.max(...ejes.map(r => r.bottom)) : null }; });
+      const tab = kids.map(c => { const t = /^table$/i.test(c.tagName) ? c : c.querySelector('table'); if (!t) return null; const trs = [...t.querySelectorAll('tr')].filter(vis);
+        return trs.length >= 2 ? { cab: R(trs[0].getBoundingClientRect()).bottom, fin: R(trs[trs.length - 1].getBoundingClientRect()).bottom } : null; });
+      const g = graf.find(Boolean), gi = graf.findIndex(Boolean), ti = tab.findIndex((t, j) => t && j !== gi), t = ti >= 0 ? tab[ti] : null;
+      const otroEje = graf.find((x, j) => x && j !== gi && x.eje !== null);
+      if (g && t && g.eje !== null) {
+        const dArr = t.cab - g.top, dAb = t.fin - g.eje;
+        if (Math.abs(dAb) > TOL || Math.abs(dArr) > TOL + 4) add('aviso', 'eje', `A4: la tabla de al lado acaba a ${Math.round(dAb)} px del eje y su cabecera a ${Math.round(dArr)} px del borde de arriba del gráfico; usar el H de la tabla y desplazar el gráfico el alto de la cabecera · ${name(p).slice(0, 50)}`);
+      } else if (g && otroEje && g.eje !== null && Math.abs(otroEje.eje - g.eje) > TOL) add('aviso', 'eje', `A1: dos gráficas en la misma fila con el eje a distinto alto (Δ ${Math.round(Math.abs(otroEje.eje - g.eje))} px) · ${name(p).slice(0, 50)}`);
+      else if (db > TOL && db < 320) add('info', 'eje', `Columna con gráfico: comprobar en el PNG que lo de al lado acaba en el eje o la última fila (Δ de cajas ${Math.round(db)} px) en ${name(p).slice(0, 60)}`);
+      continue; }
     if (db > TOL && db < 320) add('aviso', 'alto', `Columnas que acaban a distinto alto (Δ ${Math.round(db)} px) en ${name(p).slice(0, 70)}`);
     if (dt > 10 && dt < 200) add('aviso', 'arranque', `Columnas que empiezan a distinto alto (Δ ${Math.round(dt)} px) en ${name(p).slice(0, 70)}`);
   }
@@ -208,6 +226,10 @@ slides.forEach((sl, i) => {
  
         add('aviso', 'llenado', `M11: ${Math.round(top)} px libres bajo la cabecera y ${Math.round(bot)} px sobre ${banda ? 'la banda' : 'el pie'}: dar a la pieza el alto de X.alto_cuerpo o añadir contenido, sin centrar`);
     }
+    // holgura (A7): el texto o la imagen más bajos del cuerpo dejan al menos 8 px sobre la banda o el pie; el solape ya es error
+    const bajos = textos.filter(x => !inFoot(x.el) && !h2.contains(x.el) && !(banda && banda.e.contains(x.el)) && x.r.top < fondo).map(x => x.r.bottom);
+    for (const e of sl.querySelectorAll('img')) if (vis(e) && !inFoot(e) && !(banda && banda.e.contains(e))) { const r = R(e.getBoundingClientRect()); if (r.top < fondo) bajos.push(r.bottom); }
+    if (bajos.length) { const hg = fondo - Math.max(...bajos); if (hg < 8 && hg > -2) add('aviso', 'holgura', `A7: solo ${Math.round(hg)} px entre el cuerpo y ${banda ? 'la banda' : 'el pie'} (mínimo 8): compactar o acortar`); }
   }
 
   // --- 8. color
@@ -228,6 +250,19 @@ slides.forEach((sl, i) => {
   // --- 9. tipografía, densidad y peso visual
   const cuerpo = textos.filter(x => !inFoot(x.el) && !x.icono);
   const peq = cuerpo.filter(x => x.fs < (x.svg ? 10 : 11)); if (peq.length) { const x = peq.sort((a, b) => a.fs - b.fs)[0]; add('aviso', 'letra', `Letra de ${x.fs} px (${peq.length} textos por debajo de ${x.svg ? 10 : 11} px): ${name(x.el).slice(0, 60)}`); }
+  // C8: en una presentación, la letra de lectura (frases, no etiquetas) va a 14 px o más; en un informe puede ir menor, por eso es «Mirar»
+  const lect = cuerpo.filter(x => !x.svg && x.t.length >= 60 && x.fs < 14);
+  if (lect.length) add('info', 'lectura', `Letra de lectura por debajo de 14 px en ${lect.length} ${lect.length === 1 ? 'texto' : 'textos'} (el menor, ${Math.min(...lect.map(x => x.fs))} px): si es una presentación, subirla (C8)`);
+  // campos (A1): el mismo rótulo de campo en tres o más tarjetas de una fila arranca a la misma altura en todas
+  const rotCampo = [...sl.querySelectorAll('.k2, b, strong')].filter(e => vis(e) && !inFoot(e) && !skip(e) && !e.closest('svg'))
+    .map(e => ({ e, t: e.textContent.replace(/\s+/g, ' ').trim(), r: R(e.getBoundingClientRect()) }))
+    .filter(x => x.t.length >= 3 && x.t.length <= 40 && (/:$/.test(x.t) || x.e.classList.contains('k2')));
+  const porRot = {}; rotCampo.forEach(x => (porRot[x.t] = porRot[x.t] || []).push(x));
+  for (const [t, xs] of Object.entries(porRot)) {
+    if (xs.length < 3 || new Set(xs.map(x => Math.round(x.r.left / 40))).size !== xs.length) continue;
+    const d = Math.max(...xs.map(x => x.r.top)) - Math.min(...xs.map(x => x.r.top));
+    if (d > TOL + 4 && d < 160) add('aviso', 'campos', `A1: el campo «${t}» arranca a distinta altura en ${xs.length} tarjetas de la misma fila (Δ ${Math.round(d)} px): alinear los campos (subgrid o último campo al pie con alto fijo)`);
+  }
   const bodyArea = S.width * (S.height - 200);
   const visArea = els.filter(e => /^(svg|img|canvas)$/i.test(e.tagName) && !e.closest('svg svg')).map(e => R(e.getBoundingClientRect()))
     .filter(r => r.width >= 40 && r.height >= 40).reduce((a, r) => a + r.width * r.height, 0)
@@ -261,7 +296,19 @@ slides.forEach((sl, i) => {
   if ((u.has('L') && u.has('kL')) || (u.has('g') && u.has('kg')) || (u.has('mL') && u.has('L'))) add('aviso', 'unidades', `Unidades mezcladas en la slide: ${[...u].join(', ')}`);
   for (const mm of plano.matchAll(/\b(\d{1,4})\s+([a-záéíóúñ]{5,})\b/gi)) { const k = mm[2].toLowerCase(); (cifras[k] = cifras[k] || []).push([n, mm[1]]); }
 
-  out.slides.push({ n, titulo, hallazgos: H });
+  // --- 11. uniones finas para ver en zoom: puntas de flecha y triángulos de CSS primero, después iconos junto a texto; a tamaño de slide no se ven
+  const zonas = [];
+  for (const sv of sl.querySelectorAll('svg')) { if (!vis(sv) || inFoot(sv)) continue;
+    if (sv.querySelectorAll('path, polygon').length <= 60) for (const e of sv.querySelectorAll('polygon, path, marker')) { if (!vis(e)) continue; const r = R(e.getBoundingClientRect()); if (r.width >= 3 && r.height >= 3 && r.width <= 24 && r.height <= 24) zonas.push(r); }
+    // guías: líneas cortas y oblicuas (rótulo fuera del territorio, llamada a un punto); su extremo es lo que se mira
+    for (const e of sv.querySelectorAll('line, polyline')) { const r = R(e.getBoundingClientRect()), l = Math.hypot(r.width, r.height); if (l >= 12 && l <= 160 && r.width > 2 && r.height > 2) zonas.push(r); } }
+  for (const e of els) { if (e instanceof SVGElement || e.clientWidth || e.clientHeight) continue; const r = R(e.getBoundingClientRect()); if (r.width > 2 && r.width <= 30 && r.height <= 30 && painted(e)) zonas.push(r); }
+  for (const x of textos) if (x.icono && !inFoot(x.el)) zonas.push(x.r);
+  const juntas = [];
+  for (const z of zonas) { const c = { x: (z.left + z.right) / 2, y: (z.top + z.bottom) / 2 };
+    if (!juntas.some(j => Math.abs(j.x - c.x) < 60 && Math.abs(j.y - c.y) < 40)) juntas.push(c); }
+
+  out.slides.push({ n, titulo, hallazgos: H, zonas: juntas.slice(0, 6) });
   } catch (err) { H.push({ nivel: 'info', tipo: 'interno', msg: 'Inspección incompleta: ' + err.message }); out.slides.push({ n, titulo: '?', hallazgos: H }); }
 });
 
